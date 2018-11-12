@@ -31,7 +31,7 @@ namespace API
             services.AddScoped<IUser, UserService>();
 
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseNpgsql(Configuration["Postgres"],
+                options.UseNpgsql(Configuration.GetConnectionString("Postgres"),
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("Data"); }));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>

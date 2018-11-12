@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Data.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -20,9 +21,9 @@ namespace Services
             return _context.Users;
         }
 
-        public IdentityUser GetUserByUsername(string userName)
+        public async Task<IdentityUser> GetUserByUsernameAsync(string userName)
         {
-            return GetAllUsers().FirstOrDefault(u => u.UserName == userName);
+            return await GetAllUsers().ToAsyncEnumerable().FirstOrDefault(u => u.UserName == userName);
         }
     }
 }
