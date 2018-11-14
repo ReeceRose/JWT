@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -9,11 +8,11 @@ using Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Services;
 
-namespace API.Controllers
+namespace API.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -38,14 +37,14 @@ namespace API.Controllers
             if (user == null)
             {
                 // Eventually you might want to replace these with your own methods such as BadLoginAttempt and then you can furhter what you return
-                return BadRequest(new { message = "Bad login attempt"});
+                return BadRequest(new { error = "Bad login attempt"});
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, accountData.Password, true);
 
             if (!result.Succeeded)
             {
-                return BadRequest(new { message = "Bad login attempt" });
+                return BadRequest(new { error = "Bad login attempt" });
             }
 
             return Ok(new
@@ -62,7 +61,7 @@ namespace API.Controllers
 
             if (user != null)
             {
-                return BadRequest(new { message = "User already exists" });
+                return BadRequest(new { error = "User already exists" });
             }
 
             user = new IdentityUser { UserName = accountData.Email, Email = accountData.Email };
@@ -71,7 +70,7 @@ namespace API.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new {message = "Error logging in"});
+                return BadRequest(new { error = "Error logging in"});
             }
 
             if (accountData.IsAdmin)

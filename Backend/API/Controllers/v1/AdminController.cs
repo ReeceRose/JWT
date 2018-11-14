@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+namespace API.Controllers.v1
 {
+    [ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(Policy = "AdministratorOnly")]
-    //[Authorize(Roles = "Administrator")]
-
-    [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class AdminController : ControllerBase
     {

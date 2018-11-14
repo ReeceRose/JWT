@@ -74,6 +74,7 @@ namespace API
                 });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddApiVersioning();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
