@@ -1,8 +1,8 @@
 <template>
     <div class="form">
         <h2>Login</h2>
-        <label for="name">Name: </label>
-        <input type="text" name="name" v-model="name">
+        <label for="email">Email: </label>
+        <input type="text" name="email" v-model="email">
         <br>
         <label for="password">Password: </label>
         <input type="password" name="pasword" v-model="password">
@@ -16,7 +16,7 @@ export default {
     name: 'Login',
     data() {
         return {
-            name: '',
+            email: '',
             password: ''
         }
     },
@@ -24,6 +24,13 @@ export default {
         submit() {
             // this.name
             // this.password
+            axios
+                .put('https://localhost:44301/api/authentication/register', {
+                    "Email": this.email,
+                    "Password": this.password
+                })
+                .then(response => console.log(response))
+                .error(error => console.log(error))
         }
     }
 }

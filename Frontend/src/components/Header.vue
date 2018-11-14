@@ -4,6 +4,7 @@
         <!-- TODO: Make these dynamic -->
         <router-link to="/Register" class="link">Register</router-link>
         <router-link to="/Login" class="link">Login</router-link>
+        <router-link to="/Dashboard" class="link">Admin dashboard</router-link>
     </nav>
 </template>
 

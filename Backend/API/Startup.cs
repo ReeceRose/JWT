@@ -46,11 +46,21 @@ namespace API
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Administrator"));
+              
+            });
+
             services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(x =>
                 {
-                    x.RequireHttpsMetadata = false;
+                    //x.RequireHttpsMetadata = true;
                     x.SaveToken = true;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -79,9 +89,33 @@ namespace API
                 app.UseHttpsRedirection();
             }
 
+            UpdateDatabase(app);
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<IdentityDbContext>())
+                {
+                    context.Database.EnsureCreated();
+                    try
+                    {
+                        context.Database.Migrate();
+                    }
+                    catch (Exception e)
+                    {
+                        // Database is already migrated. No issues here
+                    }
+                    
+                }
+            }
         }
     }
 }

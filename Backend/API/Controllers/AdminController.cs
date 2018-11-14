@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Policy = "AdministratorOnly")]
+    //[Authorize(Roles = "Administrator")]
+
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("Users")]
         public IActionResult GetUsers()
         {
             return Ok();
