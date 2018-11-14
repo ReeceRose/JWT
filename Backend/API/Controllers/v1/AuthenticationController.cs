@@ -30,7 +30,7 @@ namespace API.Controllers.v1
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody]LoginRequest loginRequest)
+        public async Task<IActionResult> LoginAsync([FromBody]UserLoginRequest loginRequest)
         {
 
             var user = await _userService.GetUserByUsernameAsync(loginRequest.Email);
@@ -56,7 +56,7 @@ namespace API.Controllers.v1
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody]RegisterRequest registerRequest)
+        public async Task<IActionResult> RegisterAsync([FromBody]UserRegisterRequest registerRequest)
         {
             var user = await _userService.GetUserByUsernameAsync(registerRequest.Email);
 

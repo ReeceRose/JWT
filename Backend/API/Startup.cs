@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Text;
 using Data.Interfaces;
+using Data.Models.v1.Authentication.Login;
+using Data.Models.v1.Authentication.Register;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -73,7 +76,11 @@ namespace API
                     };
                 });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
+            .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<UserLoginRequestValidator>());
+
             services.AddApiVersioning();
         }
 

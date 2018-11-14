@@ -1,6 +1,6 @@
 ﻿namespace Data.Models.v1.Authentication.Register
 {
-    public class RegisterRequest
+    public class UserRegisterRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }
