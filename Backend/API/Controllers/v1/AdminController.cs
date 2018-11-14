@@ -10,8 +10,8 @@ namespace API.Controllers.v1
     [ApiController]
     public class AdminController : ControllerBase
     {
-        [HttpGet("Users")]
-        public IActionResult GetUsers()
+        [HttpGet]
+        public IActionResult Index()
         {
             return Ok();
         }

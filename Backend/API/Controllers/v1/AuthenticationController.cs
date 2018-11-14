@@ -4,7 +4,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Interfaces;
-using Data.Models;
+using Data.Models.v1.Authentication.Login;
+using Data.Models.v1.Authentication.Register;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -29,10 +30,10 @@ namespace API.Controllers.v1
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody]AccountData accountData)
+        public async Task<IActionResult> LoginAsync([FromBody]LoginRequest loginRequest)
         {
 
-            var user = await _userService.GetUserByUsernameAsync(accountData.Email);
+            var user = await _userService.GetUserByUsernameAsync(loginRequest.Email);
 
             if (user == null)
             {
@@ -40,7 +41,7 @@ namespace API.Controllers.v1
                 return BadRequest(new { error = "Bad login attempt"});
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, accountData.Password, true);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, true);
 
             if (!result.Succeeded)
             {
@@ -55,25 +56,26 @@ namespace API.Controllers.v1
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody]AccountData accountData)
+        public async Task<IActionResult> RegisterAsync([FromBody]RegisterRequest registerRequest)
         {
-            var user = await _userService.GetUserByUsernameAsync(accountData.Email);
+            var user = await _userService.GetUserByUsernameAsync(registerRequest.Email);
 
             if (user != null)
             {
                 return BadRequest(new { error = "User already exists" });
             }
 
-            user = new IdentityUser { UserName = accountData.Email, Email = accountData.Email };
+            user = new IdentityUser { UserName = registerRequest.Email, Email = registerRequest.Email };
 
-            var result = await _userManager.CreateAsync(user, accountData.Password);
+            var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
             if (!result.Succeeded)
             {
                 return BadRequest(new { error = "Error logging in"});
             }
 
-            if (accountData.IsAdmin)
+            // DO NOT DO THIS. This is for demonstration purpose only. Ideally you would make a user an admin from the admin dashboard
+            if (registerRequest.IsAdmin)
             {
                 await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
             }
