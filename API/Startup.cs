@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text;
-using Data.Interfaces;
-using Data.Models.v1.Authentication.Login;
-using Data.Models.v1.Authentication.Register;
+using AutoMapper;
+using Core.Common;
+using Core.Requests.Authentication.Login;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Services;
 
 namespace API
 {
@@ -31,7 +31,6 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IdentityDbContext, IdentityDbContext>();
-            services.AddScoped<IUser, UserService>();
 
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Postgres"),
@@ -80,6 +79,15 @@ namespace API
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
             .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<UserLoginRequestValidator>());
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddMediatR();
 
             services.AddApiVersioning();
         }

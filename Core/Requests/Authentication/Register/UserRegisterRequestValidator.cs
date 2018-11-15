@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Data.Models.v1.Authentication.Login
+namespace Core.Requests.Authentication.Register
 {
-    public class UserLoginRequestValidator : AbstractValidator<UserLoginRequest>
+    public class UserRegisterRequestValidator : AbstractValidator<UserRegisterRequest>
     {
-        public UserLoginRequestValidator()
+        public UserRegisterRequestValidator()
         {
             RuleFor(u => u.Email)
                 .EmailAddress()

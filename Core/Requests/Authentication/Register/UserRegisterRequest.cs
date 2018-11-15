@@ -1,6 +1,8 @@
-﻿namespace Data.Models.v1.Authentication.Register
+﻿using MediatR;
+
+namespace Core.Requests.Authentication.Register
 {
-    public class UserRegisterRequest
+    public class UserRegisterRequest : IRequest<bool>
     {
         public string Email { get; set; }
         public string Password { get; set; }
