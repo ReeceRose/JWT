@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Core.Migrations
+namespace JWT.Persistence.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
     [Migration("20181110181025_AddedIdentity")]

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 
-namespace Core.Requests.Authentication.Register
+namespace JWT.Application.Requests.Authentication.Register
 {
     public class UserRegisterRequestHandler : IRequestHandler<UserRegisterRequest, bool>
     {

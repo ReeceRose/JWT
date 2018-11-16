@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 using AutoMapper;
-using Core.Common;
-using Core.Requests.Authentication.Login;
 using FluentValidation.AspNetCore;
+using JWT.Application.Requests.Authentication.Login;
+using JWT.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

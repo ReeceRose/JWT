@@ -1,6 +1,6 @@
-﻿namespace Core.Models.Transfer
+﻿namespace JWT.Application.Users.Models
 {
-    public class ApplicationUser
+    public class ApplicationUserDto
     {
         public string Email { get; set; }
         public string Password { get; set; }

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Core.Migrations
+namespace JWT.Persistence.Migrations
 {
     public partial class AddedIdentity : Migration
     {

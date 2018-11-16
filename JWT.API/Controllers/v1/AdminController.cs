@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers.v1
+namespace JWT.API.Controllers.v1
 {
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]

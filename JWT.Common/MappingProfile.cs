@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Core.Models.Transfer;
+using JWT.Application.Users.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace Core.Common
+namespace JWT.Common
 {
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            CreateMap<IdentityUser, ApplicationUser>();
+            CreateMap<IdentityUser, ApplicationUserDto>();
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
-using Core.Models.Transfer;
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using JWT.Application.Users.Models;
+using JWT.Application.Users.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Queries.Users
 {
-    public class GetUserHandler : IRequestHandler<GetUserByEmailQuery, ApplicationUser>
+    public class GetUserHandler : IRequestHandler<GetUserByEmailQuery, ApplicationUserDto>
     {
         private readonly IdentityDbContext _context;
         private readonly IMapper _mapper;
@@ -19,9 +20,9 @@ namespace Core.Queries.Users
             _mapper = mapper;
         }
 
-        public async Task<ApplicationUser> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+        public async Task<ApplicationUserDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<ApplicationUser>(await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken));
+            return _mapper.Map<ApplicationUserDto>(await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken));
         }
     }
 }

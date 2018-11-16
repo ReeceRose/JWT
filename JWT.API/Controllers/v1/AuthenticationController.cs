@@ -3,16 +3,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.Models.Transfer;
-using Core.Queries.Users;
-using Core.Requests.Authentication.Login;
-using Core.Requests.Authentication.Register;
+using JWT.Application.Requests.Authentication.Login;
+using JWT.Application.Requests.Authentication.Register;
+using JWT.Application.Users.Models;
+using JWT.Application.Users.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace API.Controllers.v1
+namespace JWT.API.Controllers.v1
 {
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -38,7 +38,7 @@ namespace API.Controllers.v1
         public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest loginRequest)
         {
             // TODO: Fix
-            ApplicationUser result;
+            ApplicationUserDto result;
             try
             {
                 result = await _mediatr.Send(new GetUserByEmailQuery(loginRequest.Email));

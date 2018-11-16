@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Core.Requests.Authentication.Register
+namespace JWT.Application.Requests.Authentication.Register
 {
     public class UserRegisterRequest : IRequest<bool>
     {

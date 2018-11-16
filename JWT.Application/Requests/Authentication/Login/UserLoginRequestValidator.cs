@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Core.Requests.Authentication.Login
+namespace JWT.Application.Requests.Authentication.Login
 {
     public class UserLoginRequestValidator : AbstractValidator<UserLoginRequest>
     {
