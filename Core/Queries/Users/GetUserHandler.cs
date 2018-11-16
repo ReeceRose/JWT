@@ -2,13 +2,13 @@
 using Core.Models.Transfer;
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Queries.Users
 {
-    public class GetUserHandler : IRequestHandler<GetUserByUsernameQuery, ApplicationUser>
+    public class GetUserHandler : IRequestHandler<GetUserByEmailQuery, ApplicationUser>
     {
         private readonly IdentityDbContext _context;
         private readonly IMapper _mapper;
@@ -19,9 +19,9 @@ namespace Core.Queries.Users
             _mapper = mapper;
         }
 
-        public async Task<ApplicationUser> Handle(GetUserByUsernameQuery request, CancellationToken cancellationToken)
+        public async Task<ApplicationUser> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<ApplicationUser>(await _context.Users.ToAsyncEnumerable().FirstOrDefault(u => u.UserName == request.Username));
+            return _mapper.Map<ApplicationUser>(await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken));
         }
     }
 }

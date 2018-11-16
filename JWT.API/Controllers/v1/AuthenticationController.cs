@@ -2,6 +2,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Core.Models.Transfer;
+using Core.Queries.Users;
 using Core.Requests.Authentication.Login;
 using Core.Requests.Authentication.Register;
 using MediatR;
@@ -17,23 +20,34 @@ namespace API.Controllers.v1
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+        //TODO: Refactor these and move them into the correct MediatR handler
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IMediator _mediatr;
+        private readonly IMapper _mapper;
 
-        public AuthenticationController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IMediator mediatr)
+        public AuthenticationController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IMediator mediatr, IMapper mapper)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _mediatr = mediatr;
+            _mapper = mapper;
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest loginRequest)
         {
             // TODO: Fix
-            var result = await _mediatr.Send(loginRequest);
-            return Ok();
+            ApplicationUser result;
+            try
+            {
+                result = await _mediatr.Send(new GetUserByEmailQuery(loginRequest.Email));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+            return Ok(result);
         }
 
         [HttpPost("Register")]

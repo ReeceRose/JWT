@@ -1,8 +1,6 @@
-﻿using MediatR;
-
-namespace Core.Requests.Authentication.Login
+﻿namespace Core.Requests.Authentication.Login
 {
-    public class UserLoginRequest : IRequest<bool>
+    public class UserLoginRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }
