@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using JWT.Application.Users.Commands.LoginUser;
 using JWT.Application.Users.Commands.RegisterUser;
+using JWT.Application.Users.Queries.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +20,9 @@ namespace JWT.API.Controllers.v1
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginUserCommand loginUserCommand)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginUserQuery loginUserQuery)
         {
-            return Ok(await _mediator.Send(loginUserCommand));
+            return Ok(await _mediator.Send(loginUserQuery));
         }
 
         [HttpPost("Register")]
@@ -30,26 +30,5 @@ namespace JWT.API.Controllers.v1
         {
             return Ok(await _mediator.Send(registerUserCommand));
         }
-
-        //public async Task<string> GenerateTokenAsync(IdentityUser user)
-        //{
-        //    //var securityKey = GET CONFIG SECURITY KEY
-        //    var securityKey = "PLACE YOUR KEY HERE";
-
-        //    var symmetricSecutiyKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
-
-        //    var signingCredentials = new SigningCredentials(symmetricSecutiyKey, SecurityAlgorithms.HmacSha256Signature);
-
-        //    var claims = await _userManager.GetClaimsAsync(user);
-            
-        //    var token = new JwtSecurityToken(
-        //        issuer: "Issuer",
-        //        audience: "Audience",
-        //        claims: claims,
-        //        expires: DateTime.Now.AddHours(1),
-        //        signingCredentials: signingCredentials
-        //    );
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
     }
 }
