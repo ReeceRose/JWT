@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace JWT.Application.Requests.Authentication.Register
+namespace JWT.Application.Users.Commands.RegisterUser
 {
-    public class UserRegisterRequest : IRequest<bool>
+    public class RegisterUserCommand : IRequest<bool>
     {
         public string Email { get; set; }
         public string Password { get; set; }

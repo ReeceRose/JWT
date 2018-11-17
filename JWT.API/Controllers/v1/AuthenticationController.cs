@@ -1,16 +1,8 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using JWT.Application.Requests.Authentication.Login;
-using JWT.Application.Requests.Authentication.Register;
-using JWT.Application.Users.Models;
-using JWT.Application.Users.Queries;
+﻿using System.Threading.Tasks;
+using JWT.Application.Users.Commands.LoginUser;
+using JWT.Application.Users.Commands.RegisterUser;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace JWT.API.Controllers.v1
 {
@@ -20,64 +12,44 @@ namespace JWT.API.Controllers.v1
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        //TODO: Refactor these and move them into the correct MediatR handler
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IMediator _mediatr;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public AuthenticationController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IMediator mediatr, IMapper mapper)
+        public AuthenticationController(IMediator mediator)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _mediatr = mediatr;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequest loginRequest)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginUserCommand loginUserCommand)
         {
-            // TODO: Fix
-            ApplicationUserDto result;
-            try
-            {
-                result = await _mediatr.Send(new GetUserByEmailQuery(loginRequest.Email));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-            return Ok(result);
+            return Ok(await _mediator.Send(loginUserCommand));
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterRequest registerRequest)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserCommand registerUserCommand)
         {
-            //TODO: Fix
-            var result = await _mediatr.Send(registerRequest);
-            return Ok();
-
+            return Ok(await _mediator.Send(registerUserCommand));
         }
 
-        public async Task<string> GenerateTokenAsync(IdentityUser user)
-        {
-            //var securityKey = GET CONFIG SECURITY KEY
-            var securityKey = "PLACE YOUR KEY HERE";
+        //public async Task<string> GenerateTokenAsync(IdentityUser user)
+        //{
+        //    //var securityKey = GET CONFIG SECURITY KEY
+        //    var securityKey = "PLACE YOUR KEY HERE";
 
-            var symmetricSecutiyKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+        //    var symmetricSecutiyKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
 
-            var signingCredentials = new SigningCredentials(symmetricSecutiyKey, SecurityAlgorithms.HmacSha256Signature);
+        //    var signingCredentials = new SigningCredentials(symmetricSecutiyKey, SecurityAlgorithms.HmacSha256Signature);
 
-            var claims = await _userManager.GetClaimsAsync(user);
+        //    var claims = await _userManager.GetClaimsAsync(user);
             
-            var token = new JwtSecurityToken(
-                issuer: "Issuer",
-                audience: "Audience",
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: signingCredentials
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        //    var token = new JwtSecurityToken(
+        //        issuer: "Issuer",
+        //        audience: "Audience",
+        //        claims: claims,
+        //        expires: DateTime.Now.AddHours(1),
+        //        signingCredentials: signingCredentials
+        //    );
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
     }
 }

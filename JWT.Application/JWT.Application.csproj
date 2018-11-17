@@ -7,7 +7,7 @@
   <ItemGroup>
     <Folder Include="Infrastructure\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="Users\Commands\" />
+    <Folder Include="Users\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

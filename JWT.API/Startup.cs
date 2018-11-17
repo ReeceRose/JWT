@@ -2,7 +2,7 @@
 using System.Text;
 using AutoMapper;
 using FluentValidation.AspNetCore;
-using JWT.Application.Requests.Authentication.Login;
+using JWT.Application.Users.Commands.LoginUser;
 using JWT.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,12 +48,6 @@ namespace API
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Administrator"));
-              
-            });
-
             services
                 .AddAuthentication(x =>
                 {
@@ -75,10 +69,16 @@ namespace API
                     };
                 });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Administrator"));
+
+            });
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
-            .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<UserLoginRequestValidator>());
+            .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<LoginUserCommandValidator>());
 
             var mappingConfig = new MapperConfiguration(mc =>
             {

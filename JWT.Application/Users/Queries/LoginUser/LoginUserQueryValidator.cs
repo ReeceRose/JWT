@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace JWT.Application.Requests.Authentication.Login
+namespace JWT.Application.Users.Queries.LoginUser
 {
-    public class UserLoginRequestValidator : AbstractValidator<UserLoginRequest>
+    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
     {
-        public UserLoginRequestValidator()
+        public LoginUserCommandValidator()
         {
             RuleFor(u => u.Email)
                 .EmailAddress()
