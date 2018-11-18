@@ -2,9 +2,9 @@
 
 namespace JWT.Application.Users.Queries.LoginUser
 {
-    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
+    public class LoginUserQueryValidator : AbstractValidator<LoginUserQuery>
     {
-        public LoginUserCommandValidator()
+        public LoginUserQueryValidator()
         {
             RuleFor(u => u.Email)
                 .EmailAddress()

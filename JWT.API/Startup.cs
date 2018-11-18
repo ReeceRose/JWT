@@ -2,7 +2,7 @@
 using System.Text;
 using AutoMapper;
 using FluentValidation.AspNetCore;
-using JWT.Application.Users.Commands.LoginUser;
+using JWT.Application.Users.Queries.LoginUser;
 using JWT.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,7 +34,7 @@ namespace API
 
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Postgres"),
-                    optionsBuilder => { optionsBuilder.MigrationsAssembly("Data"); }));
+                    optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -78,7 +78,7 @@ namespace API
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
-            .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<LoginUserCommandValidator>());
+            .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<LoginUserQueryValidator>());
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
