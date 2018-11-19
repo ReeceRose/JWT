@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JWT.Application\JWT.Application.csproj" />
     <ProjectReference Include="..\JWT.Common\JWT.Common.csproj" />
+    <ProjectReference Include="..\JWT.Domain\JWT.Domain.csproj" />
   </ItemGroup>
 
 </Project>

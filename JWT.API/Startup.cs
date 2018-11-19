@@ -3,6 +3,7 @@ using System.Text;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using JWT.Application.Users.Queries.LoginUser;
+using JWT.API.Filters;
 using JWT.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -75,17 +76,17 @@ namespace API
 
             });
 
-            services.AddMvc()
+            services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
-            .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<LoginUserQueryValidator>());
+                .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<LoginUserQueryValidator>());
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
             });
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+
+            services.AddSingleton(mappingConfig.CreateMapper());
 
             services.AddMediatR();
 
@@ -102,7 +103,6 @@ namespace API
             else
             {
                 app.UseHsts();
-                app.UseHttpsRedirection();
             }
 
             UpdateDatabase(app);
