@@ -12,6 +12,7 @@ namespace JWT.Application.Users.Commands.RegisterUser
                 .WithMessage("Not a valid email");
 
             RuleFor(u => u.Password)
+                .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$")
                 .NotEmpty()
                 .WithMessage("Password is required");
         }

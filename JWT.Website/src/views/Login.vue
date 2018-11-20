@@ -24,13 +24,13 @@ export default {
         submit() {
             // this.name
             // this.password
-            axios
-                .put('https://localhost:44301/api/authentication/register', {
-                    "Email": this.email,
-                    "Password": this.password
-                })
-                .then(response => console.log(response))
-                .error(error => console.log(error))
+            // axios
+            //     .put('https://localhost:44301/api/authentication/register', {
+            //         "Email": this.email,
+            //         "Password": this.password
+            //     })
+            //     .then(response => console.log(response))
+            //     .error(error => console.log(error))
         }
     }
 }

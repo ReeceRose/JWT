@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace API
+namespace JWT.API
 {
     public class Startup
     {
@@ -32,7 +32,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IdentityDbContext, IdentityDbContext>();
-
+            
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Postgres"),
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
@@ -43,7 +43,7 @@ namespace API
                     options.Lockout.MaxFailedAccessAttempts = 5;
                     options.Lockout.AllowedForNewUsers = true;
                     options.User.RequireUniqueEmail = true;
-                    // I would recommend setting this to true and implenting an email sender
+                    // I would recommend setting this to true and implementing an email sender
                     options.SignIn.RequireConfirmedEmail = false;
                 })
                 .AddEntityFrameworkStores<IdentityDbContext>()

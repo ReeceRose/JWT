@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using JWT.Application.Users.Models;
+using JWT.Application.Users.Commands.RegisterUser;
 using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Common
@@ -8,7 +8,8 @@ namespace JWT.Common
     {
         public MappingProfile()
         {
-            CreateMap<IdentityUser, ApplicationUserDto>();
+            CreateMap<RegisterUserCommand, IdentityUser>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email));
         }
     }
 }
