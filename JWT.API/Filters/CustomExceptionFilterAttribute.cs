@@ -21,9 +21,21 @@ namespace JWT.API.Filters
 
             var code = HttpStatusCode.InternalServerError;
 
-            if (context.Exception is InvalidLoginException)
+            if (context.Exception is InvalidRegisterException)
             {
-                code = HttpStatusCode.NotFound;
+                code = HttpStatusCode.BadRequest;
+            }
+            else if (context.Exception is AccountAlreadyExistsException)
+            {
+                code = HttpStatusCode.Conflict;
+            }
+            else if (context.Exception is AccountLockedException)
+            {
+                code = HttpStatusCode.Locked;
+            }
+            else if (context.Exception is InvalidCredentialException)
+            {
+                code = HttpStatusCode.BadRequest;
             }
 
             context.HttpContext.Response.ContentType = "application/json";

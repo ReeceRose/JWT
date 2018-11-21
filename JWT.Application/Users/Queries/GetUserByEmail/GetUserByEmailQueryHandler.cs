@@ -18,7 +18,7 @@ namespace JWT.Application.Users.Queries.GetUserByEmail
 
         public async Task<IdentityUser> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken: cancellationToken);
+            return await _context.Users.FirstAsync(u => u.Email == request.Email, cancellationToken: cancellationToken);
         }
     }
 }

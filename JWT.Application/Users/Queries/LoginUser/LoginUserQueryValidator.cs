@@ -8,12 +8,11 @@ namespace JWT.Application.Users.Queries.LoginUser
         {
             RuleFor(u => u.Email)
                 .EmailAddress()
-                .NotEmpty()
                 .WithMessage("Not a valid email");
 
             RuleFor(u => u.Password)
-                .NotEmpty()
-                .WithMessage("Password is required");
+                .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$")
+                .WithMessage("Password does not meet security constraints");
         }
     }
 }

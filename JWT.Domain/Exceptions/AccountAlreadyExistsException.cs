@@ -4,7 +4,12 @@ namespace JWT.Domain.Exceptions
 {
     public class AccountAlreadyExistsException : Exception
     {
-        public AccountAlreadyExistsException(string email) : base($"Account with email: '{email}' already exists")
+        public AccountAlreadyExistsException() : base("Account with this email already exists")
+        {
+            
+        }
+        
+        public AccountAlreadyExistsException(string message) : base(message)
         {
             
         }
