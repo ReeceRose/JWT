@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using JWT.Application.Token.Commands.GenerateToken;
+using JWT.Application.Token.Query.GetToken;
 using JWT.Application.Users.Queries.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;
@@ -45,7 +45,7 @@ namespace JWT.Application.Users.Commands.RegisterUser
             {
                 await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
             }
-            return await _mediator.Send(new GenerateTokenCommand(), cancellationToken: cancellationToken);
+            return await _mediator.Send(new GetTokenQuery(), cancellationToken: cancellationToken);
         }
     }
 }

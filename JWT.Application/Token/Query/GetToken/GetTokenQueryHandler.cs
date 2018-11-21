@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JWT.Application.Token.Commands.GenerateToken
+namespace JWT.Application.Token.Query.GetToken
 {
-    public class GenerateTokenCommandHandler :IRequestHandler<GenerateTokenCommand, string>
+    public class GetTokenQueryHandler :IRequestHandler<GetTokenQuery, string>
     {
-        public Task<string> Handle(GenerateTokenCommand request, CancellationToken cancellationToken)
+        public Task<string> Handle(GetTokenQuery request, CancellationToken cancellationToken)
         {
             //var securityKey = GET CONFIG SECURITY KEY
             var securityKey = "PLACE YOUR KEY HERE";

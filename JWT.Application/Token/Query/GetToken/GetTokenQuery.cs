@@ -2,9 +2,9 @@
 using System.Security.Claims;
 using MediatR;
 
-namespace JWT.Application.Token.Commands.GenerateToken
+namespace JWT.Application.Token.Query.GetToken
 {
-    public class GenerateTokenCommand : IRequest<string>
+    public class GetTokenQuery : IRequest<string>
     {
 
         public List<Claim> Claims { get; set; }

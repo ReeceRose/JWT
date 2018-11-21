@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using JWT.Application.Token.Commands.GenerateToken;
+using JWT.Application.Token.Query.GetToken;
 using JWT.Application.Users.Queries.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;
@@ -33,7 +33,7 @@ namespace JWT.Application.Users.Queries.LoginUser
             
             // NOTE: Might want to change false to true so it will lock out users
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
-
+            
             if (!result.Succeeded)
             {
                 throw new InvalidCredentialException();
@@ -43,7 +43,7 @@ namespace JWT.Application.Users.Queries.LoginUser
                 throw new AccountLockedException();
             }
             
-            return await _mediator.Send(new GenerateTokenCommand(), cancellationToken: cancellationToken);
+            return await _mediator.Send(new GetTokenQuery(), cancellationToken: cancellationToken);
         }
     }
 }

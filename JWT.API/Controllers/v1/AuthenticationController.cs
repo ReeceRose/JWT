@@ -22,13 +22,13 @@ namespace JWT.API.Controllers.v1
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginUserQuery loginUserQuery)
         {
-            return Ok(await _mediator.Send(loginUserQuery));
+            return Ok(new { token = await _mediator.Send(loginUserQuery)});
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserCommand registerUserCommand)
         {
-            return Ok(await _mediator.Send(registerUserCommand));
+            return Ok( new { token = await _mediator.Send(registerUserCommand)});
         }
     }
 }
