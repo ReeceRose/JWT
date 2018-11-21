@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +19,8 @@ namespace JWT.Application.Users.Queries.GetUserByEmail
 
         public async Task<IdentityUser> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstAsync(u => u.Email == request.Email, cancellationToken: cancellationToken);
+            return await _context.Users.FirstOrDefaultAsync(u =>
+                string.Equals(u.Email.ToLower(), request.Email.ToLower(), StringComparison.Ordinal), cancellationToken: cancellationToken);
         }
     }
 }

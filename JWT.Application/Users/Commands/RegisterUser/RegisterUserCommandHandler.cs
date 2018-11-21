@@ -45,7 +45,7 @@ namespace JWT.Application.Users.Commands.RegisterUser
             {
                 await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
             }
-            return await _mediator.Send(new GetTokenQuery(), cancellationToken: cancellationToken);
+            return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
         }
     }
 }

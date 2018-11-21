@@ -14,12 +14,14 @@ namespace JWT.Application.Users.Queries.LoginUser
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public LoginUserQueryHandler(IMediator mediator, IMapper mapper, SignInManager<IdentityUser> signInManager)
+        public LoginUserQueryHandler(IMediator mediator, IMapper mapper, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _mediator = mediator;
             _mapper = mapper;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
         
         public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
@@ -43,7 +45,7 @@ namespace JWT.Application.Users.Queries.LoginUser
                 throw new AccountLockedException();
             }
             
-            return await _mediator.Send(new GetTokenQuery(), cancellationToken: cancellationToken);
+            return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
         }
     }
 }

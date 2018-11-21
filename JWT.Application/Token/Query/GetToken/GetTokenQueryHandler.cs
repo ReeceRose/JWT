@@ -15,9 +15,9 @@ namespace JWT.Application.Token.Query.GetToken
             //var securityKey = GET CONFIG SECURITY KEY
             var securityKey = "PLACE YOUR KEY HERE";
 
-            var symmetricSecutiyKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
 
-            var signingCredentials = new SigningCredentials(symmetricSecutiyKey, SecurityAlgorithms.HmacSha256Signature);
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
             
             var token = new JwtSecurityToken(
                 issuer: "Issuer",

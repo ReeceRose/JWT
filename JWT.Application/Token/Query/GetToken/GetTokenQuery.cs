@@ -6,7 +6,11 @@ namespace JWT.Application.Token.Query.GetToken
 {
     public class GetTokenQuery : IRequest<string>
     {
+        public IList<Claim> Claims { get; }
 
-        public List<Claim> Claims { get; set; }
+        public GetTokenQuery(IList<Claim> claims)
+        {
+            Claims = claims;
+        }
     }
 }
