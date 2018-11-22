@@ -1,50 +1,58 @@
-﻿using System.Net;
-using FluentValidation;
+﻿using System.Linq;
+using System.Net;
 using JWT.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace JWT.API.Filters
 {
-    public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
+    public class CustomExceptionFilterAttribute : ExceptionFilterAttribute, IActionFilter
     {
         public override void OnException(ExceptionContext context)
         {
-            if (context.Exception is ValidationException exception)
-            {
-                context.HttpContext.Response.ContentType = "application/json";
-                context.HttpContext.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                context.Result = new JsonResult(
-                    exception.Errors);
-                return;
-            }
-
             var code = HttpStatusCode.InternalServerError;
 
-            if (context.Exception is InvalidRegisterException)
+            switch (context.Exception)
             {
-                code = HttpStatusCode.BadRequest;
-            }
-            else if (context.Exception is AccountAlreadyExistsException)
-            {
-                code = HttpStatusCode.Conflict;
-            }
-            else if (context.Exception is AccountLockedException)
-            {
-                code = HttpStatusCode.Locked;
-            }
-            else if (context.Exception is InvalidCredentialException)
-            {
-                code = HttpStatusCode.BadRequest;
+                case InvalidRegisterException _:
+                    code = HttpStatusCode.BadRequest;
+                    break;
+                case AccountAlreadyExistsException _:
+                    code = HttpStatusCode.Conflict;
+                    break;
+                case AccountLockedException _:
+                    code = HttpStatusCode.Locked;
+                    break;
+                case InvalidCredentialException _:
+                    code = HttpStatusCode.BadRequest;
+                    break;
             }
 
             context.HttpContext.Response.ContentType = "application/json";
             context.HttpContext.Response.StatusCode = (int) code;
             context.Result = new JsonResult(new
             {
-                error = new[] { context.Exception.Message },
-                stackTrace = context.Exception.StackTrace
+                error = new[] {context.Exception.Message}
             });
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (context.ModelState.IsValid) return;
+            
+            context.HttpContext.Response.ContentType = "application/json";
+            context.HttpContext.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            context.Result = new JsonResult(new
+            {
+                errors = context.ModelState
+                    .Select(x => x.Value.Errors.Select(m => m.ErrorMessage))
+                    
+            });
+        }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            
         }
     }
 }

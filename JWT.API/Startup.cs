@@ -2,6 +2,7 @@
 using System.Text;
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using JWT.Application.Users.Commands.RegisterUser;
 using JWT.Application.Users.Queries.LoginUser;
 using JWT.API.Filters;
 using JWT.Common;
@@ -26,7 +27,7 @@ namespace JWT.API
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -75,11 +76,20 @@ namespace JWT.API
                 options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Administrator"));
 
             });
-
-            services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
+            
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+            
+            services.AddMvc(
+                    options =>
+                    {
+                        options.Filters.Add(typeof(CustomExceptionFilterAttribute));
+                    })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
-                .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<LoginUserQueryValidator>());
+                .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<RegisterUserCommandValidator>());
 
             var mappingConfig = new MapperConfiguration(mc =>
             {

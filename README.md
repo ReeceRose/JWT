@@ -1,6 +1,6 @@
 <h1 align="center">
     <a href="https://reecerose.com/projects/JWT">
-        <img src="https://a2c.quebec/uploads/medias/jwt-logo-a2c.png" title="JSON Web   Tokens" alt="JSON Web Tokens"  width="200">
+        <img src="https://static.reecerose.com/images/projects/JWTExample/git-header.png" title="JSON Web   Tokens" alt="JSON Web Tokens"  width="200">
     </a>
     <br>
     JWT FullStack Example
