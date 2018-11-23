@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import axios from '@/axios.js'
 export default {
     name: 'Login',
     data() {
@@ -22,6 +23,10 @@ export default {
     },
     methods: {
         submit() {
+            axios.put('admin/')
+                .then(response => {
+                    console.log(response)
+                })
             // this.name
             // this.password
             // axios
