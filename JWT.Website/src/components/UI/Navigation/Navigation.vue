@@ -8,19 +8,19 @@
                 <!-- Add conditonal rendering -->
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <router-link to="/" class="btn btn-primary">Home</router-link>
+                        <router-link to="/" class="btn btn-outline-primary">Home</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/login" class="btn btn-primary">Login</router-link>
+                        <router-link to="/login" class="btn btn-outline-primary">Login</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/register" class="btn btn-primary">Register</router-link>
+                        <router-link to="/register" class="btn btn-outline-primary">Register</router-link>
                     </li>
                     <li class="nav-item">
-                        <button class="btn btn-primary">Logout</button>
+                        <button class="btn btn-outline-primary">Logout</button>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/dashboard" class="btn btn-primary">Dashboard</router-link>
+                        <router-link to="/dashboard" class="btn btn-outline-primary">Dashboard</router-link>
                     </li>
                 </ul>
         </div>
