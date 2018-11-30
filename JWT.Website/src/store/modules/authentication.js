@@ -12,9 +12,11 @@ const authentication = {
     },
     // SET
     mutations: {
-        setToken(state, token) {
+        setStateToken(state, token) {
             state.token = token
-            localStorage.setItem("token", token)
+        },
+        setLocalStorageToken(token) {
+            localStorage.setItem("token", JSON.stringify(token))
         },
         removeToken(state) {
             state.token = ''
@@ -24,14 +26,18 @@ const authentication = {
     // METHOD
     actions: {
         signIn({ commit }, payload) {
-            commit("setToken", payload)
+            // console.log(payload);
+            commit("setStateToken", payload.token)
+            if (payload.rememberMe) {
+                commit("setLocalStorageToken", payload.token)
+            }
         },
         logout({ commit }) {
             commit("removeToken")
         },
         loadToken({ commit }) {
             if (localStorage.getItem("token")) {
-                commit("setToken", localStorage.getItem("token"))
+                commit("setStateToken", JSON.parse(localStorage.getItem("token")).token)
             }
         }
     }

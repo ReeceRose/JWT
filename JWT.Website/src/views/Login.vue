@@ -16,8 +16,8 @@
                         </div>
 
                         <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Remember password</label>
+                            <input v-model="rememberMe" type="checkbox" class="custom-control-input" id="inputRememberMe">
+                            <label class="custom-control-label" for="inputRememberMe">Remember password</label>
                         </div>
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
                         <div class="my-4 strike">
@@ -55,6 +55,7 @@ export default {
         return {
             email: '',
             password: '',
+            rememberMe: false,
             error: '',
             loading: false
         }
@@ -65,7 +66,7 @@ export default {
             this.error = ''
             axios.post('authentication/login', { email: this.email, password: this.password })
                 .then(response => {
-                    this.$store.dispatch('authentication/signIn', response.data.token)
+                    this.$store.dispatch('authentication/signIn', { token: response.data.token, rememberMe: this.rememberMe })
                     // console.log(response)
                 })
                 .catch(error => {

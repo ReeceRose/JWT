@@ -15,6 +15,7 @@ export default {
         TheHeader
     },
     beforeCreate() {
+        // console.log('loading')
         this.$store.dispatch("authentication/loadToken")
     }
 }
