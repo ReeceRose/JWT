@@ -1,5 +1,6 @@
 <template>
     <div id="App">
+        <Spinner v-if="loading"/>
         <TheHeader/>
         <div class="container">
             <router-view/>
@@ -9,13 +10,20 @@
 
 <script>
 import TheHeader from '@/components/UI/Navigation/Navigation.vue'
+import Spinner from '@/components/UI/Spinner.vue'
+
 export default {
     name: 'App',
     components: {
-        TheHeader
+        TheHeader,
+        Spinner
+    },
+    computed: {
+        loading() {
+            return this.$store.getters['general/isLoading']
+        }
     },
     beforeCreate() {
-        // console.log('loading')
         this.$store.dispatch("authentication/loadToken")
     }
 }

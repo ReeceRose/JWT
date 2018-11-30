@@ -1,6 +1,5 @@
 <template>
     <div class="row">
-        <Spinner v-if="loading"/>
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
@@ -44,47 +43,30 @@
 <script>
 import axios from '@/axios.js'
 
-import Spinner from '@/components/UI/Spinner.vue'
-
 export default {
     name: 'Login',
-    components: {
-        Spinner
-    },
     data() {
         return {
             email: '',
             password: '',
             rememberMe: false,
-            error: '',
-            loading: false
+            error: ''
         }
     },
     methods: {
         submit() {
-            this.loading = true
+            this.$store.dispatch('general/setIsLoading', true)
             this.error = ''
             axios.post('authentication/login', { email: this.email, password: this.password })
                 .then(response => {
                     this.$store.dispatch('authentication/signIn', { token: response.data.token, rememberMe: this.rememberMe })
-                    // console.log(response)
                 })
                 .catch(error => {
                     this.error = error
                 })
                 .finally(() => {
-                    this.loading = false
+                    this.$store.dispatch('general/setIsLoading', false)
                 })
-            
-            // this.name
-            // this.password
-            // axios
-            //     .put('https://localhost:44301/api/authentication/register', {
-            //         "Email": this.email,
-            //         "Password": this.password
-            //     })
-            //     .then(response => console.log(response))
-            //     .error(error => console.log(error))
         }
     }
 }
