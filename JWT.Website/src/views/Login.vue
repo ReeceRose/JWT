@@ -7,12 +7,10 @@
                     <form class="form-signin">
                         <div class="form-label-group">
                             <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                            <!-- <label for="inputEmail">Email address</label> -->
                         </div>
 
                         <div class="form-label-group">
                             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                            <!-- <label for="inputPassword">Password</label> -->
                         </div>
 
                         <div class="custom-control custom-checkbox mb-3">
@@ -20,7 +18,6 @@
                             <label class="custom-control-label" for="customCheck1">Remember password</label>
                         </div>
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
-                        <!-- <hr class="my-4">OR -->
                         <div class="my-4 strike">
                             <span>OR</span>
                         </div>
