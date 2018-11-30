@@ -4,6 +4,7 @@
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Register</h5>
+                    <p v-if="error" class="text-danger text-center">An error has occured, make sure your passwords match and your email is unique</p>
                     <form class="form-signin">
                         <div class="form-label-group">
                             <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
@@ -42,14 +43,15 @@ export default {
     name: 'Register',
     data() {
         return {
-            name: '',
-            password: ''
+            email: '',
+            password: '',
+            confirmationPassword: '',
+            error: ''
         }
     },
     methods: {
         submit() {
-            // this.name
-            // this.password
+            
         }
     }
 }

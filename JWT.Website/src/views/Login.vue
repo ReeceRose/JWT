@@ -7,11 +7,30 @@
                     <p v-if="error" class="text-danger text-center">An error has occured, please check your credentials</p>
                     <form class="form-signin" @submit.prevent="submit">
                         <div class="form-label-group">
-                            <input v-model="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                            <input 
+                                v-model="email" 
+                                @blur="$v.email.$touch()" 
+                                :class="{'is-invalid': $v.email.$error }"
+                                type="email" 
+                                id="inputEmail" 
+                                class="form-control" 
+                                placeholder="Email address" 
+                                autofocus 
+                            >
+                            <p v-if="$v.email.$error" class="text-danger text-center">Not a valid email address</p>
                         </div>
 
                         <div class="form-label-group">
-                            <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <input 
+                                v-model="password"
+                                @blur="$v.password.$touch()"
+                                :class="{'is-invalid': $v.password.$error}"
+                                type="password"
+                                id="inputPassword" 
+                                class="form-control"
+                                placeholder="Password"
+                            >
+                            <p v-if="$v.password.$error" class="text-danger text-center">Password must be at least 6 characters</p>
                         </div>
 
                         <div class="custom-control custom-checkbox mb-3">
@@ -43,6 +62,8 @@
 <script>
 import axios from '@/axios.js'
 
+import { required, minLength, email } from 'vuelidate/lib/validators'
+
 export default {
     name: 'Login',
     data() {
@@ -53,8 +74,22 @@ export default {
             error: ''
         }
     },
+    validations: {
+        email: {
+            required,
+            email
+        },
+        password: {
+            required,
+            minLength: minLength(6)
+        }
+    },
     methods: {
         submit() {
+            if (this.$v.$invalid) {
+                this.error = 'Password must be at least 6 characters'
+                return
+            }
             this.$store.dispatch('general/setIsLoading', true)
             this.error = ''
             axios.post('authentication/login', { email: this.email, password: this.password })
