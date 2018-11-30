@@ -32,6 +32,8 @@ namespace JWT.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApiVersioning();
+
             services.AddScoped<IdentityDbContext, IdentityDbContext>();
             
             services.AddDbContext<IdentityDbContext>(options =>
@@ -96,11 +98,11 @@ namespace JWT.API
                 mc.AddProfile(new MappingProfile());
             });
 
+            services.AddCors();
+
             services.AddSingleton(mappingConfig.CreateMapper());
 
             services.AddMediatR();
-
-            services.AddApiVersioning();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,10 +111,17 @@ namespace JWT.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(builder =>
+                {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });
             }
             else
             {
                 app.UseHsts();
+                app.UseCors(builder => { builder.WithOrigins("https://YOURDOMAIN.com"); });
             }
 
             UpdateDatabase(app);
@@ -120,6 +129,12 @@ namespace JWT.API
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+//            app.UseMvc(routes =>
+//            {
+//                routes.MapRoute(
+//                    name: "default",
+//                    template: "api/v1/{controller}/{action}");
+//            });
         }
 
         private static void UpdateDatabase(IApplicationBuilder app)

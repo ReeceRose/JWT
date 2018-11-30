@@ -1,16 +1,18 @@
 <template>
     <div class="row">
+        <Spinner v-if="loading"/>
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Sign In</h5>
-                    <form class="form-signin">
+                    <p v-if="error" class="text-danger text-center">An error has occured, please check your credentials</p>
+                    <form class="form-signin" @submit.prevent="submit">
                         <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                            <input v-model="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                         </div>
 
                         <div class="custom-control custom-checkbox mb-3">
@@ -41,20 +43,37 @@
 
 <script>
 import axios from '@/axios.js'
+
+import Spinner from '@/components/UI/Spinner.vue'
+
 export default {
     name: 'Login',
+    components: {
+        Spinner
+    },
     data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            error: '',
+            loading: false
         }
     },
     methods: {
         submit() {
-            axios.put('admin/')
+            this.loading = true
+            this.error = ''
+            axios.post('authentication/login', { email: this.email, password: this.password })
                 .then(response => {
                     console.log(response)
                 })
+                .catch(error => {
+                    this.error = error
+                })
+                .finally(() => {
+                    this.loading = false
+                })
+            
             // this.name
             // this.password
             // axios
