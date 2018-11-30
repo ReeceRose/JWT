@@ -13,6 +13,9 @@ export default {
     name: 'App',
     components: {
         TheHeader
+    },
+    beforeCreate() {
+        this.$store.dispatch("authentication/loadToken")
     }
 }
 </script>

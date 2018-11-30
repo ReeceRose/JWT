@@ -24,10 +24,15 @@ const authentication = {
     // METHOD
     actions: {
         signIn({ commit }, payload) {
-            commit("setToken", payload.token)
+            commit("setToken", payload)
         },
         logout({ commit }) {
             commit("removeToken")
+        },
+        loadToken({ commit }) {
+            if (localStorage.getItem("token")) {
+                commit("setToken", localStorage.getItem("token"))
+            }
         }
     }
 }

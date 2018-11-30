@@ -65,7 +65,8 @@ export default {
             this.error = ''
             axios.post('authentication/login', { email: this.email, password: this.password })
                 .then(response => {
-                    console.log(response)
+                    this.$store.dispatch('authentication/signIn', response.data.token)
+                    // console.log(response)
                 })
                 .catch(error => {
                     this.error = error
