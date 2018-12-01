@@ -5,15 +5,43 @@
                 <div class="card-body">
                     <h5 class="card-title text-center">Register</h5>
                     <p v-if="error" class="text-danger text-center">An error has occured, make sure your passwords match and your email is unique</p>
-                    <form class="form-signin">
+                    <form class="form-signin" @submit.prevent="submit">
                         <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                            <input 
+                                v-model="email"
+                                @blur="$v.email.$touch()"
+                                :class="{ 'is-invalid': $v.email.$error }"
+                                type="text" 
+                                id="inputEmail" 
+                                class="form-control" 
+                                placeholder="Email address" 
+                                autofocus
+                            >
+                            <p v-if="$v.email.$error" class="text-danger text-center">Not a valid email address</p>
                         </div>
                         <div class="form-label-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <input
+                                v-model="password"
+                                @blur="$v.password.$touch()"
+                                :class="{ 'is-invalid': $v.password.$error }"                                
+                                type="password" 
+                                id="inputPassword" 
+                                class="form-control" 
+                                placeholder="Password"
+                            >
+                            <p v-if="$v.password.$error" class="text-danger text-center">Password must be at least 6 characters</p>
                         </div>
                         <div class="form-label-group">
-                            <input type="password" id="inputPasswordConfirmation" class="form-control" placeholder="Password confirmation" required>
+                            <input 
+                                v-model="confirmationPassword"
+                                @blur="$v.confirmationPassword.$touch()"
+                                :class="{ 'is-invalid': $v.confirmationPassword.$error }"
+                                type="password" 
+                                id="inputPasswordConfirmation" 
+                                class="form-control" 
+                                placeholder="Password confirmation"
+                            >
+                            <p v-if="$v.confirmationPassword.$error" class="text-danger text-center">Passwords must match</p>
                         </div>
 
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
@@ -39,6 +67,10 @@
 </template>
 
 <script>
+import axios from '@/axios.js'
+
+import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+
 export default {
     name: 'Register',
     data() {
@@ -49,9 +81,26 @@ export default {
             error: ''
         }
     },
+    validations: {
+        email: {
+            required,
+            email
+        },
+        password: {
+            required,
+            minLength: minLength(6)
+        },
+        confirmationPassword: {
+            required,
+            sameAsPassword: sameAs('password')
+        }
+    },
     methods: {
         submit() {
-            
+            this.$v.$touch()
+            if (this.$v.$invalid) {
+                return
+            }
         }
     }
 }

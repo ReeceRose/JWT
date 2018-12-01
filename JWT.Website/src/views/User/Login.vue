@@ -3,7 +3,7 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Sign In</h5>
+                    <h5 class="card-title text-center">Login</h5>
                     <p v-if="error" class="text-danger text-center">An error has occured, please check your credentials</p>
                     <form class="form-signin" @submit.prevent="submit">
                         <div class="form-label-group">
@@ -11,7 +11,7 @@
                                 v-model="email" 
                                 @blur="$v.email.$touch()" 
                                 :class="{'is-invalid': $v.email.$error }"
-                                type="email" 
+                                type="text" 
                                 id="inputEmail" 
                                 class="form-control" 
                                 placeholder="Email address" 
@@ -37,11 +37,11 @@
                             <input v-model="rememberMe" type="checkbox" class="custom-control-input" id="inputRememberMe">
                             <label class="custom-control-label" for="inputRememberMe">Remember password</label>
                         </div>
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Login</button>
                         <div class="my-4 strike">
                             <span>OR</span>
                         </div>
-                        <h5 class="card-title text-center">Sign In With</h5>
+                        <h5 class="card-title text-center">Login With</h5>
                         <div class="text-center social-btn">
                             <button class="btn btn-facebook btn-block">
                                 <i class="fab fa-facebook-f fixed-width"></i>
@@ -86,8 +86,8 @@ export default {
     },
     methods: {
         submit() {
+            this.$v.$touch()
             if (this.$v.$invalid) {
-                this.error = 'Password must be at least 6 characters'
                 return
             }
             this.$store.dispatch('general/setIsLoading', true)

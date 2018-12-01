@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home.vue'
-import Login from '@/views/Login.vue'
-import Register from '@/views/Register.vue'
-import Dashboard from '@/views/Dashboard.vue'
+// Lazy load all imports
+const Home = () => import('@/views/Home/Index.vue')
+const Login  = () => import('@/views/User/Login.vue')
+const Register = () => import('@/views/User/Register.vue')
+const Dashboard = () => import('@/views/Dashboard/Index.vue')
 
 Vue.use(Router)
 
@@ -13,22 +14,22 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'Home',
+            name: 'home',
             component: Home
         },
         {
-            path: '/Login',
-            name: 'Login',
+            path: '/User/Login',
+            name: 'login',
             component: Login
         },
         {
-            path: '/Register',
-            name: 'Register',
+            path: '/User/Register',
+            name: 'register',
             component: Register
         },
         {
             path: '/Dashboard',
-            name: 'Dashboard',
+            name: 'dashboard',
             component: Dashboard
         }
     ]
