@@ -61,6 +61,7 @@
 
 <script>
 import axios from '@/axios.js'
+import router from '@/router.js'
 
 import { required, minLength, email } from 'vuelidate/lib/validators'
 

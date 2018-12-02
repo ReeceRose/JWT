@@ -12,6 +12,9 @@ const authentication = {
     },
     // SET
     mutations: {
+        setStateToken(state, token) {
+            state.token = token
+        },
         setSessionToken(state, token) {
             state.token = token
             sessionStorage.setItem("token", JSON.stringify(token))
