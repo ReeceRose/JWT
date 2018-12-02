@@ -3,52 +3,45 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Register</h5>
-                    <p v-if="error" class="text-danger text-center">An error has occured, make sure your passwords match and your email is unique</p>
+                    <h5 class="card-title text-center">Login</h5>
+                    <p v-if="error" class="text-danger text-center">An error has occured, please check your credentials</p>
                     <form class="form-signin" @submit.prevent="submit">
                         <div class="form-label-group">
                             <input 
-                                v-model="email"
-                                @blur="$v.email.$touch()"
-                                :class="{ 'is-invalid': $v.email.$error }"
+                                v-model="email" 
+                                @blur="$v.email.$touch()" 
+                                :class="{'is-invalid': $v.email.$error }"
                                 type="text" 
                                 id="inputEmail" 
                                 class="form-control" 
                                 placeholder="Email address" 
-                                autofocus
+                                autofocus 
                             >
                             <p v-if="$v.email.$error" class="text-danger text-center">Not a valid email address</p>
                         </div>
+
                         <div class="form-label-group">
-                            <input
+                            <input 
                                 v-model="password"
                                 @blur="$v.password.$touch()"
-                                :class="{ 'is-invalid': $v.password.$error }"                                
-                                type="password" 
+                                :class="{'is-invalid': $v.password.$error}"
+                                type="password"
                                 id="inputPassword" 
-                                class="form-control" 
+                                class="form-control"
                                 placeholder="Password"
                             >
                             <p v-if="$v.password.$error" class="text-danger text-center">Password must be at least 6 characters</p>
                         </div>
-                        <div class="form-label-group">
-                            <input 
-                                v-model="confirmationPassword"
-                                @blur="$v.confirmationPassword.$touch()"
-                                :class="{ 'is-invalid': $v.confirmationPassword.$error }"
-                                type="password" 
-                                id="inputPasswordConfirmation" 
-                                class="form-control" 
-                                placeholder="Password confirmation"
-                            >
-                            <p v-if="$v.confirmationPassword.$error" class="text-danger text-center">Passwords must match</p>
-                        </div>
 
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+                        <div class="custom-control custom-checkbox mb-3">
+                            <input v-model="rememberMe" type="checkbox" class="custom-control-input" id="inputRememberMe">
+                            <label class="custom-control-label" for="inputRememberMe">Remember password</label>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Login</button>
                         <div class="my-4 strike">
                             <span>OR</span>
                         </div>
-                        <h5 class="card-title text-center">Register With</h5>
+                        <h5 class="card-title text-center">Login With</h5>
                         <div class="text-center social-btn">
                             <button class="btn btn-facebook btn-block">
                                 <i class="fab fa-facebook-f fixed-width"></i>
@@ -69,15 +62,15 @@
 <script>
 import axios from '@/axios.js'
 
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+import { required, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
-    name: 'Register',
+    name: 'Login',
     data() {
         return {
             email: '',
             password: '',
-            confirmationPassword: '',
+            rememberMe: false,
             error: ''
         }
     },
@@ -89,10 +82,6 @@ export default {
         password: {
             required,
             minLength: minLength(6)
-        },
-        confirmationPassword: {
-            required,
-            sameAsPassword: sameAs('password')
         }
     },
     methods: {
@@ -101,6 +90,19 @@ export default {
             if (this.$v.$invalid) {
                 return
             }
+            this.$store.dispatch('general/setIsLoading', true)
+            this.error = ''
+            axios.post('authentication/login', { email: this.email, password: this.password })
+                .then(response => {
+                    this.$store.dispatch('authentication/signIn', { token: response.data.token, rememberMe: this.rememberMe })
+                    router.push('/Dashboard')
+                })
+                .catch(error => {
+                    this.error = error
+                })
+                .finally(() => {
+                    this.$store.dispatch('general/setIsLoading', false)
+                })
         }
     }
 }
