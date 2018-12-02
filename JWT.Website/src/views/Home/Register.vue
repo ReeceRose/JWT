@@ -30,7 +30,7 @@
                                 class="form-control" 
                                 placeholder="Password"
                             >
-                            <p v-if="$v.password.$error" class="text-danger text-center">Password must be at least 6 characters</p>
+                            <p v-if="$v.password.$error" class="text-danger text-center">Password must be at least 6 characters long, contain one upper and lowercase letter, and one special character</p>
                         </div>
                         <div class="form-label-group">
                             <input 
@@ -71,7 +71,8 @@
 import axios from '@/axios.js'
 import router from '@/router.js'
 
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
+const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
 
 export default {
     name: 'Register',
@@ -91,7 +92,8 @@ export default {
         },
         password: {
             required,
-            minLength: minLength(6)
+            minLength: minLength(6),
+            passwordRegex
         },
         confirmationPassword: {
             required,
@@ -113,6 +115,10 @@ export default {
                         setTimeout(() => {
                             router.push('/Login')
                         }, 3000)
+                    }
+                    else {
+                        // This shouldn't happen but just in case set the error 
+                        this.error = 'error'
                     }
                 })
                 .catch(error => {
