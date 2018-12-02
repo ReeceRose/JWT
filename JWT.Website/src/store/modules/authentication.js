@@ -12,8 +12,9 @@ const authentication = {
     },
     // SET
     mutations: {
-        setStateToken(state, token) {
+        setSessionToken(state, token) {
             state.token = token
+            sessionStorage.setItem("token", JSON.stringify(token))
         },
         setLocalStorageToken(token) {
             localStorage.setItem("token", JSON.stringify(token))
@@ -27,7 +28,7 @@ const authentication = {
     actions: {
         signIn({ commit }, payload) {
             // console.log(payload);
-            commit("setStateToken", payload.token)
+            commit("setSessionToken", payload.token)
             if (payload.rememberMe) {
                 commit("setLocalStorageToken", payload.token)
             }
@@ -38,6 +39,8 @@ const authentication = {
         loadToken({ commit }) {
             if (localStorage.getItem("token")) {
                 commit("setStateToken", JSON.parse(localStorage.getItem("token")).token)
+            } else if (sessionStorage.getItem("token")) {
+                commit("setSessionToken", JSON.parse(sessionStorage.getItem("token")).token)
             }
         }
     }
