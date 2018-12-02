@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Application.Users.Commands.RegisterUser
 {
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, string>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, bool>
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -23,7 +23,7 @@ namespace JWT.Application.Users.Commands.RegisterUser
             _userManager = userManager;
         }
 
-        public async Task<string> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var user = _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result;
 
@@ -45,7 +45,9 @@ namespace JWT.Application.Users.Commands.RegisterUser
             {
                 await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
             }
-            return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
+            // Return below if you want to sign in user right away
+            //return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
+            return await Task.FromResult(result.Succeeded);
         }
     }
 }

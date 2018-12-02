@@ -108,10 +108,12 @@ export default {
             this.error = ''
             axios.post('authentication/register', { email: this.email, password: this.password })
                 .then(response => {
-                    this.success = true
-                    setTimeout(() => {
-                        router.push('/Login')
-                    }, 3000)
+                    if (response.data.result) {
+                        this.success = true
+                        setTimeout(() => {
+                            router.push('/Login')
+                        }, 3000)
+                    }
                 })
                 .catch(error => {
                     this.error = error

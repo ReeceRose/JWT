@@ -129,12 +129,6 @@ namespace JWT.API
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
-//            app.UseMvc(routes =>
-//            {
-//                routes.MapRoute(
-//                    name: "default",
-//                    template: "api/v1/{controller}/{action}");
-//            });
         }
 
         private static void UpdateDatabase(IApplicationBuilder app)

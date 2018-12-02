@@ -25,6 +25,7 @@ const authentication = {
         removeToken(state) {
             state.token = ''
             localStorage.removeItem("token")
+            sessionStorage.removeItem("token")
         }
     },
     // METHOD
@@ -43,7 +44,7 @@ const authentication = {
             if (localStorage.getItem("token")) {
                 commit("setStateToken", JSON.parse(localStorage.getItem("token")).token)
             } else if (sessionStorage.getItem("token")) {
-                commit("setSessionToken", JSON.parse(sessionStorage.getItem("token")).token)
+                commit("setSessionToken", JSON.parse(sessionStorage.getItem("token")))
             }
         }
     }

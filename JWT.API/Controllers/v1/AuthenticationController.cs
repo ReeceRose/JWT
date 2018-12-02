@@ -28,7 +28,7 @@ namespace JWT.API.Controllers.v1
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserCommand registerUserCommand)
         {
-            return Ok( new { token = await _mediator.Send(registerUserCommand)});
+            return Ok( new { result = await _mediator.Send(registerUserCommand)});
         }
     }
 }

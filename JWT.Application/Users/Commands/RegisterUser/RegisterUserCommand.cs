@@ -2,7 +2,7 @@
 
 namespace JWT.Application.Users.Commands.RegisterUser
 {
-    public class RegisterUserCommand : IRequest<string>
+    public class RegisterUserCommand : IRequest<bool>
     {
         public RegisterUserCommand(string email, string password, bool isAdmin)
         {
