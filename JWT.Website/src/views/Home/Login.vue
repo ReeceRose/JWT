@@ -105,6 +105,11 @@ export default {
                     this.$store.dispatch('general/setIsLoading', false)
                 })
         }
+    },
+    beforeCreate() {
+        if (this.$store.getters['authentication/getToken']) {
+            router.push('/')
+        }
     }
 }
 </script>
