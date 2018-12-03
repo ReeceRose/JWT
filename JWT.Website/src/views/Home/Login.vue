@@ -96,7 +96,7 @@ export default {
             axios.post('authentication/login', { email: this.email, password: this.password })
                 .then(response => {
                     this.$store.dispatch('authentication/signIn', { token: response.data.token, rememberMe: this.rememberMe })
-                    router.push('/Dashboard')
+                    router.push('/')
                 })
                 .catch(error => {
                     this.error = error
