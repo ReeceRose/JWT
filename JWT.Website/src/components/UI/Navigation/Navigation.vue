@@ -18,7 +18,7 @@
                     <li class="nav-item" v-if="loggedIn">
                         <button class="btn btn-outline-primary" @click="logout">Logout</button>
                     </li>
-                    <li class="nav-item" v-if="loggedIn">
+                    <li class="nav-item" v-if="loggedIn && isAdmin">
                         <router-link :to="{ name: 'dashboard' }" class="btn btn-outline-primary">Dashboard</router-link>
                     </li>
                 </ul>
@@ -36,13 +36,11 @@ export default {
     computed: {
         loggedIn() {
             return this.$store.getters['authentication/getToken']
+        },
+        isAdmin() {
+            return this.$store.getters['authentication/isAdmin']
         }
     }
-    // watch: {
-    //     loggedIn() {
-    //         this.isLoggedIn()
-    //     }
-    // }
 }
 </script>
 

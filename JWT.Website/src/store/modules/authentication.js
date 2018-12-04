@@ -1,13 +1,24 @@
+import utilities from '@/utilities.js'
+import router from '../../router';
+// import router from '@/'
+
 const authentication = {
     namespaced: true,
     // VAR
     state: {
-        token: null
+        token: null,
+        loading: false
     },
     // GET
     getters: {
         getToken(state) {
             return state.token
+        },
+        isAdmin(state) {
+            return state.token ? utilities.parseJwt(state.token).hasOwnProperty("Administrator") : false
+        },
+        isLoading(state) {
+            return state.loading
         }
     },
     // SET
@@ -26,12 +37,14 @@ const authentication = {
             state.token = ''
             localStorage.removeItem("token")
             sessionStorage.removeItem("token")
+        },
+        setLoading(state, loadingState) {
+            state.loading = loadingState
         }
     },
     // METHOD
     actions: {
         signIn({ commit }, payload) {
-            // console.log(payload);
             commit("setSessionToken", payload.token)
             if (payload.rememberMe) {
                 commit("setLocalStorageToken", payload.token)
@@ -39,13 +52,16 @@ const authentication = {
         },
         logout({ commit }) {
             commit("removeToken")
+            router.push('/')
         },
         loadToken({ commit }) {
+            commit("setLoading", true)
             if (localStorage.getItem("token")) {
                 commit("setStateToken", JSON.parse(localStorage.getItem("token")).token)
             } else if (sessionStorage.getItem("token")) {
                 commit("setSessionToken", JSON.parse(sessionStorage.getItem("token")))
             }
+            commit("setLoading", false)
         }
     }
 }

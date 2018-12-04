@@ -22,9 +22,6 @@ export default {
         loading() {
             return this.$store.getters['general/isLoading']
         }
-    },
-    beforeCreate() {
-        this.$store.dispatch("authentication/loadToken")
     }
 }
 </script>

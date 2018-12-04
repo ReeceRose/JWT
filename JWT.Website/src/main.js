@@ -2,8 +2,11 @@ import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 
 import App from '@/App.vue'
-import router from '@/router.js'
 import store from '@/store/store.js'
+
+store.dispatch("authentication/loadToken") 
+
+import router from '@/router.js'
 
 Vue.use(Vuelidate)
 

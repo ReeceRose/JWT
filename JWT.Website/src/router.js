@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store/store.js'
-import utilities from '@/utilities.js'
 
 // Lazy load all imports
 const Home = () => import('@/views/Home/Index.vue')
@@ -15,18 +14,29 @@ Vue.use(Router)
 
 const AdminProtected = {
     beforeEnter: (to, from, next) => {
-        const token = store.getters['authentication/getToken']
-        if (token) {
-            const parsedToken = utilities.parseJwt(token)
-            if (parsedToken.hasOwnProperty("Administrator")) {
-                next()
+        const redirect = () => {
+            const token = store.getters['authentication/getToken']
+            if (token) {
+                if (store.getters['authentication/isAdmin']) {
+                    next()
+                } else {
+                    next('/AccessDenied')
+                }
             } else {
-                // TODO: ADD UNAUTHRIZED
-                next('/AccessDenied')
+                next({ name: 'login', params: { redirect: to.fullPath }})
             }
+        }
+        if (store.getters['authentication/isLoading']) {
+            store.watch(
+                (getters) => {
+                    getters['authentication/isLoading']
+                },
+                () => {
+                    redirect()
+                }
+            )
         } else {
-            // TODO: ADD UNATHENTICATED PAGE
-            next({ name: 'login', params: { redirect: to.fullPath }})
+            redirect()
         }
     }
 }
