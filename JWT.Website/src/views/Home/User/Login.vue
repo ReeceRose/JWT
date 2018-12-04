@@ -4,6 +4,7 @@
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Login</h5>
+                    <p v-if="this.$route.params.redirect" class="text-danger text-center">You must be logged in to view this. Please login below.</p>
                     <p v-if="error" class="text-danger text-center">An error has occured, please check your credentials</p>
                     <form class="form-signin" @submit.prevent="submit">
                         <div class="form-label-group">
@@ -37,11 +38,15 @@
                             <input v-model="rememberMe" type="checkbox" class="custom-control-input" id="inputRememberMe">
                             <label class="custom-control-label" for="inputRememberMe">Remember password</label>
                         </div>
+
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Login</button>
+
                         <div class="my-4 strike">
                             <span>OR</span>
                         </div>
+
                         <h5 class="card-title text-center">Login With</h5>
+                        
                         <div class="text-center social-btn">
                             <button class="btn btn-facebook btn-block">
                                 <i class="fab fa-facebook-f fixed-width"></i>

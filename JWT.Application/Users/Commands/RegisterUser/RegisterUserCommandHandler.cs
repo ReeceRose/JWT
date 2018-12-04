@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using JWT.Application.Token.Query.GetToken;
 using JWT.Application.Users.Queries.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;

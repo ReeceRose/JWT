@@ -5,14 +5,15 @@ import utilities from '@/utilities.js'
 
 // Lazy load all imports
 const Home = () => import('@/views/Home/Index.vue')
-const Login  = () => import('@/views/Home/Login.vue')
-const Register = () => import('@/views/Home/Register.vue')
 const Dashboard = () => import('@/views/Dashboard/Index.vue')
+
+const Login  = () => import('@/views/Home/User/Login.vue')
+const Register = () => import('@/views/Home/User/Register.vue')
+const AccessDenied = () => import('@/views/Home/User/AccessDenied.vue')
 
 Vue.use(Router)
 
 const AdminProtected = {
-
     beforeEnter: (to, from, next) => {
         const token = store.getters['authentication/getToken']
         if (token) {
@@ -21,18 +22,18 @@ const AdminProtected = {
                 next()
             } else {
                 // TODO: ADD UNAUTHRIZED
-                next(false)
+                next('/AccessDenied')
             }
         } else {
             // TODO: ADD UNATHENTICATED PAGE
-            next('/')
+            next({ name: 'login', params: { redirect: to.fullPath }})
         }
     }
 }
 const NotLoggedIn = {
     beforeEnter: (to, from, next) => {
         const token = store.getters['authentication/getToken']
-        if (store.getters['authentication/getToken']) {
+        if (token) {
             next(false)
         }
         else {
@@ -51,7 +52,7 @@ export default new Router({
             component: Home
         },
         {
-            path: '/Login',
+            path: '/Login/:redirect?',
             name: 'login',
             component: Login,
             ...NotLoggedIn
@@ -67,6 +68,11 @@ export default new Router({
             name: 'dashboard',
             component: Dashboard,
             ...AdminProtected
+        },
+        {
+            path: '/AccessDenied',
+            name: 'accessDenied',
+            component: AccessDenied
         },
         {
             path: '*',
