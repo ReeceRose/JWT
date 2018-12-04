@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import axios from '@/axios.js'
 import router from '@/router.js'
 
 import { required, minLength, email } from 'vuelidate/lib/validators'
@@ -76,8 +75,7 @@ export default {
         return {
             email: '',
             password: '',
-            rememberMe: true,
-            error: ''
+            rememberMe: true
         }
     },
     validations: {
@@ -90,25 +88,18 @@ export default {
             minLength: minLength(6)
         }
     },
+    computed: {
+        error() {
+            return this.$store.getters['authentication/getError']
+        }
+    },
     methods: {
         submit() {
             this.$v.$touch()
             if (this.$v.$invalid) {
                 return
             }
-            this.$store.dispatch('general/setIsLoading', true)
-            this.error = ''
-            axios.post('authentication/login', { email: this.email, password: this.password })
-                .then(response => {
-                    this.$store.dispatch('authentication/signIn', { token: response.data.token, rememberMe: this.rememberMe })
-                    router.push('/')
-                })
-                .catch(error => {
-                    this.error = error
-                })
-                .finally(() => {
-                    this.$store.dispatch('general/setIsLoading', false)
-                })
+            this.$store.dispatch('authentication/login', { email: this.email, password: this.password, rememberMe: this.rememberMe })
         }
     },
     beforeCreate() {

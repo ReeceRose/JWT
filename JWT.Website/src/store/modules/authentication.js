@@ -1,28 +1,33 @@
+// import axios from '@/axios.js'
 import utilities from '@/utilities.js'
-import router from '../../router';
-// import router from '@/'
-
+import router from '@/router.js'
+import axios from '@/axios.js'
+// headers: { Authorization: `Bearer ${getters['uthentication/getToken'] || ''}`}
 const authentication = {
     namespaced: true,
     // VAR
     state: {
         token: null,
-        loading: false
+        loading: false,
+        error: false,
+        detailedError: ''
     },
     // GET
     getters: {
-        getToken(state) {
-            return state.token
-        },
+        // TOKEN
+        getToken(state) { return state.token },
         isAdmin(state) {
             return state.token ? utilities.parseJwt(state.token).hasOwnProperty("Administrator") : false
         },
-        isLoading(state) {
-            return state.loading
-        }
+        // LOADING
+        isLoading(state) { return state.loading },
+        // ERROR
+        getError(state) { return state.error },
+        getDetailedError(state) { return state.detailedError } // For debugging
     },
     // SET
     mutations: {
+        // TOKEN
         setStateToken(state, token) {
             state.token = token
         },
@@ -38,17 +43,38 @@ const authentication = {
             localStorage.removeItem("token")
             sessionStorage.removeItem("token")
         },
-        setLoading(state, loadingState) {
-            state.loading = loadingState
-        }
+        // LOADING
+        setLoading(state, loadingState) { state.loading = loadingState },
+        // ERROR
+        setError(state, error) { state.error = error },
+        setDetailedError(state, error) { state.detailedError = error }
     },
     // METHOD
     actions: {
-        signIn({ commit }, payload) {
-            commit("setSessionToken", payload.token)
-            if (payload.rememberMe) {
-                commit("setLocalStorageToken", payload.token)
-            }
+        // TOKEN
+        login({ commit, dispatch }, payload) {
+            dispatch('general/setIsLoading', true, {root: true})
+            commit("setError", false)
+            axios({
+                method: 'post',
+                url: 'authentication/login',
+                data: { email: payload.email, password: payload.password},
+            })
+                .then((response) => {
+                    const token = response.data.token
+                    commit("setSessionToken", token)
+                    if (payload.rememberMe) {
+                        commit("setLocalStorageToken", token)
+                    }
+                    router.push('/')
+                })
+                .catch(error => {
+                    commit("setError", true)
+                    commit("setDetailedError", JSON.stringify(error))
+                })
+                .finally(() => {
+                    dispatch('general/setIsLoading', false, {root: true})
+                })
         },
         logout({ commit }) {
             commit("removeToken")
@@ -62,7 +88,7 @@ const authentication = {
                 commit("setSessionToken", JSON.parse(sessionStorage.getItem("token")))
             }
             commit("setLoading", false)
-        }
+        },
     }
 }
 
