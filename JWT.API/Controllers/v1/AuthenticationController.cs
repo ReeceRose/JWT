@@ -20,15 +20,9 @@ namespace JWT.API.Controllers.v1
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginUserQuery loginUserQuery)
-        {
-            return Ok(new { token = await _mediator.Send(loginUserQuery)});
-        }
+        public async Task<IActionResult> PostLoginAsync([FromBody] LoginUserQuery loginUserQuery) => Ok(new { token = await _mediator.Send(loginUserQuery) });
 
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserCommand registerUserCommand)
-        {
-            return Ok( new { result = await _mediator.Send(registerUserCommand)});
-        }
+        public async Task<IActionResult> PostRegisterAsync([FromBody] RegisterUserCommand registerUserCommand) => Ok(new { result = await _mediator.Send(registerUserCommand) });
     }
 }

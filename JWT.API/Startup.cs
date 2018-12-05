@@ -17,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace JWT.API
 {
@@ -41,7 +40,9 @@ namespace JWT.API
                 options.UseNpgsql(Configuration.GetConnectionString("Postgres"),
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
             
-            services.AddHealthChecks();
+            services
+                .AddHealthChecks()
+                .AddDbContextCheck<IdentityDbContext>();
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
