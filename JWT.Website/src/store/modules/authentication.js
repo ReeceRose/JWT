@@ -89,7 +89,11 @@ const authentication = {
         register({ commit, dispatch }, payload) {
             dispatch('general/setIsLoading', true, {root: true})
             commit("setError", false)
-            axios.post('authentication/register', { email: payload.email, password: payload.password })
+            axios({
+                method: 'post',
+                url: 'authentication/register',
+                data: { email: payload.email, password: payload.password}
+            })
                 .then(response => {
                     if (response.data.result) {
                         commit("setStatus", true)

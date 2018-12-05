@@ -3,7 +3,6 @@ using System.Text;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using JWT.Application.Users.Commands.RegisterUser;
-using JWT.Application.Users.Queries.LoginUser;
 using JWT.API.Filters;
 using JWT.Common;
 using MediatR;
@@ -17,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace JWT.API
 {
@@ -89,13 +89,18 @@ namespace JWT.API
                     {
                         options.Filters.Add(typeof(CustomExceptionFilterAttribute));
                     })
-//                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
                 .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<RegisterUserCommandValidator>());
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "JWT API", Version = "v1" });
             });
 
             services.AddCors();
@@ -126,9 +131,17 @@ namespace JWT.API
 
             UpdateDatabase(app);
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+
         }
 
         private static void UpdateDatabase(IApplicationBuilder app)
