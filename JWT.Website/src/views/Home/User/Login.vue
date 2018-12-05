@@ -106,6 +106,9 @@ export default {
         if (this.$store.getters['authentication/getToken']) {
             router.push('/')
         }
+    },
+    destroyed() {
+        this.$store.commit('authentication/resetError')
     }
 }
 </script>

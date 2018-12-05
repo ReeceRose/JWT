@@ -1,7 +1,7 @@
-// import axios from '@/axios.js'
 import utilities from '@/utilities.js'
 import router from '@/router.js'
 import axios from '@/axios.js'
+// For reference
 // headers: { Authorization: `Bearer ${getters['uthentication/getToken'] || ''}`}
 const authentication = {
     namespaced: true,
@@ -10,7 +10,8 @@ const authentication = {
         token: null,
         loading: false,
         error: false,
-        detailedError: ''
+        detailedError: '',
+        status: false
     },
     // GET
     getters: {
@@ -23,7 +24,8 @@ const authentication = {
         isLoading(state) { return state.loading },
         // ERROR
         getError(state) { return state.error },
-        getDetailedError(state) { return state.detailedError } // For debugging
+        getDetailedError(state) { return state.detailedError }, // For debugging
+        getStatus(state) { return state.status }
     },
     // SET
     mutations: {
@@ -47,11 +49,15 @@ const authentication = {
         setLoading(state, loadingState) { state.loading = loadingState },
         // ERROR
         setError(state, error) { state.error = error },
-        setDetailedError(state, error) { state.detailedError = error }
+        setDetailedError(state, error) { state.detailedError = error },
+        resetError(state) {
+            state.error = ''
+            state.detailedError = ''
+        },
+        setStatus(state, status) { state.status = status }
     },
     // METHOD
     actions: {
-        // TOKEN
         login({ commit, dispatch }, payload) {
             dispatch('general/setIsLoading', true, {root: true})
             commit("setError", false)
@@ -79,6 +85,28 @@ const authentication = {
         logout({ commit }) {
             commit("removeToken")
             router.push('/')
+        },
+        register({ commit, dispatch }, payload) {
+            dispatch('general/setIsLoading', true, {root: true})
+            commit("setError", false)
+            axios.post('authentication/register', { email: payload.email, password: payload.password })
+                .then(response => {
+                    if (response.data.result) {
+                        commit("setStatus", true)
+                        setTimeout(() => {
+                            router.push('/Login')
+                        }, 3000)
+                    }
+                    else {
+                        commit("setError", true)
+                    }
+                })
+                .catch(() => {
+                    commit("setError", true)
+                })
+                .finally(() => {
+                    dispatch('general/setIsLoading', false, { root: true })
+                })
         },
         loadToken({ commit }) {
             commit("setLoading", true)

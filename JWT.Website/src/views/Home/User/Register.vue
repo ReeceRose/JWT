@@ -4,7 +4,7 @@
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Register</h5>
-                    <p v-if="success" class="text-success text-center">Registered successfully. Redirecting...</p>
+                    <p v-if="status" class="text-success text-center">Registered successfully. Redirecting...</p>
                     <p v-if="error" class="text-danger text-center">An error has occured, make sure your passwords match and your email is unique</p>
                     <form class="form-signin" @submit.prevent="submit">
                         <div class="form-label-group">
@@ -68,9 +68,6 @@
 </template>
 
 <script>
-import axios from '@/axios.js'
-import router from '@/router.js'
-
 import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
 
@@ -81,7 +78,6 @@ export default {
             email: '',
             password: '',
             confirmationPassword: '',
-            error: '',
             success: false
         }
     },
@@ -100,33 +96,21 @@ export default {
             sameAsPassword: sameAs('password')
         }
     },
+    computed: {
+        error() {
+            return this.$store.getters['authentication/getError']
+        },
+        status() {
+            return this.$store.getters['authentication/getStatus']
+        }
+    },
     methods: {
         submit() {
             this.$v.$touch()
             if (this.$v.$invalid) {
                 return
             }
-            this.$store.dispatch('general/setIsLoading', true)
-            this.error = ''
-            axios.post('authentication/register', { email: this.email, password: this.password })
-                .then(response => {
-                    if (response.data.result) {
-                        this.success = true
-                        setTimeout(() => {
-                            router.push('/Login')
-                        }, 3000)
-                    }
-                    else {
-                        // This shouldn't happen but just in case set the error 
-                        this.error = 'error'
-                    }
-                })
-                .catch(error => {
-                    this.error = error
-                })
-                .finally(() => {
-                    this.$store.dispatch('general/setIsLoading', false)
-                })
+            this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
         }
     }
 }
