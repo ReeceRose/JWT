@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace JWT.API
 {
@@ -39,6 +40,8 @@ namespace JWT.API
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Postgres"),
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
+            
+            services.AddHealthChecks();
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -60,7 +63,7 @@ namespace JWT.API
                 })
                 .AddJwtBearer(x =>
                 {
-                    //x.RequireHttpsMetadata = true;
+                    x.RequireHttpsMetadata = true;
                     x.SaveToken = true;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -137,6 +140,8 @@ namespace JWT.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API V1");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseHealthChecks("/ready");
 
             app.UseAuthentication();
             app.UseHttpsRedirection();
