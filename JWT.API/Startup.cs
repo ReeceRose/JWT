@@ -89,7 +89,7 @@ namespace JWT.API
                     {
                         options.Filters.Add(typeof(CustomExceptionFilterAttribute));
                     })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+//                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
                 .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<RegisterUserCommandValidator>());
 
