@@ -31,9 +31,7 @@ namespace JWT.Application.Users.Queries.LoginUser
         public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
         {
             var user = _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result;
-
-            await _notificationService.SendNotificationAsync("Reece Rose", "reecerose18@gmail.com", "Test", "Testing this email");
-
+            
             if (user == null)
             {
                 throw new InvalidCredentialException();
