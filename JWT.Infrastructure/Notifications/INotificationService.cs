@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using System.Threading.Tasks;
 
 namespace JWT.Infrastructure.Notifications
 {
-    public interface INotificationService : IEmailSender
+    public interface INotificationService
     {
-        // More features might want to be added in the future so add the ability to extend IEmailSender   
+        Task SendNotificationAsync(
+            string fromName,
+            string fromEmailAddress,
+            string toName,
+            string toEmailAddress,
+            string subject,
+            string message
+        );
     }
 }

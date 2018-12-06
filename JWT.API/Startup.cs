@@ -5,6 +5,7 @@ using FluentValidation.AspNetCore;
 using JWT.Application.Users.Commands.RegisterUser;
 using JWT.API.Filters;
 using JWT.Common;
+using JWT.Infrastructure.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,8 @@ namespace JWT.API
             services.AddApiVersioning();
 
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<INotificationService, NotificationService>();
+
             services.AddScoped<IdentityDbContext, IdentityDbContext>();
 
             var mappingConfig = new MapperConfiguration(mc =>

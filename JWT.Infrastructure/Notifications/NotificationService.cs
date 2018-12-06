@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using System.Threading.Tasks;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using MimeKit;
+using Org.BouncyCastle.Crypto.Tls;
 
 namespace JWT.Infrastructure.Notifications
 {
@@ -17,25 +14,29 @@ namespace JWT.Infrastructure.Notifications
         {
             _configuration = configuration;
         }
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
-        {
-            return Execute(email, subject, htmlMessage);
-        }
 
-        public Task Execute(string email, string subject, string htmlMessage)
+        public async Task SendNotificationAsync(string fromName, string fromEmailAddress, string toName, string toEmailAddress,
+            string subject, string message)
         {
-            var client = new SendGridClient(_configuration["SendGrid:Key"]);
-            var message = new SendGridMessage()
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress(name: fromName, address: fromEmailAddress));
+            email.To.Add(new MailboxAddress(name: toName, address: toEmailAddress));
+            email.Subject = subject;
+            var body = new BodyBuilder {HtmlBody = message };
+
+            using (var client = new SmtpClient())
             {
-                From = new EmailAddress(_configuration["SendGrid:From"], _configuration["SendGrid:Name"]),
-                Subject = subject,
-                PlainTextContent = htmlMessage,
-                HtmlContent = htmlMessage
-            };
-            message.AddTo(new EmailAddress(email));
-            message.SetClickTracking(false, false);
+                client.ServerCertificateValidationCallback = (sender, certificate, certChainType, errors) => true;
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-            return client.SendEmailAsync(message);
+                await client.ConnectAsync(_configuration["SMTP:Host"], int.Parse(_configuration["SMTP:Port"]), false)
+                    .ConfigureAwait(false);
+                await client.AuthenticateAsync(_configuration["SMTP:Username"], _configuration["SMTP:Password"])
+                    .ConfigureAwait(false);
+
+                await client.SendAsync(email).ConfigureAwait(false);
+                await client.DisconnectAsync(true).ConfigureAwait(false);
+            }
         }
     }
 }
