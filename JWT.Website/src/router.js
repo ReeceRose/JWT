@@ -6,9 +6,11 @@ import store from '@/store/store.js'
 const Home = () => import('@/views/Home/Index.vue')
 const Dashboard = () => import('@/views/Dashboard/Index.vue')
 
+// USER
 const Login  = () => import('@/views/Home/User/Login.vue')
 const Register = () => import('@/views/Home/User/Register.vue')
 const AccessDenied = () => import('@/views/Home/User/AccessDenied.vue')
+const ResetPassword = () => import('@/views/Home/User/ResetPassword.vue')
 
 Vue.use(Router)
 
@@ -83,6 +85,11 @@ export default new Router({
             path: '/AccessDenied',
             name: 'accessDenied',
             component: AccessDenied
+        },
+        {
+            path: '/ResetPassword',
+            name: 'resetPassword',
+            component: ResetPassword
         },
         {
             path: '*',
