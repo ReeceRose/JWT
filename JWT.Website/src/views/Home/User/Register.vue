@@ -1,78 +1,83 @@
 <template>
-    <div class="row">
-        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div class="card card-signin my-5">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Register</h5>
-                    <p v-if="status" class="text-success text-center">Registered successfully. Redirecting...</p>
-                    <p v-if="error" class="text-danger text-center">An error has occured, make sure your passwords match and your email is unique</p>
-                    <form class="form-signin" @submit.prevent="submit">
-                        <div class="form-label-group">
-                            <input 
-                                v-model="email"
-                                @blur="$v.email.$touch()"
-                                :class="{ 'is-invalid': $v.email.$error }"
-                                type="text" 
-                                id="inputEmail" 
-                                class="form-control" 
-                                placeholder="Email address" 
-                                autofocus
-                            >
-                            <p v-if="$v.email.$error" class="text-danger text-center">Not a valid email address</p>
-                        </div>
-                        <div class="form-label-group">
-                            <input
-                                v-model="password"
-                                @blur="$v.password.$touch()"
-                                :class="{ 'is-invalid': $v.password.$error }"                                
-                                type="password" 
-                                id="inputPassword" 
-                                class="form-control" 
-                                placeholder="Password"
-                            >
-                            <p v-if="$v.password.$error" class="text-danger text-center">Password must be at least 6 characters long, contain one upper and lowercase letter, and one special character</p>
-                        </div>
-                        <div class="form-label-group">
-                            <input 
-                                v-model="confirmationPassword"
-                                @blur="$v.confirmationPassword.$touch()"
-                                :class="{ 'is-invalid': $v.confirmationPassword.$error }"
-                                type="password" 
-                                id="inputPasswordConfirmation" 
-                                class="form-control" 
-                                placeholder="Password confirmation"
-                            >
-                            <p v-if="$v.confirmationPassword.$error" class="text-danger text-center">Passwords must match</p>
-                        </div>
+    <FormCard title="Register" :submit="submit">
+        <div slot="card-information">
+            <p v-if="status" class="text-success text-center">Registered successfully. Redirecting...</p>
+            <p v-if="error" class="text-danger text-center">An error has occured, make sure your passwords match and your email is unique</p>
+        </div>
 
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
-                        <div class="my-4 strike">
-                            <span>OR</span>
-                        </div>
-                        <h5 class="card-title text-center">Register With</h5>
-                        <div class="text-center social-btn">
-                            <button class="btn btn-facebook btn-block">
-                                <i class="fab fa-facebook-f fixed-width"></i>
-                                <span>Facebook</span>
-                            </button>
-                            <button class="btn btn-google btn-block">
-                                <i class="fab fa-google fixed-width"></i>
-                                <span>Google</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+        <div slot="card-content">
+            <div class="form-label-group">
+                <input 
+                    v-model="email"
+                    @blur="$v.email.$touch()"
+                    :class="{ 'is-invalid': $v.email.$error }"
+                    type="text" 
+                    id="inputEmail" 
+                    class="form-control" 
+                    placeholder="Email address" 
+                    autofocus
+                >
+                <p v-if="$v.email.$error" class="text-danger text-center">Not a valid email address</p>
+            </div>
+
+            <div class="form-label-group">
+                <input
+                    v-model="password"
+                    @blur="$v.password.$touch()"
+                    :class="{ 'is-invalid': $v.password.$error }"                                
+                    type="password" 
+                    id="inputPassword" 
+                    class="form-control" 
+                    placeholder="Password"
+                >
+                <p v-if="$v.password.$error" class="text-danger text-center">Password must be at least 6 characters long, contain one upper and lowercase letter, and one special character</p>
+            </div>
+
+            <div class="form-label-group">
+                <input 
+                    v-model="confirmationPassword"
+                    @blur="$v.confirmationPassword.$touch()"
+                    :class="{ 'is-invalid': $v.confirmationPassword.$error }"
+                    type="password" 
+                    id="inputPasswordConfirmation" 
+                    class="form-control" 
+                    placeholder="Password confirmation"
+                >
+                <p v-if="$v.confirmationPassword.$error" class="text-danger text-center">Passwords must match</p>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+            
+            <div class="my-4 strike">
+                <span>OR</span>
+            </div>
+
+            <h5 class="card-title text-center">Register With</h5>
+
+            <div class="text-center social-btn">
+                <button class="btn btn-facebook btn-block">
+                    <i class="fab fa-facebook-f fixed-width"></i>
+                    <span>Facebook</span>
+                </button>
+                <button class="btn btn-google btn-block">
+                    <i class="fab fa-google fixed-width"></i>
+                    <span>Google</span>
+                </button>
             </div>
         </div>
-    </div>
+    </FormCard>
 </template>
 
 <script>
+import FormCard from '@/components/UI/Card/FormCard.vue'
+
 import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
 
 export default {
-    name: 'Register',
+    components: {
+        FormCard
+    },
     data() {
         return {
             email: '',
@@ -117,44 +122,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-signin {
-    border: 0;
-    border-radius: 1rem;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-
-    .card-title {
-        margin-bottom: 2rem;
-        font-weight: 300;
-        font-size: 1.5rem;
-    }
-
-    .card-body {
-        padding: 2rem;
-    }
-}
-
-.form-signin {
-    width: 100%;
-
-    .btn {
-        font-size: 80%;
-        border-radius: 5rem;
-        letter-spacing: .1rem;
-        font-weight: bold;
-        padding: 1rem;
-        transition: all 0.2s;
-    }
-
-    .form-label-group {
-        position: relative;
-        margin-bottom: 1rem;
-
-        input {
-            border-radius: 2rem;
-        }
-    }
-
-    .btn-google {
+.custom-form {
+     .btn-google {
         color: white;
         background-color: #ea4335;
         margin: 5px;
