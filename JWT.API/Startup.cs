@@ -34,10 +34,11 @@ namespace JWT.API
         {
             services.AddApiVersioning();
 
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped<IdentityDbContext, IdentityDbContext>();
             
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("Postgres"),
+                options.UseNpgsql(Configuration["ConnectionStrings:Postgres"],
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
             
             services
@@ -69,11 +70,11 @@ namespace JWT.API
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("PLACE YOUR KEY HERE")),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SigningKey"])),
                         ValidateIssuer = true,
-                        ValidIssuer = "Issuer",
+                        ValidIssuer = Configuration["JWT:Issuer"],
                         ValidateAudience = true,
-                        ValidAudience = "Audience"
+                        ValidAudience = Configuration["JWT:Audience"]
                     };
                 });
 

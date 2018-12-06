@@ -34,6 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{67D0E21A-C
 		LICENSE = LICENSE
 		migrations.txt = migrations.txt
 		README.md = README.md
+		SECRETS.md = SECRETS.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A08F6F72-D3A2-4606-878B-57C547875035}"

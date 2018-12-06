@@ -4,24 +4,29 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JWT.Application.Token.Query.GetToken
 {
     public class GetTokenQueryHandler :IRequestHandler<GetTokenQuery, string>
     {
+        private readonly IConfiguration _configuration;
+
+        public GetTokenQueryHandler(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public Task<string> Handle(GetTokenQuery request, CancellationToken cancellationToken)
         {
-            //var securityKey = GET CONFIG SECURITY KEY
-            var securityKey = "PLACE YOUR KEY HERE";
-
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]));
 
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
             
             var token = new JwtSecurityToken(
-                issuer: "Issuer",
-                audience: "Audience",
+                issuer: _configuration["JWT:Issuer"],
+                audience: _configuration["JWT:Audience"],
                 claims: request.Claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: signingCredentials
