@@ -2,7 +2,6 @@
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using Org.BouncyCastle.Crypto.Tls;
 
 namespace JWT.Infrastructure.Notifications
 {
@@ -15,11 +14,11 @@ namespace JWT.Infrastructure.Notifications
             _configuration = configuration;
         }
 
-        public async Task SendNotificationAsync(string fromName, string fromEmailAddress, string toName, string toEmailAddress,
+        public async Task SendNotificationAsync(string toName, string toEmailAddress,
             string subject, string message)
         {
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress(name: fromName, address: fromEmailAddress));
+            email.From.Add(new MailboxAddress(name: _configuration["SMTP:Name"], address: _configuration["SMTP:Email"]));
             email.To.Add(new MailboxAddress(name: toName, address: toEmailAddress));
             email.Subject = subject;
             var body = new BodyBuilder {HtmlBody = message };
@@ -28,8 +27,8 @@ namespace JWT.Infrastructure.Notifications
             {
                 client.ServerCertificateValidationCallback = (sender, certificate, certChainType, errors) => true;
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
-
-                await client.ConnectAsync(_configuration["SMTP:Host"], int.Parse(_configuration["SMTP:Port"]), false)
+                var host = _configuration["SMTP:Host"];
+                await client.ConnectAsync(_configuration["SMTP:Host"], 587, false)
                     .ConfigureAwait(false);
                 await client.AuthenticateAsync(_configuration["SMTP:Username"], _configuration["SMTP:Password"])
                     .ConfigureAwait(false);
