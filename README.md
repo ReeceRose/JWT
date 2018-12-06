@@ -28,6 +28,8 @@
 
 ## Setup
 
+Before you begin, you need to setup the required secrets in Azure Key Vault. [Click here](SECRETS.md) to set them up
+
 ### With Source
 
 To clone and run this application, you'll need [Git](https://git-scm.com), [Docker](https://www.docker.com/products/docker-desktop), [.NET Core 2.1](https://www.microsoft.com/net/download) and [Node.js](https://nodejs.org/en/download/)) installed on your computer. 
