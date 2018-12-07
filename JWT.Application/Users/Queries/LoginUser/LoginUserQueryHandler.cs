@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.CodeDom.Compiler;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.Token.Query.GetToken;
@@ -43,7 +45,13 @@ namespace JWT.Application.Users.Queries.LoginUser
             {
                 throw new AccountLockedException();
             }
-            
+
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                //TODO: Generate a custom exception
+                throw new InvalidCastException();
+            }
+
             return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
         }
     }
