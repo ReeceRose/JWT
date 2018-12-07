@@ -5,6 +5,7 @@ using FluentValidation.AspNetCore;
 using JWT.Application.Users.Commands.RegisterUser;
 using JWT.API.Filters;
 using JWT.Common;
+using JWT.Infrastructure.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -35,8 +36,16 @@ namespace JWT.API
             services.AddApiVersioning();
 
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<INotificationService, NotificationService>();
+
             services.AddScoped<IdentityDbContext, IdentityDbContext>();
-            
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            services.AddSingleton(mappingConfig.CreateMapper());
+
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(Configuration["ConnectionStrings:Postgres"],
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
@@ -98,19 +107,12 @@ namespace JWT.API
                 //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
                 .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<RegisterUserCommandValidator>());
 
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "JWT API", Version = "v1" });
             });
 
             services.AddCors();
-
-            services.AddSingleton(mappingConfig.CreateMapper());
 
             services.AddMediatR();
         }
