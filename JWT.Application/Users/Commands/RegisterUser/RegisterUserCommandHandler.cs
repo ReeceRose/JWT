@@ -49,7 +49,7 @@ namespace JWT.Application.Users.Commands.RegisterUser
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             
             await _notificationService.SendNotificationAsync(toName: email, toEmailAddress: email, subject: "Registered account",
-                message: $"Congratulations! You have successfully created your account. To continue click <a href='{_configuartion["url"]}/Authentication/ConfirmEmail/{code}'>here</a>");
+                message: $"Congratulations! You have successfully created your account. To continue click <a href='{_configuartion["FronteEndUrl"]}/Authentication/ConfirmEmail/{code}'>here</a>");
 
             // NOTE: DO NOT DO THIS!!
             if (request.IsAdmin)
