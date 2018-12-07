@@ -48,8 +48,7 @@ namespace JWT.Application.Users.Queries.LoginUser
 
             if (!await _userManager.IsEmailConfirmedAsync(user))
             {
-                //TODO: Generate a custom exception
-                throw new InvalidCastException();
+                throw new EmailNotConfirmedException();
             }
 
             return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);

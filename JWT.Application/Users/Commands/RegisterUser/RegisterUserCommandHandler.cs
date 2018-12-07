@@ -17,15 +17,15 @@ namespace JWT.Application.Users.Commands.RegisterUser
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly INotificationService _notificationService;
-        private readonly IConfiguration _configuartion;
+        private readonly IConfiguration _configuration;
 
-        public RegisterUserCommandHandler(IMediator mediator, IMapper mapper, UserManager<IdentityUser> userManager, INotificationService notificationService, IConfiguration configuartion)
+        public RegisterUserCommandHandler(IMediator mediator, IMapper mapper, UserManager<IdentityUser> userManager, INotificationService notificationService, IConfiguration configuration)
         {
             _mediator = mediator;
             _mapper = mapper;
             _userManager = userManager;
             _notificationService = notificationService;
-            _configuartion = configuartion;
+            _configuration = configuration;
         }
 
         public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -49,7 +49,7 @@ namespace JWT.Application.Users.Commands.RegisterUser
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             
             await _notificationService.SendNotificationAsync(toName: email, toEmailAddress: email, subject: "Registered account",
-                message: $"Congratulations! You have successfully created your account. To continue click <a href='{_configuartion["FronteEndUrl"]}/Authentication/ConfirmEmail/{code}'>here</a>");
+                message: $"Congratulations! You have successfully created your account. To continue click <a href='{_configuration["FrontEndUrl"]}/Authentication/ConfirmEmail/{code}'>here</a>");
 
             // NOTE: DO NOT DO THIS!!
             if (request.IsAdmin)
