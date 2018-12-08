@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="col-sm-10 col-md-9 col-lg-8 mx-auto">
             <div class="card custom-card my-5">
                 <div class="custom-card-body">
                     <h5 class="custom-card-title text-center">{{ title }}</h5>
@@ -20,16 +20,6 @@
 
 <script>
 export default {
-    props: {
-        title: String,
-        submit: Function
-    },
-    methods: {
-        submitForm() {
-            // eslint-disable-next-line
-            submit()
-        }
-    }
 
 }
 </script>
@@ -48,28 +38,6 @@ export default {
 
     .custom-card-body {
         padding: 2rem;
-    }
-}
-
-.custom-form {
-    width: 100%;
-
-    .btn {
-        font-size: 80%;
-        border-radius: 5rem;
-        letter-spacing: .1rem;
-        font-weight: bold;
-        padding: 1rem;
-        transition: all 0.2s;
-    }
-
-    .form-label-group {
-        position: relative;
-        margin-bottom: 1rem;
-
-        input {
-            border-radius: 2rem;
-        }
     }
 }
 </style>

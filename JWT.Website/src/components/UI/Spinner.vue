@@ -14,23 +14,24 @@
     display: flex;
     align-items: center;
     top: 0;
-    z-index: 1
-}
+    z-index: 1;
 
-.spinner {
-    display: flex;
-    margin: 0 auto;
-    height:60px;
-    width:60px;
-    animation: rotation .6s infinite linear;
-    border-left:6px solid rgba(0,174,239,.15);
-    border-right:6px solid rgba(0,174,239,.15);
-    border-bottom:6px solid rgba(0,174,239,.15);
-    border-top:6px solid rgba(0,174,239,.8);
-    border-radius:100%;
-}
-@keyframes rotation {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(359deg);}
+    .spinner {
+        display: flex;
+        margin: 0 auto;
+        height:60px;
+        width:60px;
+        animation: rotation .6s infinite linear;
+        border-left:6px solid rgba(0,174,239,.15);
+        border-right:6px solid rgba(0,174,239,.15);
+        border-bottom:6px solid rgba(0,174,239,.15);
+        border-top:6px solid rgba(0,174,239,.8);
+        border-radius:100%;
+    }
+    
+    @keyframes rotation {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(359deg);}
+    }
 }
 </style>

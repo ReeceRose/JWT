@@ -1,8 +1,8 @@
 <template>
     <FormCard title="Register" :submit="submit">
         <div slot="card-information">
-            <p v-if="status" class="text-success text-center">Registered successfully. Redirecting...</p>
-            <p v-if="error" class="text-danger text-center">An error has occured, make sure your passwords match and your email is unique</p>
+            <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
+            <p v-if="error" class="text-danger text-center mb-3">An error has occured, make sure your passwords match and your email is unique</p>
         </div>
 
         <div slot="card-content">
