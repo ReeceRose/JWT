@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.Users.Queries.GetUserById;
+using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -19,7 +20,10 @@ namespace JWT.Application.Users.Commands.ConfirmUserEmail
         public async Task<bool> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
         {
             var user = await _mediator.Send(new GetUserByIdQuery(request.UserId), cancellationToken);
-
+            if (user == null)
+            {
+                throw new InvalidUserException();
+            }
             //Finish logic
             throw new System.NotImplementedException();
         }
