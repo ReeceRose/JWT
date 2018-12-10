@@ -6,8 +6,10 @@ namespace JWT.Application.Users.Commands.ConfirmUserEmail
     {
         public ConfirmUserEmailCommandValidator()
         {
-            RuleFor(c => c.Code)
-                .NotEmpty().WithMessage("Code required");
+            RuleFor(r => r.UserId)
+                .NotEmpty().WithMessage("User ID required");
+            RuleFor(r => r.Token)
+                .NotEmpty().WithMessage("Token required");
         }
     }
 }
