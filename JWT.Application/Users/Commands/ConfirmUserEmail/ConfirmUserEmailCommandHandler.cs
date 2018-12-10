@@ -24,8 +24,10 @@ namespace JWT.Application.Users.Commands.ConfirmUserEmail
             {
                 throw new InvalidUserException();
             }
-            //Finish logic
-            throw new System.NotImplementedException();
+
+            var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+
+            return await Task.FromResult(result.Succeeded);
         }
     }
 }
