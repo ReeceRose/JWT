@@ -20,6 +20,7 @@
 
 <script>
 export default {
+    name: 'formCard',
     props: {
         title: String,
         submit: Function

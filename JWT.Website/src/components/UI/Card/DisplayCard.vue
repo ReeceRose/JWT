@@ -7,11 +7,9 @@
                     <slot name="card-information">
 
                     </slot>
-                    <form class="custom-form" @submit.prevent="submit">
-                        <slot name="card-content">
+                    <slot name="card-content">
 
-                        </slot>
-                    </form>
+                    </slot>
                 </div>
             </div>
         </div>
@@ -20,7 +18,9 @@
 
 <script>
 export default {
-
+    props: {
+        title: String
+    },
 }
 </script>
 

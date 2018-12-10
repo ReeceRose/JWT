@@ -12,6 +12,7 @@ const Register = () => import('@/views/Home/User/Register.vue')
 const AccessDenied = () => import('@/views/Home/User/AccessDenied.vue')
 const ResetPassword = () => import('@/views/Home/User/ResetPassword.vue')
 const ConfirmEmail = () => import('@/views/Home/User/ConfirmEmail.vue')
+const ResendConfirmation = () => import('@/views/Home/User/ResendConfirmation.vue')
 
 Vue.use(Router)
 
@@ -93,9 +94,14 @@ export default new Router({
             component: ResetPassword
         },
         {
-            path: '/ConfirmEmail/:code',
+            path: '/ConfirmEmail/:userId/:token',
             name: 'confirmEmail',
             component: ConfirmEmail
+        },
+        {
+            path: '/ResendConfirmation',
+            name: 'resendConfirmation',
+            component: ResendConfirmation
         },
         {
             path: '*',
