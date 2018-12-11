@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using JWT.Application.Users.Queries.GetUserByEmail;
 using JWT.Domain.Exceptions;
@@ -47,9 +48,10 @@ namespace JWT.Application.Users.Commands.RegisterUser
                 throw new InvalidRegisterException();
             }
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            token = HttpUtility.UrlEncode(token);
             
             await _notificationService.SendNotificationAsync(toName: email, toEmailAddress: email, subject: "Registered account",
-                message: $"Congratulations! You have successfully created your account. To continue click <a href='{_configuration["FrontEndUrl"]}/Authentication/ConfirmEmail/{user.Id}/{token}'>here</a>");
+                message: $"Congratulations! You have successfully created your account. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
 
             // NOTE: DO NOT DO THIS!!
             if (request.IsAdmin)

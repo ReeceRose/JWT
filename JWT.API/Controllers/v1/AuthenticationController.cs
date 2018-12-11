@@ -24,7 +24,7 @@ namespace JWT.API.Controllers.v1
         [HttpPost("Register")]
         public async Task<IActionResult> PostRegisterAsync([FromBody] RegisterUserCommand registerUserCommand) => Ok(new { result = await _mediator.Send(registerUserCommand) });
 
-        [HttpGet("ConfirmEmail")]
-        public async Task<IActionResult> GetConfirmEmail([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
+        [HttpPost("ConfirmEmail")]
+        public async Task<IActionResult> PostConfirmEmail([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
     }
 }

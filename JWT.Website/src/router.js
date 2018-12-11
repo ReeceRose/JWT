@@ -94,7 +94,7 @@ export default new Router({
             component: ResetPassword
         },
         {
-            path: '/ConfirmEmail/:userId/:token',
+            path: '/ConfirmEmail',
             name: 'confirmEmail',
             component: ConfirmEmail
         },

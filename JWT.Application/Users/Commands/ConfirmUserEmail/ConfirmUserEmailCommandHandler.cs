@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using JWT.Application.Users.Queries.GetUserById;
 using JWT.Domain.Exceptions;
 using MediatR;
