@@ -75,6 +75,11 @@ const authentication = {
                     router.push('/')
                 })
                 .catch(error => {
+                    if (error.response) {
+                        if (error.response.data.error[0] == "Email not confirmed") {
+                            router.push({ name: 'confirmEmail' })
+                        }
+                    }
                     commit("setError", true)
                     commit("setDetailedError", JSON.stringify(error))
                 })
