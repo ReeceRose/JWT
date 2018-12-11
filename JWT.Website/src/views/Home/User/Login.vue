@@ -2,7 +2,9 @@
     <FormCard title="Login" :submit="submit">
         <div slot="card-information">
             <p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>
-            <p v-if="error" class="text-danger text-center mb-3">An error has occured, please check your credentials and make sure your email is verified</p>
+            <p v-if="error" class="text-danger text-center mb-3">An error has occured, please check your credentials and make sure your email is verified<br>
+                <router-link :to="{ name: 'regenerateConfirmationEmail' }">Regenerate confirmation email</router-link>
+            </p>
         </div>
 
         <div slot="card-content">

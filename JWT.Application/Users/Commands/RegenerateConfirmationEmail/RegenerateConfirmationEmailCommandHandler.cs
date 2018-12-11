@@ -4,6 +4,7 @@ using JWT.Application.ConfirmationEmail.Command;
 using JWT.Application.Users.Queries.GetUserByEmail;
 using JWT.Infrastructure.Notifications;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace JWT.Application.Users.Commands.RegenerateConfirmationEmail
@@ -13,12 +14,14 @@ namespace JWT.Application.Users.Commands.RegenerateConfirmationEmail
         private readonly IMediator _mediator;
         private readonly INotificationService _notificationService;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RegenerateConfirmationEmailCommandHandler(IMediator mediator, INotificationService notificationService, IConfiguration configuration)
+        public RegenerateConfirmationEmailCommandHandler(IMediator mediator, INotificationService notificationService, IConfiguration configuration, UserManager<IdentityUser> userManager)
         {
             _mediator = mediator;
             _notificationService = notificationService;
             _configuration = configuration;
+            _userManager = userManager;
         }
 
         public async Task<bool> Handle(RegenerateConfirmationEmailCommand request, CancellationToken cancellationToken)
@@ -29,12 +32,17 @@ namespace JWT.Application.Users.Commands.RegenerateConfirmationEmail
             {
                 return await Task.FromResult(true);
             }
+
+            if (await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return await Task.FromResult(true);
+            }
+
             var token = _mediator.Send(new GenerateConfirmationTokenCommand(user), cancellationToken).Result;
 
             await _notificationService.SendNotificationAsync(toName: request.Email, toEmailAddress: request.Email, subject: "Confirm your account",
                 message: $"You have requested a confirmation email be sent to you again. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
-
-
+            
             return await Task.FromResult(true);
         }
     }

@@ -56,10 +56,7 @@ export default {
                 data: { email: this.email },
             })
                 .then(() => {
-                    this.confirmed = true
-                })
-                .catch(() => {
-                    this.error = true
+                    this.sent = true
                 })
         }
     }
