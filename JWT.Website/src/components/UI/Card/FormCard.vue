@@ -20,7 +20,11 @@
 
 <script>
 export default {
-    props: ['title', 'submit'],
+    name: 'formCard',
+    props: {
+        title: String,
+        submit: Function
+    },
     methods: {
         submitForm() {
             // eslint-disable-next-line

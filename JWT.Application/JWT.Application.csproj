@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="FluentValidation" Version="8.0.101" />
+    <PackageReference Include="FluentValidation" Version="8.1.0" />
     <PackageReference Include="MediatR" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.3.0" />
@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JWT.Domain\JWT.Domain.csproj" />
+    <ProjectReference Include="..\JWT.Infrastructure\JWT.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
