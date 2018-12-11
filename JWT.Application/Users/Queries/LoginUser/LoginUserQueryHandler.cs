@@ -36,19 +36,19 @@ namespace JWT.Application.Users.Queries.LoginUser
             }
             
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
-            
-            if (!result.Succeeded)
-            {
-                throw new InvalidCredentialException();
-            }
+
             if (result.IsLockedOut)
             {
                 throw new AccountLockedException();
             }
 
-            if (!await _userManager.IsEmailConfirmedAsync(user))
+            if (!(result.Succeeded))
             {
-                throw new EmailNotConfirmedException();
+                if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    throw new EmailNotConfirmedException();
+                }
+                throw new InvalidCredentialException();
             }
 
             return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
