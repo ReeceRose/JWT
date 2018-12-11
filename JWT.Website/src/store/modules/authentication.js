@@ -97,9 +97,6 @@ const authentication = {
                 .then(response => {
                     if (response.data.result) {
                         commit("setStatus", true)
-                        setTimeout(() => {
-                            router.push('/Login')
-                        }, 3000)
                     }
                     else {
                         commit("setError", true)

@@ -60,8 +60,7 @@ namespace JWT.API
                     options.Lockout.MaxFailedAccessAttempts = 5;
                     options.Lockout.AllowedForNewUsers = true;
                     options.User.RequireUniqueEmail = true;
-                    // I would recommend setting this to true and implementing an email sender
-                    options.SignIn.RequireConfirmedEmail = false;
+                    options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();

@@ -1,11 +1,15 @@
 ﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
+using JWT.Application.ConfirmationEmail.Command;
 using JWT.Application.Users.Queries.GetUserByEmail;
 using JWT.Domain.Exceptions;
+using JWT.Infrastructure.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace JWT.Application.Users.Commands.RegisterUser
 {
@@ -14,21 +18,26 @@ namespace JWT.Application.Users.Commands.RegisterUser
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly INotificationService _notificationService;
+        private readonly IConfiguration _configuration;
 
-        public RegisterUserCommandHandler(IMediator mediator, IMapper mapper, UserManager<IdentityUser> userManager)
+        public RegisterUserCommandHandler(IMediator mediator, IMapper mapper, UserManager<IdentityUser> userManager, INotificationService notificationService, IConfiguration configuration)
         {
             _mediator = mediator;
             _mapper = mapper;
             _userManager = userManager;
+            _notificationService = notificationService;
+            _configuration = configuration;
         }
 
         public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            var user = _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result;
+            var email = request.Email;
+            var user = _mediator.Send(new GetUserByEmailQuery(email), cancellationToken).Result;
 
             if (user != null)
             {
-                throw new AccountAlreadyExistsException(request.Email);
+                throw new AccountAlreadyExistsException(email);
             }
 
             // TODO: Refactor out IdentityUser to ApplicationUser
@@ -39,13 +48,18 @@ namespace JWT.Application.Users.Commands.RegisterUser
             {
                 throw new InvalidRegisterException();
             }
+
+            var token = _mediator.Send(new GenerateConfirmationTokenCommand(user), cancellationToken).Result;
+
+            await _notificationService.SendNotificationAsync(toName: email, toEmailAddress: email, subject: "Registered account",
+                message: $"Congratulations! You have successfully registered your account. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
+
             // NOTE: DO NOT DO THIS!!
             if (request.IsAdmin)
             {
                 await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
             }
-            // Return below if you want to sign in user right away
-            //return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
+
             return await Task.FromResult(result.Succeeded);
         }
     }

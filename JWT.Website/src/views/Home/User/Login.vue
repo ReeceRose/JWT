@@ -1,8 +1,10 @@
 <template>
     <FormCard title="Login" :submit="submit">
         <div slot="card-information">
-            <p v-if="this.$route.params.redirect" class="text-danger text-center">You must be logged in to view this. Please login below.</p>
-            <p v-if="error" class="text-danger text-center">An error has occured, please check your credentials</p>
+            <p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>
+            <p v-if="error" class="text-danger text-center mb-3">An error has occured, please check your credentials and make sure your email is verified<br>
+                <router-link :to="{ name: 'regenerateConfirmationEmail' }">Regenerate confirmation email</router-link>
+            </p>
         </div>
 
         <div slot="card-content">
@@ -74,7 +76,8 @@ export default {
         return {
             email: '',
             password: '',
-            rememberMe: true
+            rememberMe: true,
+            redirect: this.$route.params.redirect
         }
     },
     validations: {

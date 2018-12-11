@@ -1,0 +1,48 @@
+<template>
+    <DisplayCard title="Email Confirmation">
+        <div slot="card-content" class="text-center">
+            <p v-if="confirmed">Congragulations! Your email has been confirmed. <br>Login <router-link :to="{ name: 'login' }">here</router-link></p>
+            <p v-if="error">Unfortunately your email cannot be confirmed. <br><router-link :to="{ name: 'resendConfirmation' }">Click here to resend confirmation email</router-link></p>
+            <p v-if="!(error) && !(confirmed)">Trying to confirm email...</p>
+        </div>
+    </DisplayCard>
+</template>
+
+<script>
+import axios from '@/axios.js'
+
+import DisplayCard from '@/components/UI/Card/DisplayCard.vue'
+
+export default {
+    name: 'confirmEmail',
+    data() {
+        return {
+            userId: this.$route.query.userId,
+            token: this.$route.query.token,
+            confirmed: false,
+            error: false
+        }
+    },
+    components: {
+        DisplayCard
+    },
+    methods: {
+        confirmEmail() {
+            axios({
+                method: 'post',
+                url: 'authentication/confirmEmail',
+                data: { userId: this.userId , token: this.token},
+            })
+                .then(() => {
+                    this.confirmed = true
+                })
+                .catch(() => {
+                    this.error = true
+                })
+        }
+    },
+    created() {
+        this.confirmEmail()
+    }
+}
+</script>
