@@ -1,7 +1,7 @@
 <template>
     <FormCard title="Resend confirmation email" :submit="submit">
         <div slot="card-information">
-            <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
+            <p v-if="sent" class="text-success text-center mb-3">A confirmation email has been sent.</p>
         </div>
 
         <div slot="card-content">
@@ -25,15 +25,17 @@
 </template>
 
 <script>
-import FormCard from '@/components/UI/Card/FormCard.vue'
-
+import axios from '@/axios.js'
 import { required, email } from 'vuelidate/lib/validators'
+
+import FormCard from '@/components/UI/Card/FormCard.vue'
 
 export default {
     name: 'resendConfirmation',
     data() {
         return {
-            email: null
+            email: null,
+            sent: false
         }
     },
     components: {
@@ -47,7 +49,18 @@ export default {
     },
     methods: {
         submit() {
-            // Resend confirmation linkk
+            // TOOD: MOVE LOGIC INTO STORE. SET IS LOADING
+            axios({
+                method: 'post',
+                url: 'authentication/regenerateConfirmationEmail',
+                data: { email: this.email },
+            })
+                .then(() => {
+                    this.confirmed = true
+                })
+                .catch(() => {
+                    this.error = true
+                })
         }
     }
 }

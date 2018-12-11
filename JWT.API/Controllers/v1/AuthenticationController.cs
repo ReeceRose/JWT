@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using JWT.Application.Users.Commands.ConfirmUserEmail;
+using JWT.Application.Users.Commands.RegenerateConfirmationEmail;
 using JWT.Application.Users.Commands.RegisterUser;
 using JWT.Application.Users.Queries.LoginUser;
 using MediatR;
@@ -28,6 +29,6 @@ namespace JWT.API.Controllers.v1
         public async Task<IActionResult> PostConfirmEmail([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
 
         [HttpPost("RegenerateConfirmationEmail")]
-        public async Task<IActionResult> PostRegenerateConfirmationEmail([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
+        public async Task<IActionResult> PostRegenerateConfirmationEmail([FromBody] RegenerateConfirmationEmailCommand regenerateConfirmationEmailCommand) => Ok(new { result = await _mediator.Send(regenerateConfirmationEmailCommand) });
     }
 }

@@ -49,7 +49,7 @@ namespace JWT.Application.Users.Commands.RegisterUser
                 throw new InvalidRegisterException();
             }
 
-            var token = _mediator.Send(new GenerateConfirmationTokenCommand(user), cancellationToken);
+            var token = _mediator.Send(new GenerateConfirmationTokenCommand(user), cancellationToken).Result;
 
             await _notificationService.SendNotificationAsync(toName: email, toEmailAddress: email, subject: "Registered account",
                 message: $"Congratulations! You have successfully registered your account. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
