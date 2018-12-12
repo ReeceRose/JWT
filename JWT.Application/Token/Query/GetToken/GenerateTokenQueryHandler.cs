@@ -9,16 +9,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace JWT.Application.Token.Query.GetToken
 {
-    public class GetTokenQueryHandler :IRequestHandler<GetTokenQuery, string>
+    public class GenerateTokenQueryHandler :IRequestHandler<GenerateTokenQuery, string>
     {
         private readonly IConfiguration _configuration;
 
-        public GetTokenQueryHandler(IConfiguration configuration)
+        public GenerateTokenQueryHandler(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public Task<string> Handle(GetTokenQuery request, CancellationToken cancellationToken)
+        public Task<string> Handle(GenerateTokenQuery request, CancellationToken cancellationToken)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]));
 

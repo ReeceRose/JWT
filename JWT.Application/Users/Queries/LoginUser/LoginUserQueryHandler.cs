@@ -47,7 +47,7 @@ namespace JWT.Application.Users.Queries.LoginUser
                 throw new InvalidCredentialException();
             }
 
-            return await _mediator.Send(new GetTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
+            return await _mediator.Send(new GenerateTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
         }
     }
 }

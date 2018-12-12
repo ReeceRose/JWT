@@ -4,13 +4,10 @@ using MediatR;
 
 namespace JWT.Application.Token.Query.GetToken
 {
-    public class GetTokenQuery : IRequest<string>
+    public class GenerateTokenQuery : IRequest<string>
     {
         public IList<Claim> Claims { get; }
 
-        public GetTokenQuery(IList<Claim> claims)
-        {
-            Claims = claims;
-        }
+        public GenerateTokenQuery(IList<Claim> claims) => Claims = claims;
     }
 }
