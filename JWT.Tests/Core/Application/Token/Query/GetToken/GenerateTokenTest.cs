@@ -18,6 +18,7 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
 
         public GenerateTokenTest()
         {
+            // Arrange
             _configuration = new Mock<IConfiguration>();
             _configuration.SetupGet(x => x["JWT:Issuer"]).Returns("issuer.com");
             _configuration.SetupGet(x => x["JWT:Audience"]).Returns("audience.com");
@@ -27,15 +28,15 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
             {
                 new Claim("type", "value")
             };
-
         }
         [Fact]
         public void GenerateTokenQuery_ShouldReturnToken()
         {
+            // Arrange
             var handler = new GenerateTokenQueryHandler(_configuration.Object);
-
+            // Act
             var token = handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
-
+            // Assert
             Assert.NotNull(token);
             Assert.NotEmpty(token);
         }
@@ -43,21 +44,34 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
         [Fact]
         public void GenerateTokenQuery_IssuerIsValid()
         {
+            // Arrange
             var handler = new GenerateTokenQueryHandler(_configuration.Object);
-
+            // Act
             var token = handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
-
+            // Assert
             Assert.Equal("issuer.com", new JwtSecurityToken(token).Issuer);
         }
 
         [Fact]
         public void GenerateTokenQuery_AudienceIsValid()
         {
+            // Arrange
             var handler = new GenerateTokenQueryHandler(_configuration.Object);
-
+            // Act
             var token = handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
-
+            // Assert
             Assert.Equal("audience.com", new JwtSecurityToken(token).Audiences.First());
+        }
+
+        [Fact]
+        public void GenerateTokenQuery_HasPassedClaims()
+        {
+            //TODO: Add this test
+            // Arrange
+
+            // Act
+            
+            // Assert
         }
     }
 }

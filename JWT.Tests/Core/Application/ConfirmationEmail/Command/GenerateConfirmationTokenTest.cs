@@ -18,6 +18,7 @@ namespace JWT.Tests.Core.Application.ConfirmationEmail.Command
 
         public GenerateConfirmationTokenTest()
         {
+            // Arrange
             Users = new List<IdentityUser>()
             {
                 new IdentityUser()
@@ -27,19 +28,18 @@ namespace JWT.Tests.Core.Application.ConfirmationEmail.Command
                     EmailConfirmed = false
                 }
             };
-
             UserManager = MockHelper.MockUserManager(Users);
         }
 
         [Fact]
         public void GenerateConfirmationToken_ShouldReturnToken()
         {
+            // Arrange
             var handler = new GenerateConfirmationTokenCommandHandler(UserManager.Object);
-
             UserManager.Setup(m => m.GenerateEmailConfirmationTokenAsync(It.IsAny<IdentityUser>())).Returns(Task.FromResult("1234567890"));
-     
+            // Act
             var token = handler.Handle(new GenerateConfirmationTokenCommand(Users.First()), default(CancellationToken)).Result;
-            
+            // Assert
             Assert.NotNull(token);
             Assert.NotEmpty(token);
         }

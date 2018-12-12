@@ -9,6 +9,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         public RegenerateConfirmationEmailCommandValidator Validator { get; }
         public RegenerateConfirmationEmailTest()
         {
+            // Arrange
             Validator = new RegenerateConfirmationEmailCommandValidator();
         }
 
@@ -17,7 +18,9 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         [InlineData("user@domain.com")]
         public void RegenerateConfirmationEmail_EmailIsValid(string email)
         {
+            // Act
             var result = Validator.Validate(new RegenerateConfirmationEmailCommand(email));
+            // Assert
             Assert.True(result.IsValid);
         }
 
@@ -27,7 +30,9 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         [InlineData("test.ca")]
         public void RegenerateConfirmationEmail_EmailIsInvalid(string email)
         {
+            // Act
             var result = Validator.Validate(new RegenerateConfirmationEmailCommand(email));
+            // Assert
             Assert.Contains("Email is required", result.Errors.First().ErrorMessage);
             Assert.False(result.IsValid);
         }
