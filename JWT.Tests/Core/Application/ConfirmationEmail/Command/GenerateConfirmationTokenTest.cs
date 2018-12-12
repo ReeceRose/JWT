@@ -15,6 +15,7 @@ namespace JWT.Tests.Core.Application.ConfirmationEmail.Command
         public List<IdentityUser> Users { get; set; }
 
         public Mock<UserManager<IdentityUser>> UserManager { get; }
+
         public GenerateConfirmationTokenTest()
         {
             Users = new List<IdentityUser>()
