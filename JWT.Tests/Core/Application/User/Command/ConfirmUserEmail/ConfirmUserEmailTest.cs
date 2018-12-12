@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using FluentValidation.TestHelper;
 using JWT.Application.User.Command.ConfirmUserEmail;
 using Xunit;
 
