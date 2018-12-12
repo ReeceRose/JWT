@@ -4,8 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using JWT.Application.Token.Query.GetToken;
-using MediatR;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;

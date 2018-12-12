@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace JWT.Application.Users.Queries.GetUserById
+namespace JWT.Application.User.Query.GetUserById
 {
     public class GetUserByIdQuery : IRequest<IdentityUser>
     {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace JWT.Application.Users.Commands.RegisterUser
+namespace JWT.Application.User.Command.RegisterUser
 {
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {

@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.Token.Query.GetToken;
-using JWT.Application.Users.Queries.GetUserByEmail;
+using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace JWT.Application.Users.Queries.LoginUser
+namespace JWT.Application.User.Query.LoginUser
 {
     public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, string>
     {

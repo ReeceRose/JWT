@@ -1,17 +1,16 @@
 ﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using AutoMapper;
 using JWT.Application.ConfirmationEmail.Command;
-using JWT.Application.Users.Queries.GetUserByEmail;
+using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using JWT.Infrastructure.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
-namespace JWT.Application.Users.Commands.RegisterUser
+namespace JWT.Application.User.Command.RegisterUser
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, bool>
     {

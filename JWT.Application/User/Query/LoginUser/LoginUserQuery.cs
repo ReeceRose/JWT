@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace JWT.Application.Users.Queries.LoginUser
+namespace JWT.Application.User.Query.LoginUser
 {
     public class LoginUserQuery : IRequest<string>
     {

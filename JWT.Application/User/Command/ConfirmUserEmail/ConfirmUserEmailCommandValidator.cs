@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace JWT.Application.Users.Commands.ConfirmUserEmail
+namespace JWT.Application.User.Command.ConfirmUserEmail
 {
     public class ConfirmUserEmailCommandValidator : AbstractValidator<ConfirmUserEmailCommand>
     {

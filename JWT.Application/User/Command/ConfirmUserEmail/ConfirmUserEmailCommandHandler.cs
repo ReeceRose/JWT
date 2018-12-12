@@ -1,12 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
-using JWT.Application.Users.Queries.GetUserById;
+using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace JWT.Application.Users.Commands.ConfirmUserEmail
+namespace JWT.Application.User.Command.ConfirmUserEmail
 {
     public class ConfirmUserEmailCommandHandler : IRequestHandler<ConfirmUserEmailCommand, bool>
     {

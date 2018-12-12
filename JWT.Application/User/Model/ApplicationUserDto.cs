@@ -1,4 +1,4 @@
-﻿namespace JWT.Application.Users.Models
+﻿namespace JWT.Application.User.Model
 {
     public class ApplicationUserDto
     {

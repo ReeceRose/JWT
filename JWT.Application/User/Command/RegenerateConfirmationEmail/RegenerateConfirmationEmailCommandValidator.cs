@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace JWT.Application.Users.Commands.RegenerateConfirmationEmail
+namespace JWT.Application.User.Command.RegenerateConfirmationEmail
 {
     public class RegenerateConfirmationEmailCommandValidator : AbstractValidator<RegenerateConfirmationEmailCommand>
     {

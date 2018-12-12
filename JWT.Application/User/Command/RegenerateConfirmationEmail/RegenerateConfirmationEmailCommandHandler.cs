@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.ConfirmationEmail.Command;
-using JWT.Application.Users.Queries.GetUserByEmail;
+using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Infrastructure.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
-namespace JWT.Application.Users.Commands.RegenerateConfirmationEmail
+namespace JWT.Application.User.Command.RegenerateConfirmationEmail
 {
     public class RegenerateConfirmationEmailCommandHandler : IRequestHandler<RegenerateConfirmationEmailCommand, bool>
     {

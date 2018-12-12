@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace JWT.Application.Users.Commands.RegisterUser
+namespace JWT.Application.User.Command.RegisterUser
 {
     public class RegisterUserCommand : IRequest<bool>
     {
