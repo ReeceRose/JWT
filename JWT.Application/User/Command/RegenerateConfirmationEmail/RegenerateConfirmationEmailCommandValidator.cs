@@ -7,8 +7,8 @@ namespace JWT.Application.User.Command.RegenerateConfirmationEmail
         public RegenerateConfirmationEmailCommandValidator()
         {
             RuleFor(c => c.Email)
-                .EmailAddress().WithMessage("Email is required")
-                .NotEmpty().WithMessage("Email is required");
+                .NotNull().WithMessage("Email is required")
+                .EmailAddress().WithMessage("Email is required");
         }
     }
 }
