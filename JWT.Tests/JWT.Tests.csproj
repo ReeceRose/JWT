@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JWT.API\JWT.API.csproj" />
     <ProjectReference Include="..\JWT.Application\JWT.Application.csproj" />
   </ItemGroup>
 

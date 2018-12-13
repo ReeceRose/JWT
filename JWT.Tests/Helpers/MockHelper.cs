@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace JWT.Tests.Helpers
@@ -19,6 +22,14 @@ namespace JWT.Tests.Helpers
             mgr.Setup(x => x.UpdateAsync(It.IsAny<TUser>())).ReturnsAsync(IdentityResult.Success);
 
             return mgr;
+        }
+        public static Mock<RoleManager<TRole>> MockRoleManager<TRole>(IRoleStore<TRole> store = null) where TRole : class
+        {
+            store = store ?? new Mock<IRoleStore<TRole>>().Object;
+            var roles = new List<IRoleValidator<TRole>>();
+            roles.Add(new RoleValidator<TRole>());
+            return new Mock<RoleManager<TRole>>(store, roles, new UpperInvariantLookupNormalizer(),
+                new IdentityErrorDescriber(), null);
         }
     }
 }
