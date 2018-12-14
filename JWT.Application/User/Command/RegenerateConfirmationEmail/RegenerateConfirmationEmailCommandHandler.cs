@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace JWT.Application.User.Command.RegenerateConfirmationEmail
 {
-    public class RegenerateConfirmationEmailCommandHandler : IRequestHandler<RegenerateConfirmationEmailCommand, bool>
+    public class RegenerateConfirmationEmailCommandHandler : IRequestHandler<RegenerateConfirmationEmailCommand, string>
     {
         private readonly IMediator _mediator;
         private readonly INotificationService _notificationService;
@@ -24,18 +24,18 @@ namespace JWT.Application.User.Command.RegenerateConfirmationEmail
             _userManager = userManager;
         }
 
-        public async Task<bool> Handle(RegenerateConfirmationEmailCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(RegenerateConfirmationEmailCommand request, CancellationToken cancellationToken)
         {
             var user = _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result;
 
             if (user == null)
             {
-                return await Task.FromResult(true);
+                return await Task.FromResult<string>(null);
             }
 
             if (await _userManager.IsEmailConfirmedAsync(user))
             {
-                return await Task.FromResult(true);
+                return await Task.FromResult<string>(null);
             }
 
             var token = _mediator.Send(new GenerateConfirmationTokenCommand(user), cancellationToken).Result;
@@ -43,7 +43,7 @@ namespace JWT.Application.User.Command.RegenerateConfirmationEmail
             await _notificationService.SendNotificationAsync(toName: request.Email, toEmailAddress: request.Email, subject: "Confirm your account",
                 message: $"You have requested a confirmation email be sent to you again. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
             
-            return await Task.FromResult(true);
+            return await Task.FromResult(token);
         }
     }
 }
