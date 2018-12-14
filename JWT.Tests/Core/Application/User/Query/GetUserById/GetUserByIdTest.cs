@@ -7,6 +7,7 @@ using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserById
 {
+    // TODO: Change to user handler
     public class GetUserByIdTest
     {
         public Mock<IMediator> Mediator { get; }

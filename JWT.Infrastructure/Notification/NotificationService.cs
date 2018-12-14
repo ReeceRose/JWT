@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
+using JWT.Infrastructure.Notifications;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MimeKit.Text;
 
-namespace JWT.Infrastructure.Notifications
+namespace JWT.Infrastructure.Notification
 {
     public class NotificationService : INotificationService
     {

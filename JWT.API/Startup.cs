@@ -5,6 +5,7 @@ using FluentValidation.AspNetCore;
 using JWT.Application.User.Command.RegisterUser;
 using JWT.API.Filters;
 using JWT.Common;
+using JWT.Infrastructure.Notification;
 using JWT.Infrastructure.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
