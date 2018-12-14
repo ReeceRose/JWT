@@ -21,6 +21,7 @@
     <Folder Include="Core\Domain\" />
     <Folder Include="Infrastructure\Infrastructure\" />
     <Folder Include="Infrastructure\Persistence\" />
+    <Folder Include="Common\" />
   </ItemGroup>
 
   <ItemGroup>

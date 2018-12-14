@@ -21,20 +21,20 @@ namespace JWT.Tests.Helpers
                 new Mock<ILogger<UserManager<IdentityUser>>>().Object)
         { }
 
-        public override Task<IdentityResult> CreateAsync(IdentityUser user, string password)
-        {
-            return Task.FromResult(IdentityResult.Success);
-        }
+        //public override Task<IdentityResult> CreateAsync(IdentityUser user, string password)
+        //{
+        //    return Task.FromResult(IdentityResult.Success);
+        //}
 
-        public override Task<IdentityResult> AddToRoleAsync(IdentityUser user, string role)
-        {
-            return Task.FromResult(IdentityResult.Success);
-        }
+        //public override Task<IdentityResult> AddToRoleAsync(IdentityUser user, string role)
+        //{
+        //    return Task.FromResult(IdentityResult.Success);
+        //}
 
-        public override Task<string> GenerateEmailConfirmationTokenAsync(IdentityUser user)
-        {
-            return Task.FromResult(Guid.NewGuid().ToString());
-        }
+        //public override Task<string> GenerateEmailConfirmationTokenAsync(IdentityUser user)
+        //{
+        //    return Task.FromResult(Guid.NewGuid().ToString());
+        //}
 
     }
 }

@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JWT.Domain\JWT.Domain.csproj" />
-    <ProjectReference Include="..\JWT.Infrastructure\JWT.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

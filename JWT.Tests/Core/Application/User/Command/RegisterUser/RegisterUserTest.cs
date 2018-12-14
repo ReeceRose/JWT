@@ -76,7 +76,5 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
             // Act / Assert
             await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
         }
-
-        // failed to register
     }
 }
