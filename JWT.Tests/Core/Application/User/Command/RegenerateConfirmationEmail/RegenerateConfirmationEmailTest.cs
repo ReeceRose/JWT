@@ -27,6 +27,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
             Mediator = new Mock<IMediator>();
             NotificationService = new Mock<INotificationService>();
             Configuration = new Mock<IConfiguration>();
+            Configuration.SetupGet(x => x["FrontEndUrl"]).Returns("url.com");
             UserManager = new Mock<MockUserManager>();
             Handler = new RegenerateConfirmationEmailCommandHandler(Mediator.Object, NotificationService.Object, Configuration.Object, UserManager.Object);
         }

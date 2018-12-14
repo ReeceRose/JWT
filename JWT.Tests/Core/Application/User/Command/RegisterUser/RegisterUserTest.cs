@@ -1,66 +1,82 @@
-﻿using System.Linq;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
+using JWT.Application.ConfirmationEmail.Command;
 using JWT.Application.User.Command.RegisterUser;
+using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Common;
+using JWT.Domain.Exceptions;
+using JWT.Infrastructure.Notifications;
+using JWT.Tests.Helpers;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Moq;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Command.RegisterUser
 {
     public class RegisterUserTest
     {
-        public RegisterUserCommandValidator Validator { get; }
+        public Mock<IMediator> Mediator { get; }
+        public MapperConfiguration MapperConfiguration { get; }
+        public IMapper Mapper { get; }
+        public Mock<MockUserManager> UserManager { get; }
+        public Mock<INotificationService> NotificationService { get; }
+        public Mock<IConfiguration> Configuration { get; }
+        public RegisterUserCommandHandler Handler { get; }
+
         public RegisterUserTest()
         {
             // Arrange
-            Validator = new RegisterUserCommandValidator();
+            Mediator = new Mock<IMediator>();
+            MapperConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
+            Mapper = MapperConfiguration.CreateMapper();
+            UserManager = new Mock<MockUserManager>();
+            NotificationService =new Mock<INotificationService>();
+            Configuration = new Mock<IConfiguration>();
+            Handler = new RegisterUserCommandHandler(Mediator.Object, Mapper, UserManager.Object, NotificationService.Object, Configuration.Object);
         }
 
         [Theory]
-        [InlineData("test@test.ca")]
-        [InlineData("user@domain.com")]
-        public void RegisterUserTest_EmailIsValid(string email)
+        [InlineData("test@test.com", "Test123!")]
+        [InlineData("user@user.com", "Test123123123!")]
+        public void RegisterUser_SuccessfullyRegistersUser(string email, string password)
         {
+            // Arrange
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
+            UserManager.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            Mediator.Setup(m => m.Send(It.IsAny<GenerateConfirmationTokenCommand>(), default(CancellationToken))).ReturnsAsync(It.IsAny<string>());
             // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: email, password: "Test1!", isAdmin: false));
+            var result = Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None).Result;
             // Assert
-            Assert.True(result.IsValid);
+            Assert.True(result);
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        [InlineData("test.ca")]
-        public void RegisterUserTest_EmailIsInvalid(string email)
+        [InlineData("test@test.com", "Test123!")]
+        [InlineData("user@user.com", "Test123123123!")]
+        public async Task RegisterUser_ThrowsAccountAlreadyExistsException(string email, string password)
         {
-            // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: email, password: "Test1!", isAdmin: false));
-            // Assert
-            Assert.Contains("Email is required", result.Errors.First().ErrorMessage);
-            Assert.False(result.IsValid);
+            // Arrange
+            var requestedUser = new IdentityUser() { Email = email };
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
+            // Act / Assert
+            await Assert.ThrowsAsync<AccountAlreadyExistsException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
         }
 
         [Theory]
-        [InlineData("Test1!")]
-        [InlineData("ABcd123#!23")]
-        public void RegisterUserTest_PasswordIsValid(string password)
+        [InlineData("test@test.com", "Test123!")]
+        [InlineData("user@user.com", "Test123123123!")]
+        public async Task RegisterUser_FailedToRegistersUser(string email, string password)
         {
-            // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: "test@test.ca", password: password, isAdmin: false));
-            // Assert
-            Assert.True(result.IsValid);
+            // Arrange
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser)null);
+            UserManager.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
+            // Act / Assert
+            await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
         }
 
-        [Theory]
-        [InlineData("")] // Empty
-        [InlineData(null)] // Null
-        [InlineData("T1!")] // Too few characters
-        [InlineData("Test12")] // Does not contain any special characters
-        [InlineData("Test###")] // Does not contain any numbers
-        public void RegisterUserTest_PasswordIsInvalid(string password)
-        {
-            // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: "test@test.ca", password: password, isAdmin: false));
-            // Assert
-            Assert.Contains("Password does not meet security constraints", result.Errors.First().ErrorMessage);
-            Assert.False(result.IsValid);
-        }
+        // failed to register
     }
 }
