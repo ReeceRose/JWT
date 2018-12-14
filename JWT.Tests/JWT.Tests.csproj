@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Domain\" />
+    <Folder Include="Core\Domain\Entities\" />
     <Folder Include="Infrastructure\Infrastructure\" />
     <Folder Include="Infrastructure\Persistence\" />
     <Folder Include="Common\" />
