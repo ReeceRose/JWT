@@ -12,30 +12,30 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
 {
     public class GenerateTokenTest
     {
-        private readonly Mock<IConfiguration> _configuration;
+        public Mock<IConfiguration> Configuration;
 
         private List<Claim> Claims { get; }
+        public GenerateTokenQueryHandler Handler { get; }
 
         public GenerateTokenTest()
         {
             // Arrange
-            _configuration = new Mock<IConfiguration>();
-            _configuration.SetupGet(x => x["JWT:Issuer"]).Returns("issuer.com");
-            _configuration.SetupGet(x => x["JWT:Audience"]).Returns("audience.com");
-            _configuration.SetupGet(x => x["JWT:SigningKey"]).Returns("testing signing key");
+            Configuration = new Mock<IConfiguration>();
+            Configuration.SetupGet(x => x["JWT:Issuer"]).Returns("issuer.com");
+            Configuration.SetupGet(x => x["JWT:Audience"]).Returns("audience.com");
+            Configuration.SetupGet(x => x["JWT:SigningKey"]).Returns("testing signing key");
 
             Claims = new List<Claim>()
             {
                 new Claim("type", "value")
             };
+            Handler = new GenerateTokenQueryHandler(Configuration.Object);
         }
         [Fact]
         public void GenerateTokenQuery_ShouldReturnToken()
         {
-            // Arrange
-            var handler = new GenerateTokenQueryHandler(_configuration.Object);
             // Act
-            var token = handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
+            var token = Handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
             // Assert
             Assert.NotNull(token);
             Assert.NotEmpty(token);
@@ -44,10 +44,9 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
         [Fact]
         public void GenerateTokenQuery_IssuerIsValid()
         {
-            // Arrange
-            var handler = new GenerateTokenQueryHandler(_configuration.Object);
             // Act
-            var token = handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
+            var token = Handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
+            var test = new JwtSecurityToken(token);
             // Assert
             Assert.Equal("issuer.com", new JwtSecurityToken(token).Issuer);
         }
@@ -55,10 +54,8 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
         [Fact]
         public void GenerateTokenQuery_AudienceIsValid()
         {
-            // Arrange
-            var handler = new GenerateTokenQueryHandler(_configuration.Object);
             // Act
-            var token = handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
+            var token = Handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
             // Assert
             Assert.Equal("audience.com", new JwtSecurityToken(token).Audiences.First());
         }
@@ -66,12 +63,10 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
         [Fact]
         public void GenerateTokenQuery_HasPassedClaims()
         {
-            //TODO: Add this test
-            // Arrange
-
             // Act
-            
+            var token = Handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
             // Assert
+            Assert.Contains(Claims.First().Value, new JwtSecurityToken(token).Claims.First(claim => claim.Value == Claims.First().Value).Value);
         }
     }
 }
