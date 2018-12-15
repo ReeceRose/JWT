@@ -1,75 +1,69 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using JWT.Application.User.Query.GetUserById;
-using MediatR;
+using JWT.Tests.Context;
 using Microsoft.AspNetCore.Identity;
-using Moq;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserById
 {
-    // TODO: Change to user handler
     public class GetUserByIdTest
     {
-        public Mock<IMediator> Mediator { get; }
-
-        public GetUserByIdTest()
+        public class GetUserByEmailTest : IDisposable
         {
-            // Arrange
-            Mediator = new Mock<IMediator>();   
-        }
+            public IdentityDbContext Context { get; }
+            public GetUserByIdQueryHandler Handler { get; }
 
-        [Theory]
-        [InlineData("123", "email@test.ca", "username")]
-        [InlineData("324231", "your@domain.com", "username")]
-        public void GetUserById_(string id, string email, string username)
-        {
-            // Arrange
-            var requestedUser = new IdentityUser()
+            public GetUserByEmailTest()
             {
-                Id = id,
-                Email = email,
-                UserName = username
-            };
-            var query = new GetUserByIdQuery(requestedUser.Id);
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
-            // Act
-            var returnedUser = Mediator.Object.Send(query).Result;
-            // Assert
-            Assert.Equal(requestedUser.Id, returnedUser.Id);
-            Assert.Equal(requestedUser.Email, returnedUser.Email);
-            Assert.Equal(requestedUser.UserName, returnedUser.UserName);
-        }
+                // Arrange
+                Context = ContextFactory.Create();
+                Handler = new GetUserByIdQueryHandler(Context);
+            }
 
-        [Fact]
-        public void GetUserByEmail_NullUSerReturnsNull()
-        {
-            // Arrange
-            var query = new GetUserByIdQuery(null);
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser)null);
-            // Act
-            var result = Mediator.Object.Send(query).Result;
-            // Assert
-            Assert.Null(result);
-        }
-        // Invalid user returns null
-        [Theory]
-        [InlineData("123", "email@test.ca", "username")]
-        [InlineData("324231", "your@domain.com", "username")]
-        public void GetUserByEmail_InvalidUserReturnsNull(string id, string email, string username)
-        {
-            // Arrange
-            var requestedUser = new IdentityUser()
+            [Fact]
+            public void GetUserByEmail_ReturnsExpectedUser()
             {
-                Id = id,
-                Email = email,
-                UserName = username
-            };
-            var query = new GetUserByIdQuery(requestedUser.Email);
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser)null);
-            // Act
-            var result = Mediator.Object.Send(query).Result;
-            // Assert
-            Assert.Null(result);
+                // Arrange
+                var requestedUser = new IdentityUser()
+                {
+                    Email = "test@test.ca",
+                    UserName = "test-user",
+                    Id = "123"
+                };
+                // Act
+                var returnedUser = Handler.Handle(new GetUserByIdQuery(requestedUser.Id), CancellationToken.None).Result;
+                // Assert
+                Assert.Equal(requestedUser.Email, returnedUser.Email);
+                Assert.Equal(requestedUser.UserName, returnedUser.UserName);
+                Assert.Equal(requestedUser.Id, returnedUser.Id);
+            }
+
+            [Fact]
+            public void GetUserByEmail_NullUserReturnsNull()
+            {
+                // Act
+                var returnedUser = Handler.Handle(new GetUserByIdQuery(null), CancellationToken.None).Result;
+                // Assert
+                Assert.Null(returnedUser);
+            }
+
+            [Theory]
+            [InlineData("000001")]
+            [InlineData("121973")]
+            public void GetUserByEmail_InvalidUserReturnsNull(string email)
+            {
+                // Act
+                var returnedUser = Handler.Handle(new GetUserByIdQuery(email), CancellationToken.None).Result;
+                // Assert
+                Assert.Null(returnedUser);
+            }
+
+            public void Dispose()
+            {
+                Context?.Dispose();
+            }
         }
     }
 }

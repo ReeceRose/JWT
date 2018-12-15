@@ -1,40 +1,37 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using JWT.Application.User.Query.GetUserByEmail;
-using MediatR;
+using JWT.Tests.Context;
 using Microsoft.AspNetCore.Identity;
-using Moq;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
 {
-    // TODO: Change to use the handler
-    public class GetUserByEmailTest
+    public class GetUserByEmailTest : IDisposable
     {
-        public Mock<IMediator> Mediator { get; }
+        public IdentityDbContext Context { get; }
+        public GetUserByEmailQueryHandler Handler { get; }
 
         public GetUserByEmailTest()
         {
             // Arrange
-            Mediator = new Mock<IMediator>();
+            Context = ContextFactory.Create();
+            Handler = new GetUserByEmailQueryHandler(Context);
         }
 
-        [Theory]
-        [InlineData("test@test.com", "test-user", "123")]
-        [InlineData("user@test.com", "user", "321")]
-        // Returns expected user
-        public void GetUserByEmail_ReturnsExpectedUser(string email, string username, string id)
+        [Fact]
+        public void GetUserByEmail_ReturnsExpectedUser()
         {
             // Arrange
             var requestedUser = new IdentityUser()
             {
-                Email = email,
-                UserName = username,
-                Id = id
+                Email = "test@test.ca",
+                UserName = "test-user",
+                Id = "123"
             };
-            var query = new GetUserByEmailQuery(requestedUser.Email);
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
             // Act
-            var returnedUser = Mediator.Object.Send(query).Result;
+            var returnedUser = Handler.Handle(new GetUserByEmailQuery(requestedUser.Email), CancellationToken.None).Result;
             // Assert
             Assert.Equal(requestedUser.Email, returnedUser.Email);
             Assert.Equal(requestedUser.UserName, returnedUser.UserName);
@@ -42,35 +39,28 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
         }
 
         [Fact]
-        public void GetUserByEmail_NullUSerReturnsNull()
+        public void GetUserByEmail_NullUserReturnsNull()
         {
-            // Arrange
-            var query = new GetUserByEmailQuery(null);
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
             // Act
-            var result = Mediator.Object.Send(query).Result;
+            var returnedUser = Handler.Handle(new GetUserByEmailQuery(null), CancellationToken.None).Result;
             // Assert
-            Assert.Null(result);
+            Assert.Null(returnedUser);
         }
 
         [Theory]
-        [InlineData("test@test.com", "test-user", "123")]
-        [InlineData("user@test.com", "user", "321")]
-        public void GetUserByEmail_InvalidUserReturnsNull(string email, string username, string id)
+        [InlineData("test@test.com")]
+        [InlineData("user@test.com")]
+        public void GetUserByEmail_InvalidUserReturnsNull(string email)
         {
-            // Arrange
-            var requestedUser = new IdentityUser()
-            {
-                Email = email,
-                UserName = username,
-                Id = id
-            };
-            var query = new GetUserByEmailQuery(requestedUser.Email);
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
             // Act
-            var result = Mediator.Object.Send(query).Result;
+            var returnedUser = Handler.Handle(new GetUserByEmailQuery(email), CancellationToken.None).Result;
             // Assert
-            Assert.Null(result);
+            Assert.Null(returnedUser);
+        }
+
+        public void Dispose()
+        {
+            Context?.Dispose();
         }
     }
 }
