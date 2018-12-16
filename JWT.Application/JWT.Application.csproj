@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\" />
-    <Folder Include="Interfaces\" />
+    <Folder Include="User\Model\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JWT.Domain\JWT.Domain.csproj" />
-    <ProjectReference Include="..\JWT.Infrastructure\JWT.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

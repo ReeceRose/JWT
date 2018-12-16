@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JWT.Application.Users.Commands.ConfirmUserEmail;
-using JWT.Application.Users.Commands.RegenerateConfirmationEmail;
-using JWT.Application.Users.Commands.RegisterUser;
-using JWT.Application.Users.Queries.LoginUser;
+using JWT.Application.User.Command.ConfirmUserEmail;
+using JWT.Application.User.Command.RegenerateConfirmationEmail;
+using JWT.Application.User.Command.RegisterUser;
+using JWT.Application.User.Query.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using JWT.Application.Users.Commands.RegisterUser;
-using JWT.Application.Users.Queries.LoginUser;
+using JWT.Application.User.Command.RegisterUser;
+using JWT.Application.User.Query.LoginUser;
 using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Common

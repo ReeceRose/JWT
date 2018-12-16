@@ -2,10 +2,11 @@
 using System.Text;
 using AutoMapper;
 using FluentValidation.AspNetCore;
-using JWT.Application.Users.Commands.RegisterUser;
+using JWT.Application.Interfaces;
+using JWT.Application.User.Command.RegisterUser;
 using JWT.API.Filters;
 using JWT.Common;
-using JWT.Infrastructure.Notifications;
+using JWT.Infrastructure.Notification;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
