@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -17,9 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Domain\" />
+    <Folder Include="Core\Domain\Entities\" />
     <Folder Include="Infrastructure\Infrastructure\" />
     <Folder Include="Infrastructure\Persistence\" />
+    <Folder Include="Common\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JWT.API\JWT.API.csproj" />
+    <ProjectReference Include="..\JWT.Application\JWT.Application.csproj" />
   </ItemGroup>
 
 </Project>

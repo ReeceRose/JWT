@@ -338,3 +338,4 @@ ASALocalRun/
 **/yarn-error.log*
 
 **/azure-secrets.json
+.vscode
