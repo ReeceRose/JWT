@@ -24,7 +24,7 @@ namespace JWT.Tests.Core.Application.ConfirmationEmail.Command
                 new IdentityUser()
                 {
                     Email = "test@test.ca",
-                    UserName = "test@test.ca",
+                    UserName = "test-user",
                     EmailConfirmed = false
                 }
             };

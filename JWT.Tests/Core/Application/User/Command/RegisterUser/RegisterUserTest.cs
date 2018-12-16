@@ -39,8 +39,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         }
 
         [Theory]
-        [InlineData("test@test.com", "Test123!")]
-        [InlineData("user@user.com", "Test123123123!")]
+        [InlineData("test@test.ca", "Test123!")]
+        [InlineData("user@domain.com", "Password!1f4")]
         public void RegisterUser_SuccessfullyRegistersUser(string email, string password)
         {
             // Arrange
@@ -55,8 +55,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         }
 
         [Theory]
-        [InlineData("test@test.com", "Test123!")]
-        [InlineData("user@user.com", "Test123123123!")]
+        [InlineData("test@test.ca", "Test123!")]
+        [InlineData("user@domain.com", "Password!1f4")]
         public async Task RegisterUser_ThrowsAccountAlreadyExistsException(string email, string password)
         {
             // Arrange
@@ -67,8 +67,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         }
 
         [Theory]
-        [InlineData("test@test.com", "Test123!")]
-        [InlineData("user@user.com", "Test123123123!")]
+        [InlineData("test@test.ca", "Test123!")]
+        [InlineData("user@domain.com", "Password!1f4")]
         public async Task RegisterUser_FailedToRegistersUser(string email, string password)
         {
             // Arrange

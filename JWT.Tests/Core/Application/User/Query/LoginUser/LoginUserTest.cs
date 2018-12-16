@@ -29,8 +29,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         }
 
         [Theory]
-        [InlineData("email@test.ca", "password", "1234123")]
-        [InlineData("test@test.ca", "password123", "45674")]
+        [InlineData("test@test.ca", "Test123!", "1234567890")]
+        [InlineData("user@domain.com", "Password!1f4", "0987654321")]
         public void LoginUser_ReturnsValidToken(string email, string password, string token)
         {
             // Arrange
@@ -50,8 +50,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         }
 
         [Theory]
-        [InlineData("your@domain.com", "password")]
-        [InlineData("test@email.com", "password123")]
+        [InlineData("test@test.ca", "Test123!")]
+        [InlineData("user@domain.com", "Password!1f4")]
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenInvalidCredentials(string email, string password)
         {
             // Arrange
@@ -71,8 +71,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         }
 
         [Theory]
-        [InlineData("your@domain.com", "password")]
-        [InlineData("test@email.com", "password123")]
+        [InlineData("test@test.ca", "Test123!")]
+        [InlineData("user@domain.com", "Password!1f4")]
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenUserNotFound(string email, string password)
         {
             // Arrange
@@ -82,8 +82,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         }
 
         [Theory]
-        [InlineData("your@domain.com", "password")]
-        [InlineData("test@email.com", "password123")]
+        [InlineData("test@test.ca", "Test123!")]
+        [InlineData("user@domain.com", "Password!1f4")]
         public async Task LoginUser_ThrowsAccountLockedException(string email, string password)
         {
             // Arrange
@@ -102,8 +102,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
                 Handler.Handle(new LoginUserQuery(email, password), CancellationToken.None));
         }
         [Theory]
-        [InlineData("your@domain.com", "password")]
-        [InlineData("test@email.com", "password123")]
+        [InlineData("test@test.ca", "Test123!")]
+        [InlineData("user@domain.com", "Password!1f4")]
         public async Task LoginUser_ThrowsEmailNotConfirmedException(string email, string password)
         {
             // Arrange

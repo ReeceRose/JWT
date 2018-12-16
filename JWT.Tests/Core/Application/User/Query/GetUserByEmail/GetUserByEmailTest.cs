@@ -48,8 +48,8 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
         }
 
         [Theory]
-        [InlineData("test@test.com")]
-        [InlineData("user@test.com")]
+        [InlineData("user@test.ca")]
+        [InlineData("user@domain.com")]
         public void GetUserByEmail_InvalidUserReturnsNull(string email)
         {
             // Act

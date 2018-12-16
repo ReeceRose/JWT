@@ -48,7 +48,7 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
             var token = Handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
             var test = new JwtSecurityToken(token);
             // Assert
-            Assert.Equal("issuer.com", new JwtSecurityToken(token).Issuer);
+            Assert.Equal(Configuration.Object["JWT:Issuer"], new JwtSecurityToken(token).Issuer);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace JWT.Tests.Core.Application.Token.Query.GetToken
             // Act
             var token = Handler.Handle(new GenerateTokenQuery(Claims), CancellationToken.None).Result;
             // Assert
-            Assert.Equal("audience.com", new JwtSecurityToken(token).Audiences.First());
+            Assert.Equal(Configuration.Object["JWT:Audience"], new JwtSecurityToken(token).Audiences.First());
         }
 
         [Fact]

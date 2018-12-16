@@ -33,8 +33,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         }
 
         [Theory]
-        [InlineData("email@test.ca", "123")]
-        [InlineData("your@domain.ca" ,"321")]
+        [InlineData("test@test.ca", "123")]
+        [InlineData("user@domain.com" ,"321")]
         public void RegenerateConfirmationEmail_NewNotificationSent(string email, string token)
         {
             // Arrange
@@ -54,8 +54,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         }
 
         [Theory]
-        [InlineData("email@test.ca")]
-        [InlineData("your@domain.ca")]
+        [InlineData("test@test.ca")]
+        [InlineData("user@domain.com")]
         public void RegenerateConfirmationEmail_ReturnsNullOnInvalidUser(string email)
         {
             // Arrange
@@ -67,8 +67,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         }
 
         [Theory]
-        [InlineData("email@test.ca")]
-        [InlineData("your@domain.ca")]
+        [InlineData("test@test.ca")]
+        [InlineData("user@domain.com")]
         public void RegenerateConfirmationEmail_ReturnsNullOnEmailAlreadyConfirmed(string email)
         {
             // Arrange

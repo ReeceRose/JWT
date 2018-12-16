@@ -38,8 +38,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         }
 
         [Theory]
-        [InlineData("Test1!")]
-        [InlineData("ABcd123#!23")]
+        [InlineData("Test123!")]
+        [InlineData("Password!1f4")]
         public void RegisterUserTest_PasswordIsValid(string password)
         {
             // Act
