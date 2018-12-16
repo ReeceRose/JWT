@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using JWT.Infrastructure.Notifications;
+using JWT.Application.Interfaces;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
@@ -16,7 +16,7 @@ namespace JWT.Infrastructure.Notification
             _configuration = configuration;
         }
 
-        public async Task SendNotificationAsync(string toName, string toEmailAddress,
+        public async Task<bool> SendNotificationAsync(string toName, string toEmailAddress,
             string subject, string message)
         {
             var email = new MimeMessage();
@@ -40,6 +40,8 @@ namespace JWT.Infrastructure.Notification
                 await client.SendAsync(email).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }
+
+            return await Task.FromResult(true);
         }
     }
 }

@@ -13,7 +13,6 @@ namespace JWT.Tests.Core.Application.ConfirmationEmail.Command
     public class GenerateConfirmationTokenTest
     {
         public List<IdentityUser> Users { get; set; }
-
         public Mock<MockUserManager> UserManager { get; }
         public GenerateConfirmationTokenCommandHandler Handler { get; }
 

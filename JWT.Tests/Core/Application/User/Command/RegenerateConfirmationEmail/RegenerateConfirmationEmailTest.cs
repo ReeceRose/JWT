@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.ConfirmationEmail.Command;
+using JWT.Application.Interfaces;
 using JWT.Application.User.Command.RegenerateConfirmationEmail;
 using JWT.Application.User.Query.GetUserByEmail;
-using JWT.Infrastructure.Notifications;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -43,10 +43,10 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
                 Email = email,
                 EmailConfirmed = false
             };
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult(requestedUser));
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
+            NotificationService.Setup(n => n.SendNotificationAsync("test", email, "test email", "message")).ReturnsAsync(true);
             UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<IdentityUser>())).ReturnsAsync(false);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateConfirmationTokenCommand>(), default(CancellationToken))).ReturnsAsync(token);
-            NotificationService.Setup(n => n.SendNotificationAsync("test", "test@test.ca", "test email", "message"));
             // Act
             var returnedToken = Handler.Handle(new RegenerateConfirmationEmailCommand(email), CancellationToken.None);
             // Assert
@@ -59,7 +59,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         public void RegenerateConfirmationEmail_ReturnsNullOnInvalidUser(string email)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((IdentityUser) null));
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
             // Act
             var returnedToken = Handler.Handle(new RegenerateConfirmationEmailCommand(email), CancellationToken.None).Result;
             // Assert

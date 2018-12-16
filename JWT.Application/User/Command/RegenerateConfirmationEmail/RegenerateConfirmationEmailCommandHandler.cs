@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.ConfirmationEmail.Command;
+using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GetUserByEmail;
-using JWT.Infrastructure.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

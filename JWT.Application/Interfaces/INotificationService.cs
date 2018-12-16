@@ -1,14 +1,12 @@
 ﻿using System.Threading.Tasks;
 
-namespace JWT.Infrastructure.Notifications
+namespace JWT.Application.Interfaces
 {
     public interface INotificationService
     {
-        Task SendNotificationAsync(
-            string toName,
+        Task<bool> SendNotificationAsync(string toName,
             string toEmailAddress,
             string subject,
-            string message
-        );
+            string message);
     }
 }
