@@ -11,11 +11,9 @@
             <FormPassword :password="confirmationPassword" :validator="$v.confirmationPassword"/>
 
             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
-            
             <Strike text="OR"/>
-
+            
             <h5 class="card-title text-center">Register With</h5>
-
             <div class="text-center social-btn">
                 <FacebookButton/>
                 <GoogleButton/>
