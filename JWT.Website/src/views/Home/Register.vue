@@ -12,9 +12,7 @@
 
             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
             
-            <div class="my-4 strike">
-                <span>OR</span>
-            </div>
+            <Strike text="OR"/>
 
             <h5 class="card-title text-center">Register With</h5>
 
@@ -30,6 +28,7 @@
 import FormCard from '@/components/UI/Card/FormCard.vue'
 import FormEmail from '@/components/UI/Form/Email.vue'
 import FormPassword from '@/components/UI/Form/Password.vue'
+import Strike from '@/components/UI/Form/Strike.vue'
 import FacebookButton from '@/components/UI/Button/Facebook.vue'
 import GoogleButton from '@/components/UI/Button/Google.vue'
 
@@ -41,6 +40,7 @@ export default {
         FormCard,
         FormEmail,
         FormPassword,
+        Strike,
         FacebookButton,
         GoogleButton
     },
@@ -90,34 +90,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.strike {
-    display: block;
-    text-align: center;
-    overflow: hidden;
-    white-space: nowrap;
 
-    span {
-        position: relative;
-        display: inline-block;
-
-        &:before, &:after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 5000px;
-            height: 1px;
-            background-color: #000;
-        }
-
-        &:before {
-            right: 100%;
-            margin-right: 15px;
-        }
-
-        &:after {
-            left: 100%;
-            margin-left: 15px;
-        }
-    }
-}
 </style>
