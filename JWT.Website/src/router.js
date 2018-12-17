@@ -7,12 +7,12 @@ const Home = () => import('@/views/Home/Index.vue')
 const Dashboard = () => import('@/views/Dashboard/Index.vue')
 
 // USER
-const Login  = () => import('@/views/Home/User/Login.vue')
-const Register = () => import('@/views/Home/User/Register.vue')
-const AccessDenied = () => import('@/views/Home/User/AccessDenied.vue')
-const ResetPassword = () => import('@/views/Home/User/ResetPassword.vue')
-const ConfirmEmail = () => import('@/views/Home/User/ConfirmEmail.vue')
-const RegenerateConfirmationEmail = () => import('@/views/Home/User/RegenerateConfirmationEmail.vue')
+const Login  = () => import('@/views/Home/Login.vue')
+const Register = () => import('@/views/Home/Register.vue')
+const AccessDenied = () => import('@/views/Home/AccessDenied.vue')
+const ResetPassword = () => import('@/views/Home/ResetPassword.vue')
+const ConfirmEmail = () => import('@/views/Home/ConfirmEmail.vue')
+const RegenerateConfirmationEmail = () => import('@/views/Home/RegenerateConfirmationEmail.vue')
 
 Vue.use(Router)
 
