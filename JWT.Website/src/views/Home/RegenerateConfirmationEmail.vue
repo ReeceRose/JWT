@@ -2,44 +2,35 @@
     <FormCard title="Resend confirmation email" :submit="submit">
         <div slot="card-information">
             <p v-if="sent" class="text-success text-center mb-3">A confirmation email has been sent.</p>
+            <p v-if="error" class="text-danger text-center mb-3">A confirmation email cannot be sent.</p>
         </div>
 
         <div slot="card-content">
-            <div class="form-label-group">
-                <input 
-                    v-model="email"
-                    @blur="$v.email.$touch()"
-                    :class="{ 'is-invalid': $v.email.$error }"
-                    type="text" 
-                    id="inputEmail" 
-                    class="form-control" 
-                    placeholder="Email address" 
-                    autofocus
-                >
-                <p v-if="$v.email.$error" class="text-danger text-center">Not a valid email address</p>
-            </div>
-
+            <FormEmail v-model="email" :validator="$v.email"/>
             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Resend link</button>
         </div>
     </FormCard>
 </template>
 
 <script>
+import FormCard from '@/components/UI/Card/FormCard.vue'
+import FormEmail from '@/components/UI/Form/Email.vue'
+
 import axios from '@/axios.js'
 import { required, email } from 'vuelidate/lib/validators'
-
-import FormCard from '@/components/UI/Card/FormCard.vue'
 
 export default {
     name: 'resendConfirmation',
     data() {
         return {
             email: null,
-            sent: false
+            sent: false,
+            error: false
         }
     },
     components: {
-        FormCard
+        FormCard,
+        FormEmail
     },
     validations: {
         email: {
@@ -49,15 +40,19 @@ export default {
     },
     methods: {
         submit() {
-            // TOOD: MOVE LOGIC INTO STORE. SET IS LOADING
+            this.error = false
+            // TODO: MOVE LOGIC INTO STORE. SET IS LOADING
             axios({
                 method: 'post',
                 url: 'authentication/regenerateConfirmationEmail',
                 data: { email: this.email },
             })
-                .then(() => {
-                    this.sent = true
-                })
+            .then(() => {
+                this.sent = true
+            })
+            .catch(() => {
+                this.error = true
+            })
         }
     }
 }
