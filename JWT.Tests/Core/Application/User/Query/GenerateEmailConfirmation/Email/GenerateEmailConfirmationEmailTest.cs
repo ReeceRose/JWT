@@ -35,7 +35,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         [Theory]
         [InlineData("test@test.ca", "123")]
         [InlineData("user@domain.com" ,"321")]
-        public void RegenerateConfirmationEmail_NewNotificationSent(string email, string token)
+        public void GenerateEmailConfirmationEmail_NewNotificationSent(string email, string token)
         {
             // Arrange
             var requestedUser = new IdentityUser()
@@ -56,7 +56,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         [Theory]
         [InlineData("test@test.ca")]
         [InlineData("user@domain.com")]
-        public void RegenerateConfirmationEmail_ReturnsNullOnInvalidUser(string email)
+        public void GenerateEmailConfirmationEmail_ReturnsNullOnInvalidUser(string email)
         {
             // Arrange
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
@@ -69,7 +69,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         [Theory]
         [InlineData("test@test.ca")]
         [InlineData("user@domain.com")]
-        public void RegenerateConfirmationEmail_ReturnsNullOnEmailAlreadyConfirmed(string email)
+        public void GenerateEmailConfirmationEmail_ReturnsNullOnEmailAlreadyConfirmed(string email)
         {
             // Arrange
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((IdentityUser)null));

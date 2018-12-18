@@ -32,7 +32,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateLoginToken
             Handler = new GenerateLoginTokenQueryHandler(Configuration.Object);
         }
         [Fact]
-        public void GenerateTokenQuery_ShouldReturnToken()
+        public void GenerateLoginToken_ShouldReturnToken()
         {
             // Act
             var token = Handler.Handle(new GenerateLoginTokenQuery(Claims), CancellationToken.None).Result;
@@ -42,7 +42,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateLoginToken
         }
 
         [Fact]
-        public void GenerateTokenQuery_IssuerIsValid()
+        public void GenerateLoginToken_IssuerIsValid()
         {
             // Act
             var token = Handler.Handle(new GenerateLoginTokenQuery(Claims), CancellationToken.None).Result;
@@ -61,7 +61,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateLoginToken
         }
 
         [Fact]
-        public void GenerateTokenQuery_HasPassedClaims()
+        public void GenerateLoginToken_HasPassedClaims()
         {
             // Act
             var token = Handler.Handle(new GenerateLoginTokenQuery(Claims), CancellationToken.None).Result;

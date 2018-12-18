@@ -33,7 +33,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Token
         }
 
         [Fact]
-        public void GenerateConfirmationToken_ShouldReturnToken()
+        public void GenerateEmailConfirmationToken_ShouldReturnToken()
         {
             // Arrange
             UserManager.Setup(m => m.GenerateEmailConfirmationTokenAsync(It.IsAny<IdentityUser>())).Returns(Task.FromResult("1234567890"));

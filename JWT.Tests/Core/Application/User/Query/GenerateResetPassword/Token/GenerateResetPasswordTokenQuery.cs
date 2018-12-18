@@ -2,5 +2,12 @@
 {
     public class GenerateResetPasswordTokenQuery
     {
+        public GenerateResetPasswordTokenQuery()
+        {
+
+        }
+        // Returns valid token
+
+        // Use does not exist, returns null
     }
 }
