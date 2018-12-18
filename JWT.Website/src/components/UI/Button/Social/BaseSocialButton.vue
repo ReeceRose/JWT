@@ -1,20 +1,20 @@
 <template>
-    <button class="btn btn-facebook btn-block">
-        <i class="fab fa-facebook-f fixed-width"></i>
-        <span>Facebook</span>
+    <button class="btn btn-social btn-social btn-block">
+        <slot>
+
+        </slot>
     </button>
 </template>
 
 <script>
 export default {
-    name: 'FacebookButton'
+    
 }
 </script>
 
 <style lang="scss" scoped>
-.btn-facebook {
+.btn-social {
     color: white;
-    background-color: #3b5998;
     margin: 10px 0;
     font-size: 15px;
     text-align: center;
@@ -27,6 +27,7 @@ export default {
     .fixed-width {
         width: 0;
         margin-left: 10px;
+        margin-right: -15px;
         float: left;
         margin-top: 5px;
     }

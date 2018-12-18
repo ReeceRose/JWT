@@ -1,7 +1,7 @@
 <template>
     <div class="form-label-group">
         <input
-            v-model="password"
+            v-model="input"
             @blur="validator.$touch()"
             :class="{ 'is-invalid': validator.$error }"                                
             type="password" 
@@ -9,7 +9,8 @@
             class="form-control" 
             placeholder="Password"
         >
-        <p v-if="validator.$error" class="text-danger text-center">Password must be at least 6 characters long, contain one upper and lowercase letter, and one special character</p>
+        <p v-if="validator.$error && !confirmationPassword" class="text-danger text-center">Password must be at least 6 characters long, contain one upper and lowercase letter, and one special character</p>
+        <p v-if="validator.$error && confirmationPassword" class="text-danger text-center">Password must match the password above</p>
     </div>
 </template>
 
@@ -17,8 +18,30 @@
 export default {
     name: 'Password',
     props: {
-        password: String,
-        validator: Object
+        value: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        validator: {
+            type: Object,
+            required: true  
+        },
+        confirmationPassword: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
+    computed: {
+        input: {
+            get() {
+                return this.value
+            },
+            set(value) {
+                this.$emit("input", value)
+            }
+        }
     }
 }
 </script>

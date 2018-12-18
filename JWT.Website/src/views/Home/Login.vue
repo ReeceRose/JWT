@@ -6,8 +6,8 @@
         </div>
 
         <div slot="card-content">
-            <FormEmail :email="email" :validator="$v.email"/>
-            <FormPassword :password="password" :validator="$v.password"/>
+            <FormEmail v-model="email" :validator="$v.email"/>
+            <FormPassword v-model="password" :validator="$v.password"/>
 
             <div class="custom-control custom-checkbox mb-3">
                 <input v-model="rememberMe" type="checkbox" class="custom-control-input" id="inputRememberMe">
@@ -34,8 +34,8 @@ import FormCard from '@/components/UI/Card/FormCard.vue'
 import FormEmail from '@/components/UI/Form/Email.vue'
 import FormPassword from '@/components/UI/Form/Password.vue'
 import Strike from '@/components/UI/Form/Strike.vue'
-import FacebookButton from '@/components/UI/Button/Facebook.vue'
-import GoogleButton from '@/components/UI/Button/Google.vue'
+import FacebookButton from '@/components/UI/Button/Social/Facebook.vue'
+import GoogleButton from '@/components/UI/Button/Social/Google.vue'
 
 import { required, minLength, email } from 'vuelidate/lib/validators'
 

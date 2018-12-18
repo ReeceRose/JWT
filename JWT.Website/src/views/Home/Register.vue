@@ -6,13 +6,13 @@
         </div>
 
         <div slot="card-content">
-            <FormEmail :email="email" :validator="$v.email"/>
-            <FormPassword :password="password" :validator="$v.password"/>
-            <FormPassword :password="confirmationPassword" :validator="$v.confirmationPassword"/>
+            <FormEmail v-model="email" :validator="$v.email"/>
+            <FormPassword v-model="password" :validator="$v.password"/>
+            <FormPassword v-model="confirmationPassword" confirmationPassword=true :validator="$v.confirmationPassword"/>
 
             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
             <Strike text="OR"/>
-            
+
             <h5 class="card-title text-center">Register With</h5>
             <div class="text-center social-btn">
                 <FacebookButton/>
@@ -27,8 +27,8 @@ import FormCard from '@/components/UI/Card/FormCard.vue'
 import FormEmail from '@/components/UI/Form/Email.vue'
 import FormPassword from '@/components/UI/Form/Password.vue'
 import Strike from '@/components/UI/Form/Strike.vue'
-import FacebookButton from '@/components/UI/Button/Facebook.vue'
-import GoogleButton from '@/components/UI/Button/Google.vue'
+import FacebookButton from '@/components/UI/Button/Social/Facebook.vue'
+import GoogleButton from '@/components/UI/Button/Social/Google.vue'
 
 import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
