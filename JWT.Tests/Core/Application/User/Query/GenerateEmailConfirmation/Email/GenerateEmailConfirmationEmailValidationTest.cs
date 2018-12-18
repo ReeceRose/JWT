@@ -1,16 +1,16 @@
 ﻿using System.Linq;
-using JWT.Application.User.Command.RegenerateConfirmationEmail;
+using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using Xunit;
 
-namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
+namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
 {
-    public class RegenerateConfirmationEmailValidationTest
+    public class GenerateEmailConfirmationEmailValidationTest
     {
-        public RegenerateConfirmationEmailCommandValidator Validator { get; }
-        public RegenerateConfirmationEmailValidationTest()
+        public GenerateEmailConfirmationEmailQueryValidator Validator { get; }
+        public GenerateEmailConfirmationEmailValidationTest()
         {
             // Arrange
-            Validator = new RegenerateConfirmationEmailCommandValidator();
+            Validator = new GenerateEmailConfirmationEmailQueryValidator();
         }
 
         [Theory]
@@ -19,7 +19,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         public void RegenerateConfirmationEmail_EmailIsValid(string email)
         {
             // Act
-            var result = Validator.Validate(new RegenerateConfirmationEmailCommand(email));
+            var result = Validator.Validate(new GenerateEmailConfirmationEmailQuery(email));
             // Assert
             Assert.True(result.IsValid);
         }
@@ -31,7 +31,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegenerateConfirmationEmail
         public void RegenerateConfirmationEmail_EmailIsInvalid(string email)
         {
             // Act
-            var result = Validator.Validate(new RegenerateConfirmationEmailCommand(email));
+            var result = Validator.Validate(new GenerateEmailConfirmationEmailQuery(email));
             // Assert
             Assert.Contains("Email is required", result.Errors.First().ErrorMessage);
             Assert.False(result.IsValid);

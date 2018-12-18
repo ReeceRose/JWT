@@ -7,18 +7,18 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JWT.Application.Token.Query.GetToken
+namespace JWT.Application.User.Query.GenerateLoginToken
 {
-    public class GenerateTokenQueryHandler :IRequestHandler<GenerateTokenQuery, string>
+    public class GenerateLoginTokenQueryHandler :IRequestHandler<GenerateLoginTokenQuery, string>
     {
         private readonly IConfiguration _configuration;
 
-        public GenerateTokenQueryHandler(IConfiguration configuration)
+        public GenerateLoginTokenQueryHandler(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public Task<string> Handle(GenerateTokenQuery request, CancellationToken cancellationToken)
+        public Task<string> Handle(GenerateLoginTokenQuery request, CancellationToken cancellationToken)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SigningKey"]));
 
