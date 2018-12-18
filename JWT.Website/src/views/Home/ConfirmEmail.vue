@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import axios from '@/axios.js'
-
 import DisplayCard from '@/components/UI/Card/DisplayCard.vue'
+
+import axios from '@/axios.js'
 
 export default {
     name: 'confirmEmail',
