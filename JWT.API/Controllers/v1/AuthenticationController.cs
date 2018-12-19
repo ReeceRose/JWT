@@ -29,9 +29,9 @@ namespace JWT.API.Controllers.v1
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> PostConfirmEmail([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
 
-        [HttpPost("RegenerateConfirmationEmail")]
+        [HttpPost("GenerateConfirmationEmail")]
         public async Task<IActionResult> PostRegenerateConfirmationEmail([FromBody] GenerateEmailConfirmationEmailQuery regenerateConfirmationEmailCommand) => Ok(new { result = await _mediator.Send(regenerateConfirmationEmailCommand) });
-        [HttpPost("GenerateResetPassword")]
+        [HttpPost("GenerateResetPasswordEmail")]
         public async Task<IActionResult> PostResetPassword([FromBody] GenerateResetPasswordEmailQuery generateResetPasswordEmailQuery) => Ok(new { result = await _mediator.Send(generateResetPasswordEmailQuery) });
     }
 }

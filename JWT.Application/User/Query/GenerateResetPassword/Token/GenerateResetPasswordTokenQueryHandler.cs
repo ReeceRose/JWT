@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 

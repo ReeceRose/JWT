@@ -33,7 +33,7 @@ namespace JWT.Application.User.Query.GenerateResetPassword.Email
             var token = _mediator.Send(new GenerateResetPasswordTokenQuery(user), cancellationToken).Result;
 
             await _notificationService.SendNotificationAsync(toName: request.Email, toEmailAddress: request.Email, subject: "Password reset",
-                message: $"You have requested a password reset. To reset our password click <a href='{_configuration["FrontEndUrl"]}/PasswordReset?token={token}'>here</a>");
+                message: $"You have requested a password reset. To reset our password click <a href='{_configuration["FrontEndUrl"]}/ResetPassword?token={token}'>here</a>");
 
             return await Task.FromResult(token);
         }

@@ -1,5 +1,99 @@
 <template>
-    <div>
-        <!-- TODO: Add password reset form and functionality in backend -->
-    </div>
+    <FormCard title="Forgot Password" :submit="submit">
+        <div slot="card-information">
+            <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
+            <p v-if="passwordReset" class="text-success text-center mb-3">Password has been reset</p>
+            <p v-if="error" class="text-danger text-center mb-3">An error has occured, please try again</p>
+        </div>
+        <div slot="card-content">
+            <FormEmail v-model="email" :validator="$v.email"/>
+            <div v-if="token">
+                <FormPassword v-model="password" :validator="$v.password"/>
+                <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Reset Password</button>
+        </div>
+    </FormCard>
 </template>
+
+<script>
+import FormCard from '@/components/UI/Card/FormCard.vue'
+import FormEmail from '@/components/UI/Form/Email.vue'
+import FormPassword from '@/components/UI/Form/Password.vue'
+
+import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
+const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
+
+import axios from '@/axios.js'
+
+export default {
+    name: 'ResetPassword',
+    components: {
+        FormCard,
+        FormEmail,
+        FormPassword
+    },
+    data() {
+        return {
+            email: '',
+            password: '',
+            confirmationPassword: '',
+            token: this.$route.query.token,
+            error: '',
+            emailSent: ''
+        }
+    },
+    validations: {
+        email: {
+            required,
+            email
+        },
+        password: {
+            required,
+            minLength: minLength(6),
+            passwordRegex
+        },
+        confirmationPassword: {
+            required,
+            sameAsPassword: sameAs('password')
+        }
+    },
+    methods: {
+        submit() {
+            this.$v.$touch()
+            if (this.$v.email.$error) {
+                return
+            }
+            if (this.token) {
+                if (this.$v.password.$error || this.$v.confirmationPassword.$error) {
+                    return
+                }
+                axios({
+                    method: 'post',
+                    url: 'authentication/resetPassword',
+                    data: { token: this.token, email: this.email, password: this.password },
+                })
+                    .then(() => {
+                        this.passwordReset = true
+                    })
+                    .catch(() => {
+                        this.error = true
+                    })
+            } else {
+                axios({
+                    method: 'post',
+                    url: 'authentication/generateResetPasswordEmail',
+                    data: { email: this.email },
+                })
+                    .then(() => {
+                        this.emailSent = true
+                    })
+                    .catch(() => {
+                        this.error = true
+                    })
+            }
+
+        }
+    }
+}
+</script>

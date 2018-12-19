@@ -44,7 +44,7 @@ export default {
             // TODO: MOVE LOGIC INTO STORE. SET IS LOADING
             axios({
                 method: 'post',
-                url: 'authentication/regenerateConfirmationEmail',
+                url: 'authentication/generateConfirmationEmail',
                 data: { email: this.email },
             })
             .then(() => {
