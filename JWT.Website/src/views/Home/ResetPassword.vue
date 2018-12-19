@@ -71,29 +71,37 @@ export default {
                 if (this.$v.password.$error || this.$v.confirmationPassword.$error) {
                     return
                 }
+                this.$store.dispatch('general/setIsLoading', true)
                 axios({
                     method: 'post',
                     url: 'authentication/resetPassword',
                     data: { token: this.token, email: this.email, password: this.password },
                 })
-                    .then(() => {
-                        this.passwordReset = true
-                    })
-                    .catch(() => {
-                        this.error = true
-                    })
+                .then(() => {
+                    this.passwordReset = true
+                })
+                .catch(() => {
+                    this.error = true
+                })                
+                .finally(() => {
+                    this.$store.dispatch('general/setIsLoading', false)
+                })
             } else {
+                this.$store.dispatch('general/setIsLoading', true)
                 axios({
                     method: 'post',
                     url: 'authentication/generateResetPasswordEmail',
                     data: { email: this.email },
                 })
-                    .then(() => {
-                        this.emailSent = true
-                    })
-                    .catch(() => {
-                        this.error = true
-                    })
+                .then(() => {
+                    this.emailSent = true
+                })
+                .catch(() => {
+                    this.error = true
+                })                
+                .finally(() => {
+                    this.$store.dispatch('general/setIsLoading', false)
+                })
             }
 
         }

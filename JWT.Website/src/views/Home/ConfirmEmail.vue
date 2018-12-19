@@ -34,17 +34,21 @@ export default {
     },
     methods: {
         confirmEmail() {
+            this.$store.dispatch('general/setIsLoading', true)
             axios({
                 method: 'post',
                 url: 'authentication/confirmEmail',
                 data: { userId: this.userId , token: this.token},
             })
-                .then(() => {
-                    this.confirmed = true
-                })
-                .catch(() => {
-                    this.error = true
-                })
+            .then(() => {
+                this.confirmed = true
+            })
+            .catch(() => {
+                this.error = true
+            })
+            .finally(() => {
+                this.$store.dispatch('general/setIsLoading', false)
+            })
         }
     },
     created() {

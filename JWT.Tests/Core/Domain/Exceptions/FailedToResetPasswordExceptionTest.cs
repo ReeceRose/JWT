@@ -11,7 +11,7 @@ namespace JWT.Tests.Core.Domain.Exceptions
             // Act
             var error = new FailedToResetPassword();
             // Assert
-            Assert.Equal("Failed to create account. Please try again", error.Message);
+            Assert.Equal("Failed to reset password. Try again", error.Message);
             Assert.Equal(typeof(FailedToResetPassword), error.GetType());
         }
 
