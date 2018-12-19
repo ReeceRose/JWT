@@ -2,7 +2,7 @@
 
 namespace JWT.Application.User.Query.GenerateResetPassword.Email
 {
-    public class GenerateResetPasswordEmailQuery : IRequest<bool>
+    public class GenerateResetPasswordEmailQuery : IRequest<string>
     {
         public GenerateResetPasswordEmailQuery(string email) => Email = email;
 

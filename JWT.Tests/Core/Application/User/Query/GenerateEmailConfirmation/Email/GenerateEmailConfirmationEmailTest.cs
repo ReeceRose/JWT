@@ -35,7 +35,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         [Theory]
         [InlineData("test@test.ca", "123")]
         [InlineData("user@domain.com" ,"321")]
-        public void GenerateEmailConfirmationEmail_NewNotificationSent(string email, string token)
+        public void GenerateEmailConfirmationEmail_EmailSent(string email, string token)
         {
             // Arrange
             var requestedUser = new IdentityUser()
