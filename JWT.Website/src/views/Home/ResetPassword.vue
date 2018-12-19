@@ -1,13 +1,15 @@
 <template>
-    <FormCard title="Forgot Password" :submit="submit">
+    <FormCard title="Reset Password" :submit="submit">
         <div slot="card-information">
             <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
             <p v-if="passwordReset" class="text-success text-center mb-3">Password has been reset</p>
             <p v-if="error" class="text-danger text-center mb-3">An error has occured, please try again</p>
         </div>
         <div slot="card-content">
-            <FormEmail v-model="email" :validator="$v.email"/>
-            <div v-if="token">
+            <div v-if="!token">
+                <FormEmail v-model="email" :validator="$v.email"/>
+            </div>
+            <div v-else>
                 <FormPassword v-model="password" :validator="$v.password"/>
                 <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
             </div>
@@ -35,12 +37,13 @@ export default {
     },
     data() {
         return {
-            email: '',
+            email: this.$route.query.email,
             password: '',
             confirmationPassword: '',
-            token: this.$route.query.token,
+            token: this.$route.query.token || '',
             error: '',
-            emailSent: ''
+            emailSent: '',
+            passwordReset: false
         }
     },
     validations: {
