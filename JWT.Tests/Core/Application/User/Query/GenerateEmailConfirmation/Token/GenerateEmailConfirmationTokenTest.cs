@@ -2,21 +2,21 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using JWT.Application.ConfirmationEmail.Command;
+using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Tests.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using Xunit;
 
-namespace JWT.Tests.Core.Application.ConfirmationEmail.Command
+namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Token
 {
-    public class GenerateConfirmationTokenTest
+    public class GenerateEmailConfirmationTokenTest
     {
         public List<IdentityUser> Users { get; set; }
         public Mock<MockUserManager> UserManager { get; }
-        public GenerateConfirmationTokenCommandHandler Handler { get; }
+        public GenerateEmailConfirmationTokenQueryHandler Handler { get; }
 
-        public GenerateConfirmationTokenTest()
+        public GenerateEmailConfirmationTokenTest()
         {
             // Arrange
             Users = new List<IdentityUser>()
@@ -29,16 +29,16 @@ namespace JWT.Tests.Core.Application.ConfirmationEmail.Command
                 }
             };
             UserManager = new Mock<MockUserManager>();
-            Handler = new GenerateConfirmationTokenCommandHandler(UserManager.Object);
+            Handler = new GenerateEmailConfirmationTokenQueryHandler(UserManager.Object);
         }
 
         [Fact]
-        public void GenerateConfirmationToken_ShouldReturnToken()
+        public void GenerateEmailConfirmationToken_ShouldReturnToken()
         {
             // Arrange
             UserManager.Setup(m => m.GenerateEmailConfirmationTokenAsync(It.IsAny<IdentityUser>())).Returns(Task.FromResult("1234567890"));
             // Act
-            var token = Handler.Handle(new GenerateConfirmationTokenCommand(Users.First()), default(CancellationToken)).Result;
+            var token = Handler.Handle(new GenerateEmailConfirmationTokenQuery(Users.First()), default(CancellationToken)).Result;
             // Assert
             Assert.NotNull(token);
             Assert.NotEmpty(token);
