@@ -41,7 +41,7 @@ export default {
     methods: {
         submit() {
             this.error = false
-            this.$store.dispatch('general/setIsLoading', true)
+            // this.$store.dispatch('general/setIsLoading', true)
             axios({
                 method: 'post',
                 url: 'authentication/generateConfirmationEmail',
@@ -54,7 +54,7 @@ export default {
                 this.error = true
             })
             .finally(() => {
-                this.$store.dispatch('general/setIsLoading', false)
+                // this.$store.dispatch('general/setIsLoading', false)
             })
         }
     }

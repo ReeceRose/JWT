@@ -66,10 +66,12 @@ export default {
     },
     computed: {
         error() {
-            return this.$store.getters['authentication/getError']
+            return false
+            // return this.$store.getters['authentication/register/getError']
         },
         status() {
-            return this.$store.getters['authentication/getStatus']
+            return false
+            // return this.$store.getters['authentication/register/getStatus']
         }
     },
     methods: {
@@ -78,11 +80,11 @@ export default {
             if (this.$v.$invalid) {
                 return
             }
-            this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
+            // this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
         }
     },
     destroyed() {
-        this.$store.commit('authentication/setStatus', false)
+        // this.$store.commit('authentication/setStatus', false)
     }
 }
 </script>

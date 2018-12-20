@@ -2,7 +2,7 @@
     <FormCard title="Login" :submit="submit">
         <div slot="card-information">
             <p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>
-            <p v-if="error" class="text-danger text-center mb-3">An error has occured, please check your credentials</p>
+            <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
         </div>
 
         <div slot="card-content">
@@ -53,7 +53,9 @@ export default {
             email: '',
             password: '',
             rememberMe: true,
-            redirect: this.$route.params.redirect
+            redirect: this.$route.params.redirect,
+            error: null,
+            errorMessage: 'Failed to login. Please try again'
         }
     },
     validations: {
@@ -66,11 +68,6 @@ export default {
             minLength: minLength(6)
         }
     },
-    computed: {
-        error() {
-            return this.$store.getters['authentication/getError']
-        }
-    },
     methods: {
         submit() {
             this.$v.$touch()
@@ -78,10 +75,16 @@ export default {
                 return
             }
             this.$store.dispatch('authentication/login', { email: this.email, password: this.password, rememberMe: this.rememberMe })
+                .then(() => {
+                    this.$router.push({ name: 'home' })
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        this.errorMessage = error.response.data.error[0]
+                    }
+                    this.error = true
+                })
         }
-    },
-    destroyed() {
-        this.$store.commit('authentication/resetError')
     }
 }
 </script>
