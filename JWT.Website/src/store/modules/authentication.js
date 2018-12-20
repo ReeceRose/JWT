@@ -1,9 +1,13 @@
 import axios from '@/axios.js'
 import utilities from '@/utilities.js'
+import global from '@/store/modules/global.js'
 // For reference
 // headers: { Authorization: `Bearer ${getters['uthentication/getToken'] || ''}`}
 const authentication = {
     namespaced: true,
+    getters: {
+        isAdmin: () => utilities.parseJwt(global.state.token).hasOwnProperty("Administrator")
+    },
     actions: {
         login: ({ commit, dispatch }, payload) => {
             return new Promise((resolve, reject) => {
@@ -32,10 +36,6 @@ const authentication = {
         },
         logout({ commit }) {
             commit("global/removeToken", null, { root: true })
-        },
-        isAdmin({ getters }) {
-            const token = getters("global/getToken", { root: true })
-            return token ? utilities.parseJwt(token).hasOwnProperty("Administrator") : false
         },
     }
     // state: {

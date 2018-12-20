@@ -39,7 +39,7 @@ export default {
             return this.$store.getters['global/getToken']
         },
         isAdmin() {
-            return this.$store.dispatch['authentication/isAdmin']
+            return this.$store.getters['authentication/isAdmin']
         }
     }
 }

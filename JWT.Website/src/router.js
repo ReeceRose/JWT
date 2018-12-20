@@ -21,7 +21,7 @@ const AdminProtected = {
         const redirect = () => {
             const token = store.getters['global/getToken']
             if (token) {
-                if (store.dispatch['authentication/isAdmin']) {
+                if (store.getters['authentication/isAdmin']) {
                     next()
                 } else {
                     next('/AccessDenied')
