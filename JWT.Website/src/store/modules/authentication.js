@@ -92,6 +92,44 @@ const authentication = {
                         commit('global/setLoading', false, { root: true })
                     })
             })
+        },
+        resetPassword: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'authentication/resetPassword',
+                    data: { token: payload.token, email: payload.email, password: payload.password },
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
+        generateResetPasswordEmail: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'authentication/generateResetPasswordEmail',
+                    data: { email: payload.email },
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
         }
     }
 }
