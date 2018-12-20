@@ -61,17 +61,36 @@ const authentication = {
                 axios({
                     method: 'post',
                     url: 'authentication/confirmEmail',
-                    data: { userId: payload.userId , token: payload.token},
+                    data: { userId: payload.userId, token: payload.token },
                 })
-                .then(() => {
-                    resolve()
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
+        regenerateConfirmationEmail: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'authentication/generateConfirmationEmail',
+                    data: { email: payload.email },
                 })
-                .catch(() => {
-                    reject()
-                })
-                .finally(() => {
-                    commit('global/setLoading', false, { root: true })
-                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         }
     }

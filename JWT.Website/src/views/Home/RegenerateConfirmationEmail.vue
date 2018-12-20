@@ -16,7 +16,6 @@
 import FormCard from '@/components/UI/Card/FormCard.vue'
 import FormEmail from '@/components/UI/Form/Email.vue'
 
-import axios from '@/axios.js'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
@@ -40,22 +39,13 @@ export default {
     },
     methods: {
         submit() {
-            this.error = false
-            // this.$store.dispatch('general/setIsLoading', true)
-            axios({
-                method: 'post',
-                url: 'authentication/generateConfirmationEmail',
-                data: { email: this.email },
-            })
-            .then(() => {
-                this.sent = true
-            })
-            .catch(() => {
-                this.error = true
-            })
-            .finally(() => {
-                // this.$store.dispatch('general/setIsLoading', false)
-            })
+             this.$store.dispatch('authentication/regenerateConfirmationEmail', { email: this.email })
+                .then(() => {
+                    this.sent = true
+                })
+                .catch(() => {
+                    this.error = true
+                })
         }
     }
 }
