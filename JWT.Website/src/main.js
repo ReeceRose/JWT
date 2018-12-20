@@ -1,16 +1,16 @@
 import Vue from 'vue'
+Vue.config.productionTip = false
+
 import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
 
 import App from '@/App.vue'
-import store from '@/store/store.js'
 
-store.dispatch("authentication/loadToken") 
+import store from '@/store/store.js'
+store.dispatch("global/loadToken", { root: true }) 
 
 import router from '@/router.js'
 
-Vue.use(Vuelidate)
-
-Vue.config.productionTip = false
 
 new Vue({
     router,

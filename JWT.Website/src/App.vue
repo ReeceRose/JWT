@@ -20,7 +20,7 @@ export default {
     },
     computed: {
         loading() {
-            return this.$store.getters['general/isLoading']
+            return this.$store.getters['global/isLoading']
         }
     }
 }

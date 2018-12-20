@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -30,12 +31,12 @@ namespace JWT.Application.User.Query.GenerateEmailConfirmation.Email
 
             if (user == null)
             {
-                return await Task.FromResult<string>(null);
+                throw new InvalidUserException();
             }
 
             if (await _userManager.IsEmailConfirmedAsync(user))
             {
-                return await Task.FromResult<string>(null);
+                throw new EmailIsAlreadyConfirmedException();
             }
 
             var token = _mediator.Send(new GenerateEmailConfirmationTokenQuery(user), cancellationToken).Result;
