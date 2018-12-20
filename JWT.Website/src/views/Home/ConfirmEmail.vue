@@ -17,8 +17,6 @@
 <script>
 import DisplayCard from '@/components/UI/Card/DisplayCard.vue'
 
-import axios from '@/axios.js'
-
 export default {
     name: 'confirmEmail',
     data() {
@@ -34,21 +32,18 @@ export default {
     },
     methods: {
         confirmEmail() {
-            this.$store.dispatch('general/setIsLoading', true)
-            axios({
-                method: 'post',
-                url: 'authentication/confirmEmail',
-                data: { userId: this.userId , token: this.token},
-            })
-            .then(() => {
-                this.confirmed = true
-            })
-            .catch(() => {
-                this.error = true
-            })
-            .finally(() => {
-                this.$store.dispatch('general/setIsLoading', false)
-            })
+            if (this.userId && this.token) {
+                this.$store.dispatch('authentication/confirmEmail', { userId: this.userId, token: this.token })
+                .then(() => {
+                    this.confirmed = true
+                    setTimeout(() => {
+                        this.$router.push({ name: 'login' })
+                    }, 3000)
+                })
+                .catch(() => {
+                    this.error = true
+                })
+            }
         }
     },
     created() {

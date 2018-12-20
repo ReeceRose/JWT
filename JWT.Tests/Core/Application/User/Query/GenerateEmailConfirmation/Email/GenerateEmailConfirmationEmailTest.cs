@@ -4,6 +4,7 @@ using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -56,28 +57,28 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         [Theory]
         [InlineData("test@test.ca")]
         [InlineData("user@domain.com")]
-        public void GenerateEmailConfirmationEmail_ReturnsNullOnInvalidUser(string email)
+        public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnInvalidUser(string email)
         {
             // Arrange
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
-            // Act
-            var returnedToken = Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None).Result;
-            // Assert
-            Assert.Null(returnedToken);
+            // Act / Assert
+            await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None));
         }
 
         [Theory]
         [InlineData("test@test.ca")]
         [InlineData("user@domain.com")]
-        public void GenerateEmailConfirmationEmail_ReturnsNullOnEmailAlreadyConfirmed(string email)
+        public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnEmailAlreadyConfirmed(string email)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((IdentityUser)null));
+            var requestedUser = new IdentityUser()
+            {
+                Email = email
+            };
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult(requestedUser));
             UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<IdentityUser>())).ReturnsAsync(true);
-            // Act
-            var returnedToken = Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None).Result;
-            // Assert
-            Assert.Null(returnedToken);
+            // Act / Assert
+            await Assert.ThrowsAsync<EmailIsAlreadyConfirmedException>(() => Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None));
         }
     }
 }
