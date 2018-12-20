@@ -11,7 +11,7 @@ namespace JWT.Tests.Core.Domain.Exceptions
             // Act
             var error = new InvalidUserException();
             // Assert
-            Assert.Equal("A user with this ID or email does not exist", error.Message);
+            Assert.Equal("A user with this ID does not exist", error.Message);
             Assert.Equal(typeof(InvalidUserException), error.GetType());
         }
 

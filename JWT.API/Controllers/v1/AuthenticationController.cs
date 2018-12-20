@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using JWT.Application.User.Command.ConfirmUserEmail;
+using JWT.Application.User.Command.RegenerateConfirmationEmail;
 using JWT.Application.User.Command.RegisterUser;
-using JWT.Application.User.Command.ResetPassword;
-using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
-using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,13 +28,7 @@ namespace JWT.API.Controllers.v1
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> PostConfirmEmail([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
 
-        [HttpPost("GenerateConfirmationEmail")]
-        public async Task<IActionResult> PostRegenerateConfirmationEmail([FromBody] GenerateEmailConfirmationEmailQuery regenerateConfirmationEmailCommand) => Ok(new { result = await _mediator.Send(regenerateConfirmationEmailCommand) });
-
-        [HttpPost("GenerateResetPasswordEmail")]
-        public async Task<IActionResult> PostGenerateRestResetPasswordEmail([FromBody] GenerateResetPasswordEmailQuery generateResetPasswordEmailQuery) => Ok(new { result = await _mediator.Send(generateResetPasswordEmailQuery) });
-
-        [HttpPost("ResetPassword")]
-        public async Task<IActionResult> PostResetPassword([FromBody] ResetPasswordCommand resetPasswordCommand) => Ok(new { result = await _mediator.Send(resetPasswordCommand) });
+        [HttpPost("RegenerateConfirmationEmail")]
+        public async Task<IActionResult> PostRegenerateConfirmationEmail([FromBody] RegenerateConfirmationEmailCommand regenerateConfirmationEmailCommand) => Ok(new { result = await _mediator.Send(regenerateConfirmationEmailCommand) });
     }
 }

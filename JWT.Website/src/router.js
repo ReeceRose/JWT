@@ -19,7 +19,7 @@ Vue.use(Router)
 const AdminProtected = {
     beforeEnter: (to, from, next) => {
         const redirect = () => {
-            const token = store.getters['global/getToken']
+            const token = store.getters['authentication/getToken']
             if (token) {
                 if (store.getters['authentication/isAdmin']) {
                     next()
@@ -30,10 +30,10 @@ const AdminProtected = {
                 next({ name: 'login', params: { redirect: to.fullPath }})
             }
         }
-        if (store.getters['global/isLoading']) {
+        if (store.getters['authentication/isLoading']) {
             store.watch(
                 (getters) => {
-                    getters['global/isLoading']
+                    getters['authentication/isLoading']
                 },
                 () => {
                     redirect()
@@ -46,9 +46,9 @@ const AdminProtected = {
 }
 const NotLoggedIn = {
     beforeEnter: (to, from, next) => {
-        const token = store.getters['global/getToken']
+        const token = store.getters['authentication/getToken']
         if (token) {
-            next({ name: 'home' })
+            next(false)
         }
         else {
             next()
@@ -59,13 +59,6 @@ const NotLoggedIn = {
 export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
-    beforeEach: (to, from, next) => {
-        store.commit('global/setLoading', true)
-        next()
-    },
-    afterEach: () => {
-        store.commit('global/setLoading', false)
-    },
     routes: [
         {
             path: '/',

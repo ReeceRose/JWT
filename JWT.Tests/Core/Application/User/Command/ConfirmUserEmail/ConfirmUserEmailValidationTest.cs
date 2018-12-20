@@ -20,7 +20,7 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
         public void ConfirmUserEmail_UserIdIsValid(string userId)
         {
             // Act
-            var result = Validator.Validate(new ConfirmUserEmailCommand(userId, "1"));
+            var result = Validator.Validate(new ConfirmUserEmailCommand() {Token = "1", UserId = userId});
             // Assert
             Assert.True(result.IsValid);
         }
@@ -31,7 +31,7 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
         public void ConfirmUserEmail_UserIdIsInvalid(string userId)
         {
             // Act
-            var result = Validator.Validate(new ConfirmUserEmailCommand(userId, "1"));
+            var result = Validator.Validate(new ConfirmUserEmailCommand() { Token = "1", UserId = userId });
             // Assert
             Assert.Contains("User ID required", result.Errors.First().ErrorMessage);
             Assert.False(result.IsValid);
@@ -43,7 +43,7 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
         public void ConfirmUserEmail_TokenIsValid(string token)
         {
             // Act
-            var result = Validator.Validate(new ConfirmUserEmailCommand("1", token));
+            var result = Validator.Validate(new ConfirmUserEmailCommand() {Token = token, UserId = "1"});
             // Assert
             Assert.True(result.IsValid);
         }
@@ -54,7 +54,7 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
         public void ConfirmUserEmail_TokenIsInvalid(string token)
         {
             // Act
-            var result = Validator.Validate(new ConfirmUserEmailCommand("1", token));
+            var result = Validator.Validate(new ConfirmUserEmailCommand() { Token = token, UserId = "1" });
             // Assert
             Assert.Contains("Token required", result.Errors.First().ErrorMessage);
             Assert.False(result.IsValid);
