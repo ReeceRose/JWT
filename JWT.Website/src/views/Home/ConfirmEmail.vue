@@ -36,6 +36,9 @@ export default {
                 this.$store.dispatch('authentication/confirmEmail', { userId: this.userId, token: this.token })
                 .then(() => {
                     this.confirmed = true
+                    setTimeout(() => {
+                        this.$router.push({ name: 'login' })
+                    }, 3000)
                 })
                 .catch(() => {
                     this.error = true
