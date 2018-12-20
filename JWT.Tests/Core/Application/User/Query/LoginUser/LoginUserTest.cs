@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using JWT.Application.Token.Query.GetToken;
+using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.LoginUser;
 using JWT.Domain.Exceptions;
@@ -42,7 +42,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
             SignInManager
                 .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<IdentityUser>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(Task.FromResult(SignInResult.Success));
-            Mediator.Setup(m => m.Send(It.IsAny<GenerateTokenQuery>(), default(CancellationToken))).Returns(Task.FromResult(token));
+            Mediator.Setup(m => m.Send(It.IsAny<GenerateLoginTokenQuery>(), default(CancellationToken))).Returns(Task.FromResult(token));
             // Act
             var returnedToken = Handler.Handle(new LoginUserQuery(email, password), default(CancellationToken)).Result;
             // Assert
