@@ -7,7 +7,7 @@ Vue.use(Vuelidate)
 import App from '@/App.vue'
 
 import store from '@/store/store.js'
-store.dispatch("global/loadToken") 
+store.dispatch("global/loadToken", { root: true }) 
 
 import router from '@/router.js'
 

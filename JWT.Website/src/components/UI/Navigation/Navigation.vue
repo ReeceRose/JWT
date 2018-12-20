@@ -31,14 +31,15 @@ export default {
     methods: {
         logout() {
             this.$store.dispatch("authentication/logout")
+            this.$router.push({ name: 'home' })
         }
     },
     computed: {
         loggedIn() {
-            return this.$store.getters['authentication/getToken']
+            return this.$store.getters['global/getToken']
         },
         isAdmin() {
-            return this.$store.getters['authentication/isAdmin']
+            return this.$store.dispatch['authentication/isAdmin']
         }
     }
 }

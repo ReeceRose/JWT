@@ -80,6 +80,9 @@ export default {
                 })
                 .catch((error) => {
                     if (error.response) {
+                        if (String(error.response.data.error[0]).toLowerCase().includes('email not confirmed')) {
+                            this.$router.push({ name: 'confirmEmail' })
+                        }
                         this.errorMessage = error.response.data.error[0]
                     }
                     this.error = true

@@ -34,21 +34,23 @@ export default {
     },
     methods: {
         confirmEmail() {
-            this.$store.dispatch('general/setIsLoading', true)
-            axios({
-                method: 'post',
-                url: 'authentication/confirmEmail',
-                data: { userId: this.userId , token: this.token},
-            })
-            .then(() => {
-                this.confirmed = true
-            })
-            .catch(() => {
-                this.error = true
-            })
-            .finally(() => {
-                this.$store.dispatch('general/setIsLoading', false)
-            })
+            if (this.token && this.userId) {
+                this.$store.commit('global/setLoading', true)
+                axios({
+                    method: 'post',
+                    url: 'authentication/confirmEmail',
+                    data: { userId: this.userId , token: this.token},
+                })
+                .then(() => {
+                    this.confirmed = true
+                })
+                .catch(() => {
+                    this.error = true
+                })
+                .finally(() => {
+                    this.$store.commit('global/setLoading', false)
+                })
+            }
         }
     },
     created() {

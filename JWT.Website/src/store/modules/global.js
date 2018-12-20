@@ -11,8 +11,14 @@ const global = {
         isLoading: state => state.loading
     },
     mutations: {
-        // TOKN
-        setToken: (state, token) => state.token = token,
+        // TOKEN
+        setToken: (state, token) => {
+            state.token = token
+        },
+        removeToken: (state) => {
+            state.token = null
+            localStorage.removeItem("token")
+        },
         // LOADING
         setLoading: (state, isLoading) => state.loading = isLoading
     },
@@ -20,11 +26,12 @@ const global = {
         // TOKEN
         updateToken({ commit }, token) {
             commit("setToken", token)
+            localStorage.setItem("token", JSON.stringify(token))
         },
         loadToken({ commit }) {
             commit("setLoading", true)
             if (localStorage.getItem("token")) {
-                commit("setToken", JSON.parse(localStorage.getItem("token")).token)
+                commit("setToken", JSON.parse(localStorage.getItem("token")))
             }
             commit("setLoading", false)
         },
