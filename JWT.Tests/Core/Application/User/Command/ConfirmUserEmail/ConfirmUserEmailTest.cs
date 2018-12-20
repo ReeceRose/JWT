@@ -37,7 +37,11 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken))).Returns(Task.FromResult(requestedUser));
             UserManager.Setup(u => u.ConfirmEmailAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).Returns(Task.FromResult(IdentityResult.Success));
-            var query = new ConfirmUserEmailCommand(userId, token);
+            var query = new ConfirmUserEmailCommand()
+            {
+                UserId = userId,
+                Token = token
+            };
             // Act
             var result = Handler.Handle(query, CancellationToken.None).Result;
             // Assert
@@ -51,7 +55,11 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
         {
             // Arrange
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken))).Returns(Task.FromResult((IdentityUser) null));
-            var query = new ConfirmUserEmailCommand(userId, token);
+            var query = new ConfirmUserEmailCommand()
+            {
+                UserId = userId,
+                Token = token
+            };
             // Act / Assert
             await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(query, CancellationToken.None));
         }

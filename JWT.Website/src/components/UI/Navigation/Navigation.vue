@@ -31,12 +31,11 @@ export default {
     methods: {
         logout() {
             this.$store.dispatch("authentication/logout")
-            this.$router.push({ name: 'home' })
         }
     },
     computed: {
         loggedIn() {
-            return this.$store.getters['global/getToken']
+            return this.$store.getters['authentication/getToken']
         },
         isAdmin() {
             return this.$store.getters['authentication/isAdmin']
@@ -44,6 +43,8 @@ export default {
     }
 }
 </script>
+
+
 
 <style lang="scss" scoped>
 .btn {

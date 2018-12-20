@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using JWT.Application.User.Query.GenerateLoginToken;
+using JWT.Application.Token.Query.GetToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;
@@ -47,7 +47,7 @@ namespace JWT.Application.User.Query.LoginUser
                 throw new InvalidCredentialException();
             }
 
-            return await _mediator.Send(new GenerateLoginTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
+            return await _mediator.Send(new GenerateTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
         }
     }
 }

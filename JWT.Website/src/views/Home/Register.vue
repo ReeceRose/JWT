@@ -1,14 +1,14 @@
 <template>
     <FormCard title="Register" :submit="submit">
         <div slot="card-information">
-            <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
-            <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
+            <p v-if="status" class="text-success text-center mb-3">A confirmation email has been sent.</p>
+            <p v-if="error" class="text-danger text-center mb-3">An error has occured, make sure your passwords match and your email is unique</p>
         </div>
 
         <div slot="card-content">
             <FormEmail v-model="email" :validator="$v.email"/>
             <FormPassword v-model="password" :validator="$v.password"/>
-            <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+            <FormPassword v-model="confirmationPassword" confirmationPassword=true :validator="$v.confirmationPassword"/>
 
             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
             <Strike text="OR"/>
@@ -46,10 +46,7 @@ export default {
         return {
             email: '',
             password: '',
-            confirmationPassword: '',
-            success: null,
-            error: null,
-            errorMessage: 'An error has occured, make sure your passwords match and your email is unique'
+            confirmationPassword: ''
         }
     },
     validations: {
@@ -67,23 +64,25 @@ export default {
             sameAsPassword: sameAs('password')
         }
     },
+    computed: {
+        error() {
+            return this.$store.getters['authentication/getError']
+        },
+        status() {
+            return this.$store.getters['authentication/getStatus']
+        }
+    },
     methods: {
         submit() {
             this.$v.$touch()
             if (this.$v.$invalid) {
                 return
             }
-            this.$store.dispatch('authentication/register', { email: this.email, password: this.password, isAdmin: false })
-                .then(() => {
-                    this.success = true
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        this.errorMessage = error.response.data.error[0]
-                    }
-                    this.error = true
-                })
+            this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
         }
+    },
+    destroyed() {
+        this.$store.commit('authentication/setStatus', false)
     }
 }
 </script>

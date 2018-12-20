@@ -7,7 +7,7 @@
             type="password" 
             id="inputPassword" 
             class="form-control" 
-            :placeholder="confirmationPassword == 'true' ? 'Confirmation password' : 'Password'"
+            placeholder="Password"
         >
         <p v-if="validator.$error && !confirmationPassword" class="text-danger text-center">Password must be at least 6 characters long, contain one upper and lowercase letter, and one special character</p>
         <p v-if="validator.$error && confirmationPassword" class="text-danger text-center">Password must match the password above</p>
@@ -28,9 +28,9 @@ export default {
             required: true  
         },
         confirmationPassword: {
-            type: String,
+            type: Boolean,
             required: false,
-            default: ""
+            default: false
         }
     },
     computed: {

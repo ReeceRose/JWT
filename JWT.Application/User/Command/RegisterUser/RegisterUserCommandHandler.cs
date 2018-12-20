@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using JWT.Application.ConfirmationEmail.Command;
 using JWT.Application.Interfaces;
-using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;
@@ -48,7 +48,10 @@ namespace JWT.Application.User.Command.RegisterUser
                 throw new InvalidRegisterException();
             }
 
-            await _mediator.Send(new GenerateEmailConfirmationEmailQuery(email), cancellationToken);
+            var token = _mediator.Send(new GenerateConfirmationTokenCommand(user), cancellationToken).Result;
+
+            await _notificationService.SendNotificationAsync(toName: email, toEmailAddress: email, subject: "Registered account",
+                message: $"Congratulations! You have successfully registered your account. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
 
             // NOTE: DO NOT DO THIS!!
             if (request.IsAdmin)
