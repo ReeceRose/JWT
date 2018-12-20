@@ -9,6 +9,25 @@ const authentication = {
         isAdmin: () => utilities.parseJwt(global.state.token).hasOwnProperty("Administrator")
     },
     actions: {
+        register: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'authentication/register',
+                    data: { email: payload.email, password: payload.password }
+                })
+                    .then(response => {
+                        resolve(response)
+                    })
+                    .catch((error) => {
+                        reject(error)
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
         login: ({ commit, dispatch }, payload) => {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
@@ -17,21 +36,20 @@ const authentication = {
                     url: 'authentication/login',
                     data: { email: payload.email, password: payload.password },
                 })
-                .then((response) => {
-                    const token = response.data.token
-                    dispatch("global/updateToken", token, { root: true })
-                    if (payload.rememberMe) {
-                        // commit("setLocalStorageToken", token)
-                        // Store cookie
-                    }
-                    resolve()
-                })
-                .catch(error => {
-                    reject(error)
-                })
-                .finally(() => {
-                    commit('global/setLoading', false, { root: true })
-                })
+                    .then((response) => {
+                        const token = response.data.token
+                        dispatch("global/updateToken", token, { root: true })
+                        if (payload.rememberMe) {
+                            // Store cookie
+                        }
+                        resolve()
+                    })
+                    .catch(error => {
+                        reject(error)
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         },
         logout({ commit }) {

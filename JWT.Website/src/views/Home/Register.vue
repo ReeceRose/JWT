@@ -1,8 +1,8 @@
 <template>
     <FormCard title="Register" :submit="submit">
         <div slot="card-information">
-            <p v-if="status" class="text-success text-center mb-3">A confirmation email has been sent.</p>
-            <p v-if="error" class="text-danger text-center mb-3">An error has occured, make sure your passwords match and your email is unique</p>
+            <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
+            <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
         </div>
 
         <div slot="card-content">
@@ -46,7 +46,10 @@ export default {
         return {
             email: '',
             password: '',
-            confirmationPassword: ''
+            confirmationPassword: '',
+            success: null,
+            error: null,
+            errorMessage: 'An error has occured, make sure your passwords match and your email is unique'
         }
     },
     validations: {
@@ -64,27 +67,23 @@ export default {
             sameAsPassword: sameAs('password')
         }
     },
-    computed: {
-        error() {
-            return false
-            // return this.$store.getters['authentication/register/getError']
-        },
-        status() {
-            return false
-            // return this.$store.getters['authentication/register/getStatus']
-        }
-    },
     methods: {
         submit() {
             this.$v.$touch()
             if (this.$v.$invalid) {
                 return
             }
-            // this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
+            this.$store.dispatch('authentication/register', { email: this.email, password: this.password, isAdmin: false })
+                .then(() => {
+                    this.success = true
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        this.errorMessage = error.response.data.error[0]
+                    }
+                    this.error = true
+                })
         }
-    },
-    destroyed() {
-        // this.$store.commit('authentication/setStatus', false)
     }
 }
 </script>
