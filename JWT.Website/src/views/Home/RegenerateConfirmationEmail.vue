@@ -41,10 +41,10 @@ export default {
     methods: {
         submit() {
             this.error = false
-            // TODO: MOVE LOGIC INTO STORE. SET IS LOADING
+            this.$store.dispatch('general/setIsLoading', true)
             axios({
                 method: 'post',
-                url: 'authentication/regenerateConfirmationEmail',
+                url: 'authentication/generateConfirmationEmail',
                 data: { email: this.email },
             })
             .then(() => {
@@ -52,6 +52,9 @@ export default {
             })
             .catch(() => {
                 this.error = true
+            })
+            .finally(() => {
+                this.$store.dispatch('general/setIsLoading', false)
             })
         }
     }

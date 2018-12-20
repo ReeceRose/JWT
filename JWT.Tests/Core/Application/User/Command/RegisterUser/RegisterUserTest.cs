@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using JWT.Application.ConfirmationEmail.Command;
 using JWT.Application.Interfaces;
 using JWT.Application.User.Command.RegisterUser;
+using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Common;
 using JWT.Domain.Exceptions;
@@ -47,7 +47,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
             NotificationService.Setup(n => n.SendNotificationAsync("test", email, "test email", "message")).ReturnsAsync(true);
             UserManager.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
-            Mediator.Setup(m => m.Send(It.IsAny<GenerateConfirmationTokenCommand>(), default(CancellationToken))).ReturnsAsync(It.IsAny<string>());
+            Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationEmailQuery>(), default(CancellationToken))).ReturnsAsync(It.IsAny<string>());
             // Act
             var result = Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None).Result;
             // Assert
