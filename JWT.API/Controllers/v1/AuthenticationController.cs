@@ -6,6 +6,7 @@ using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.LoginUser;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.API.Controllers.v1
@@ -37,5 +38,8 @@ namespace JWT.API.Controllers.v1
 
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> PostResetPassword([FromBody] ResetPasswordCommand resetPasswordCommand) => Ok(new { result = await _mediator.Send(resetPasswordCommand) });
+
+        [HttpGet("ThirdPartyLogin")]
+        public IActionResult GetThirdPartyLogin([FromQuery] string provider) { return Challenge(new AuthenticationProperties { RedirectUri = "/"}, provider); }
     }
 }

@@ -72,6 +72,11 @@ namespace JWT.API
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
+                .AddFacebook(options =>
+                {
+                    options.AppId = Configuration["Facebook:AppId"];
+                    options.AppSecret = Configuration["Facebook:AppSecret"];
+                })
                 .AddJwtBearer(x =>
                 {
                     x.RequireHttpsMetadata = true;
@@ -144,7 +149,7 @@ namespace JWT.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API V1");
                 c.RoutePrefix = string.Empty;
             });
-
+            
             app.UseHealthChecks("/ready");
 
             app.UseAuthentication();
