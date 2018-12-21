@@ -5,8 +5,8 @@ using JWT.Application.User.Command.ResetPassword;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.LoginUser;
+using JWT.Application.User.Query.LoginUser.External;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.API.Controllers.v1
@@ -24,22 +24,22 @@ namespace JWT.API.Controllers.v1
         [HttpPost("Login")]
         public async Task<IActionResult> PostLoginAsync([FromBody] LoginUserQuery loginUserQuery) => Ok(new { token = await _mediator.Send(loginUserQuery) });
 
+        [HttpPost("FacebookLogin")]
+        public async Task<IActionResult> PostLoginFacebookAsync([FromBody] LoginUserExternalQuery loginUserExternalQuery) => Ok(new { token = await  _mediator.Send(loginUserExternalQuery)});
+
         [HttpPost("Register")]
         public async Task<IActionResult> PostRegisterAsync([FromBody] RegisterUserCommand registerUserCommand) => Ok(new { result = await _mediator.Send(registerUserCommand) });
 
         [HttpPost("ConfirmEmail")]
-        public async Task<IActionResult> PostConfirmEmail([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
+        public async Task<IActionResult> PostConfirmEmailAsync([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
 
         [HttpPost("GenerateConfirmationEmail")]
-        public async Task<IActionResult> PostRegenerateConfirmationEmail([FromBody] GenerateEmailConfirmationEmailQuery regenerateConfirmationEmailCommand) => Ok(new { result = await _mediator.Send(regenerateConfirmationEmailCommand) });
+        public async Task<IActionResult> PostRegenerateConfirmationEmailAsync([FromBody] GenerateEmailConfirmationEmailQuery regenerateConfirmationEmailCommand) => Ok(new { result = await _mediator.Send(regenerateConfirmationEmailCommand) });
 
         [HttpPost("GenerateResetPasswordEmail")]
-        public async Task<IActionResult> PostGenerateRestResetPasswordEmail([FromBody] GenerateResetPasswordEmailQuery generateResetPasswordEmailQuery) => Ok(new { result = await _mediator.Send(generateResetPasswordEmailQuery) });
+        public async Task<IActionResult> PostGenerateRestResetPasswordEmailAsync([FromBody] GenerateResetPasswordEmailQuery generateResetPasswordEmailQuery) => Ok(new { result = await _mediator.Send(generateResetPasswordEmailQuery) });
 
         [HttpPost("ResetPassword")]
-        public async Task<IActionResult> PostResetPassword([FromBody] ResetPasswordCommand resetPasswordCommand) => Ok(new { result = await _mediator.Send(resetPasswordCommand) });
-
-        [HttpGet("ThirdPartyLogin")]
-        public IActionResult GetThirdPartyLogin([FromQuery] string provider) { return Challenge(new AuthenticationProperties { RedirectUri = "/"}, provider); }
+        public async Task<IActionResult> PostResetPasswordAsync([FromBody] ResetPasswordCommand resetPasswordCommand) => Ok(new { result = await _mediator.Send(resetPasswordCommand) });
     }
 }
