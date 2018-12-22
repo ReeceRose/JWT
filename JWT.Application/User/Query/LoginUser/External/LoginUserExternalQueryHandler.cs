@@ -2,6 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using JWT.Application.User.Query.LoginUser.External.Facebook;
+using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
@@ -9,18 +11,22 @@ namespace JWT.Application.User.Query.LoginUser.External
 {
     public class LoginUserExternalQueryHandler : IRequestHandler<LoginUserExternalQuery, string>
     {
-        private readonly IConfiguration _configuration;
-        private static readonly HttpClient Client = new HttpClient();
+        private readonly IMediator _mediator;
         
-        public LoginUserExternalQueryHandler(IConfiguration configuration)
+        public LoginUserExternalQueryHandler(IMediator mediator)
         {
-            _configuration = configuration;
+            _mediator = mediator;
         }
 
         public Task<string> Handle(LoginUserExternalQuery request, CancellationToken cancellationToken)
         {
-            //var appAccessTokenResponse = await  Client.GetStringAsync($"https://graph.facebook.com/oauth/access_token?client_id={_configuration['Facebook:AppId']}")
-            throw new System.NotImplementedException();
+            switch (request.Provider)
+            {
+                case "Facebook":
+                    return _mediator.Send(new LoginUserExternalFacebookQuery(request.AccessToken), cancellationToken);
+                default:
+                    throw new InvalidProviderException();
+            }
         }
     }
 }
