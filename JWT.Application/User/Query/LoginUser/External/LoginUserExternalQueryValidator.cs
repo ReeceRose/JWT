@@ -10,6 +10,10 @@ namespace JWT.Application.User.Query.LoginUser.External
                 .NotEmpty().WithMessage("Access token required")
                 .NotNull().WithMessage("Access token required");
 
+            RuleFor(u => u.Provider)
+                .NotEmpty().WithMessage("Provider required")
+                .NotNull().WithMessage("Provider required");
+
         }
     }
 }

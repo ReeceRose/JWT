@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.User.Query.LoginUser;
 using Xunit;
 
