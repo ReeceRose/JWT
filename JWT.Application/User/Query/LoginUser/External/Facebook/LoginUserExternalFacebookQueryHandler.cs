@@ -6,6 +6,7 @@ using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Model.LoginUser.External.Facebook;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Application.User.Query.GetUserClaim;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -66,7 +67,9 @@ namespace JWT.Application.User.Query.LoginUser.External.Facebook
                 throw new InvalidUserException("Failed to load Facebook user");
             }
 
-            return _mediator.Send(new GenerateLoginTokenQuery(null), cancellationToken).Result;;
+            var claims = _mediator.Send(new GetUserClaimQuery(localUser), cancellationToken).Result;
+
+            return _mediator.Send(new GenerateLoginTokenQuery(claims), cancellationToken).Result;;
         }
     }
 }
