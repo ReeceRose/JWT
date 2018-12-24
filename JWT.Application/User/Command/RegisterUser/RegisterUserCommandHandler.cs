@@ -1,8 +1,10 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.Interfaces;
+using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Exceptions;
@@ -42,7 +44,7 @@ namespace JWT.Application.User.Command.RegisterUser
             // TODO: Refactor out IdentityUser to ApplicationUser
             user = _mapper.Map<IdentityUser>(request);
 
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var result = await _mediator.Send(new CreateUserCommand(user, request.Password), cancellationToken);
             if (!result.Succeeded)
             {
                 throw new InvalidRegisterException();
