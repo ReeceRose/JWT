@@ -1,16 +1,13 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using JWT.Application.Interfaces;
+using JWT.Application.User.Command.AddUserClaim;
 using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 
 namespace JWT.Application.User.Command.RegisterUser
 {
@@ -18,17 +15,11 @@ namespace JWT.Application.User.Command.RegisterUser
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly INotificationService _notificationService;
-        private readonly IConfiguration _configuration;
 
-        public RegisterUserCommandHandler(IMediator mediator, IMapper mapper, UserManager<IdentityUser> userManager, INotificationService notificationService, IConfiguration configuration)
+        public RegisterUserCommandHandler(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
-            _userManager = userManager;
-            _notificationService = notificationService;
-            _configuration = configuration;
         }
 
         public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -55,7 +46,7 @@ namespace JWT.Application.User.Command.RegisterUser
             // NOTE: DO NOT DO THIS!!
             if (request.IsAdmin)
             {
-                await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
+                await _mediator.Send(new AddUserClaimCommand("Administrator", ""));
             }
 
             return await Task.FromResult(result.Succeeded);
