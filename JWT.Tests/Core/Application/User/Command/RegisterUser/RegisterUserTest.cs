@@ -21,9 +21,6 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public Mock<IMediator> Mediator { get; }
         public MapperConfiguration MapperConfiguration { get; }
         public IMapper Mapper { get; }
-        public Mock<MockUserManager> UserManager { get; }
-        public Mock<INotificationService> NotificationService { get; }
-        public Mock<IConfiguration> Configuration { get; }
         public RegisterUserCommandHandler Handler { get; }
 
         public RegisterUserTest()
@@ -32,10 +29,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
             Mediator = new Mock<IMediator>();
             MapperConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
             Mapper = MapperConfiguration.CreateMapper();
-            UserManager = new Mock<MockUserManager>();
-            NotificationService = new Mock<INotificationService>();
-            Configuration = new Mock<IConfiguration>();
-            Handler = new RegisterUserCommandHandler(Mediator.Object, Mapper, UserManager.Object, NotificationService.Object, Configuration.Object);
+            Handler = new RegisterUserCommandHandler(Mediator.Object, Mapper);
         }
 
         [Theory]
@@ -45,8 +39,6 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         {
             // Arrange
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
-            NotificationService.Setup(n => n.SendNotificationAsync("test", email, "test email", "message")).ReturnsAsync(true);
-            UserManager.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationEmailQuery>(), default(CancellationToken))).ReturnsAsync(It.IsAny<string>());
             // Act
             var result = Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None).Result;
@@ -73,7 +65,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         {
             // Arrange
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser)null);
-            UserManager.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
+            //UserManager.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
             await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
         }

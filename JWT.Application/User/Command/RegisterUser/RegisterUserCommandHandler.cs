@@ -46,7 +46,7 @@ namespace JWT.Application.User.Command.RegisterUser
             // NOTE: DO NOT DO THIS!!
             if (request.IsAdmin)
             {
-                await _mediator.Send(new AddUserClaimCommand("Administrator", ""));
+                await _mediator.Send(new AddUserClaimCommand(user, "Administrator", ""), cancellationToken);
             }
 
             return await Task.FromResult(result.Succeeded);

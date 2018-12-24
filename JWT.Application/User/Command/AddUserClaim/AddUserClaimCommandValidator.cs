@@ -6,6 +6,9 @@ namespace JWT.Application.User.Command.AddUserClaim
     {
         public AddUserClaimCommandValidator()
         {
+            RuleFor(c => c.User)
+                .NotNull().WithMessage("User required");
+
             RuleFor(c => c.Key)
                 .NotEmpty().WithMessage("Key required")
                 .NotNull().WithMessage("Key required");
