@@ -19,7 +19,7 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserClaim
         [Theory]
         [InlineData("test-user")]
         [InlineData("user@domain.com")]
-        public void CreateUser_UserIsValid(string userName)
+        public void GetUserClaim_UserIsValid(string userName)
         {
             // Arrange
             var user = new IdentityUser()
@@ -34,7 +34,7 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserClaim
         }
 
         [Fact]
-        public void CreateUser_UserIsInvalid()
+        public void GetUserClaim_UserIsInvalid()
         {
             // Act
             var result = Validator.Validate(new GetUserClaimQuery(null));
