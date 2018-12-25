@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Query.GetUserClaim;
 using Microsoft.AspNetCore.Identity;
 using Xunit;

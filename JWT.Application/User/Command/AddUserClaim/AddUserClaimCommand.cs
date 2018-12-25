@@ -7,7 +7,7 @@ namespace JWT.Application.User.Command.AddUserClaim
     {
         public AddUserClaimCommand(IdentityUser user, string key, string value)
         {
-            User = User;
+            User = user;
             Key = key;
             Value = value;
         }
