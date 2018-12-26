@@ -1,5 +1,5 @@
 <template>
-    <BaseSocialButton>
+    <BaseSocialButton :submit="submit">
         <i class="fab fa-facebook-f fixed-width"></i>
         <span>Facebook</span>
     </BaseSocialButton>
@@ -12,6 +12,12 @@ export default {
     name: 'FacebookButton',
     components: {
         BaseSocialButton
+    },
+    props: {
+        submit: {
+            type: Function,
+            required: true
+        }
     }
 }
 </script>

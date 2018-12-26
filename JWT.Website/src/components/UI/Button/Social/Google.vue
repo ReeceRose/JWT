@@ -1,5 +1,5 @@
 <template>
-    <BaseSocialButton>
+    <BaseSocialButton :submit="submit">
         <i class="fab fa-google fixed-width"></i>
         <span>Google</span>
     </BaseSocialButton>
@@ -12,6 +12,12 @@ export default {
     name: 'GoogleButton',
     components: {
         BaseSocialButton
+    },
+    props: {
+        submit: {
+            type: Function,
+            required: true
+        }
     }
 }
 </script>

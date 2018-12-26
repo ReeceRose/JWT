@@ -12,6 +12,11 @@
 
                         </slot>
                     </form>
+                    <div class="custom-form">
+                        <slot class="custom-form" name="below-form">
+
+                        </slot>
+                    </div>
                 </div>
             </div>
         </div>

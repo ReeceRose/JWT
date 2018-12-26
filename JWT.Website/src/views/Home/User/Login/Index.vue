@@ -21,9 +21,11 @@
             <Strike text="OR"/>
             
             <h5 class="card-title text-center">Login With</h5>
+        </div>
+        <div slot="below-form">
             <div class="text-center social-btn">
-                <FacebookButton/>
-                <GoogleButton/>
+                <FacebookButton :submit="facebook"/>
+                <GoogleButton :submit="google"/>
             </div>
         </div>
     </FormCard>
@@ -40,6 +42,7 @@ import GoogleButton from '@/components/UI/Button/Social/Google.vue'
 import { required, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
+    name: 'LoginIndex',
     components: {
         FormCard,
         FormEmail,
@@ -87,6 +90,13 @@ export default {
                     }
                     this.error = true
                 })
+        },
+        facebook() {
+            console.log('here')
+            this.$router.push({ name: 'facebookLogin' })
+        },
+        google() {
+            this.$router.push({ name: 'googleLogin' })
         }
     }
 }
