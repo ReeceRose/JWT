@@ -15,9 +15,9 @@ const GoogleLogin  = () => import('@/views/Home/User/Login/Google.vue')
 const Register = () => import('@/views/Home/User/Register/Index.vue')
 
 const AccessDenied = () => import('@/views/Home/AccessDenied.vue')
-const ResetPassword = () => import('@/views/Home/ResetPassword.vue')
-const ConfirmEmail = () => import('@/views/Home/ConfirmEmail.vue')
-const RegenerateConfirmationEmail = () => import('@/views/Home/RegenerateConfirmationEmail.vue')
+const ResetPassword = () => import('@/views/Home/User/ResetPassword.vue')
+const ConfirmEmail = () => import('@/views/Home/User/ConfirmEmail.vue')
+const RegenerateConfirmationEmail = () => import('@/views/Home/User/RegenerateConfirmationEmail.vue')
 
 Vue.use(Router)
 
@@ -112,12 +112,12 @@ export default new Router({
                     component: ResetPassword
                 },
                 {
-                    path: '/ConfirmEmail',
+                    path: 'ConfirmEmail',
                     name: 'confirmEmail',
                     component: ConfirmEmail
                 },
                 {
-                    path: '/RegenerateConfirmationEmail',
+                    path: 'RegenerateConfirmationEmail',
                     name: 'regenerateConfirmationEmail',
                     component: RegenerateConfirmationEmail
                 },
