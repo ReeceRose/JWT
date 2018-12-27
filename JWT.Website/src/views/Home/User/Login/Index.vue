@@ -1,5 +1,5 @@
 <template>
-    <FormCard title="Login" :submit="submit">
+    <FormCard title="Login" :submit="submit" v-if="this.$route.name === 'login' ">
         <div slot="card-information">
             <p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>
             <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
@@ -29,6 +29,9 @@
             </div>
         </div>
     </FormCard>
+    <div v-else>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
@@ -92,7 +95,6 @@ export default {
                 })
         },
         facebook() {
-            console.log('here')
             this.$router.push({ name: 'facebookLogin' })
         },
         google() {

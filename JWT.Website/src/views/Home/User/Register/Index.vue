@@ -14,10 +14,10 @@
             <Strike text="OR"/>
 
             <h5 class="card-title text-center">Register With</h5>
-            <div class="text-center social-btn">
-                <FacebookButton/>
-                <GoogleButton/>
-            </div>
+        </div>
+        <div slot="below-form" class="text-center social-btn">
+            <FacebookButton :submit="facebook"/>
+            <GoogleButton :submit="google"/>
         </div>
     </FormCard>
 </template>
@@ -83,6 +83,12 @@ export default {
                     }
                     this.error = true
                 })
+        },
+        facebook() {
+            this.$router.push({ name: 'facebookLogin' })
+        },
+        google() {
+            this.$router.push({ name: 'googleLogin' })
         }
     }
 }

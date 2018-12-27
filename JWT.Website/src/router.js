@@ -9,9 +9,11 @@ const Dashboard = () => import('@/views/Dashboard/Index.vue')
 // USER
 const UserIndex = () => import('@/views/Home/User/Index.vue')
 const LoginIndex  = () => import('@/views/Home/User/Login/Index.vue')
-// const FacebookLogin  = () => import('@/views/Home/User/Login/Facebook.vue')
+const FacebookLogin  = () => import('@/views/Home/User/Login/Facebook.vue')
 const GoogleLogin  = () => import('@/views/Home/User/Login/Google.vue')
+
 const Register = () => import('@/views/Home/User/Register/Index.vue')
+
 const AccessDenied = () => import('@/views/Home/AccessDenied.vue')
 const ResetPassword = () => import('@/views/Home/ResetPassword.vue')
 const ConfirmEmail = () => import('@/views/Home/ConfirmEmail.vue')
@@ -81,70 +83,57 @@ export default new Router({
             component: UserIndex,
             children: [
                 {
-                    path: 'Login',
+                    path: 'Login/:redirect?',
                     name: 'login',
                     component: LoginIndex,
                     ...NotLoggedIn,
-                    // children: [
-                    //     {
-                    //         path: 'Google',
-                    //         name: 'login-google',
-                    //         component: GoogleLogin
-                    //     }
-                    // ]
+                    children: [
+                        {
+                            path: 'Google',
+                            name: 'googleLogin',
+                            component: GoogleLogin
+                        },
+                        {
+                            path: 'Facebook',
+                            name: 'facebookLogin',
+                            component: FacebookLogin
+                        }
+                    ]
+                },
+                {
+                    path: 'Register',
+                    name: 'register',
+                    component: Register,
+                    ...NotLoggedIn
+                },
+                {
+                    path: 'ResetPassword',
+                    name: 'resetPassword',
+                    component: ResetPassword
+                },
+                {
+                    path: '/ConfirmEmail',
+                    name: 'confirmEmail',
+                    component: ConfirmEmail
+                },
+                {
+                    path: '/RegenerateConfirmationEmail',
+                    name: 'regenerateConfirmationEmail',
+                    component: RegenerateConfirmationEmail
                 },
             ]
         },
-        // {
-        //     path: '/Login/:redirect?',
-        //     name: 'login',
-        //     component: Login,
-        //     ...NotLoggedIn,
-        //     children: [
-        //         {
-        //             path: 'Facebook/',
-        //             name: 'facebookLogin',
-        //             component: FacebookLogin
-        //         },
-        //         {
-        //             path: 'Google/',
-        //             name: 'googleLogin',
-        //             component: GoogleLogin
-        //         }
-        //     ]
-        // },
         {
-            path: '/Register',
-            name: 'register',
-            component: Register,
-            ...NotLoggedIn
+            path: '/Dashboard',
+            name: 'dashboard',
+            component: Dashboard,
+            ...AdminProtected
         },
-        // {
-        //     path: '/Dashboard',
-        //     name: 'dashboard',
-        //     component: Dashboard,
-        //     ...AdminProtected
-        // },
-        // {
-        //     path: '/AccessDenied',
-        //     name: 'accessDenied',
-        //     component: AccessDenied
-        // },
-        // {
-        //     path: '/ResetPassword',
-        //     name: 'resetPassword',
-        //     component: ResetPassword
-        // },
-        // {
-        //     path: '/ConfirmEmail',
-        //     name: 'confirmEmail',
-        //     component: ConfirmEmail
-        // },
-        // {
-        //     path: '/RegenerateConfirmationEmail',
-        //     name: 'regenerateConfirmationEmail',
-        //     component: RegenerateConfirmationEmail
-        // },
+        {
+            path: '/AccessDenied',
+            name: 'accessDenied',
+            component: AccessDenied
+        },
         {
             path: '*',
             component: Home
