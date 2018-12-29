@@ -5,7 +5,7 @@ using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
-using JWT.Common;
+using JWT.Application.Utilities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

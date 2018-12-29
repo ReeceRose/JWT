@@ -5,6 +5,7 @@ using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.GetUserClaim;
+using JWT.Application.Utilities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -29,10 +30,11 @@ namespace JWT.Application.User.Query.LoginUser.External
                 var newUser = new IdentityUser()
                 {
                     Email = request.Email,
-                    UserName = request.Email
+                    UserName = request.Email,
+                    EmailConfirmed = true
                 };
-
-                var result = await _mediator.Send(new CreateUserCommand(newUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8)), cancellationToken);
+                
+                var result = await _mediator.Send(new CreateUserCommand(newUser, GenerateRandomPassword.SecurePassword()), cancellationToken);
 
                 if (!result.Succeeded)
                 {

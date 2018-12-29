@@ -96,9 +96,18 @@ export default {
 					this.errorMessage = "Failed to register with Facebook";
 				});
         },
-        google() {
-            this.$router.push({ name: 'googleLogin' })
-        }
+		google() {
+            this.$store
+				.dispatch("authentication/googleLogin")
+				.then(() => {
+                    // this.$router.push({ name: "home" });
+                    console.log('success')
+				})
+				.catch(() => {
+					this.error = true;
+					this.errorMessage = "Failed to login with Google";
+				});
+		}
     }
 }
 </script>

@@ -2,7 +2,7 @@ import axios from '@/axios.js'
 import utilities from '@/utilities.js'
 import global from '@/store/modules/global.js'
 import '@/facebook/init.js'
-
+import '@/google/init.js'
 // For reference
 // headers: { Authorization: `Bearer ${getters['uthentication/getToken'] || ''}`}
 const authentication = {
@@ -172,6 +172,33 @@ const authentication = {
                 );
             })
         },
+        googleLogin: ({ commit, dipatch }) => {
+            return new Promise((resolve, reject) => {    
+                let googleAuth = window.gapi.auth2.getAuthInstance()
+                googleAuth.signIn().then(googleUser => {
+                    axios({
+                        method: 'post',
+                        url: 'authentication/externalLogin',
+                        data: { email: googleUser.w3.U3, accessToken: googleUser.Zi.id_token },
+                    })
+                        .then((response) => {
+                            const token = response.data.token
+                            dispatch("global/updateToken", token, { root: true })
+                            resolve()
+                        })
+                        .catch(() => {
+                            reject()
+                        })
+                        .finally(() => {
+                            commit('global/setLoading', false, { root: true })
+                        })
+                    resolve()
+                })
+                .catch(() => {
+                    reject()
+                })
+            })
+        }
     }
 }
 

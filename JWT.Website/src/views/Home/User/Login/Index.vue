@@ -108,7 +108,6 @@ export default {
 				.dispatch("authentication/facebookLogin")
 				.then(() => {
 					this.$router.push({ name: "home" });
-					// Backend login error
 				})
 				.catch(() => {
 					this.error = true;
@@ -116,7 +115,16 @@ export default {
 				});
 		},
 		google() {
-			this.$router.push({ name: "googleLogin" });
+            this.$store
+				.dispatch("authentication/googleLogin")
+				.then(() => {
+                    // this.$router.push({ name: "home" });
+                    console.log('success')
+				})
+				.catch(() => {
+					this.error = true;
+					this.errorMessage = "Failed to login with Google";
+				});
 		}
 	}
 };
