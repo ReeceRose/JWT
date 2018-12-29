@@ -24,8 +24,8 @@ namespace JWT.API.Controllers.v1
         [HttpPost("Login")]
         public async Task<IActionResult> PostLoginAsync([FromBody] LoginUserQuery loginUserQuery) => Ok(new { token = await _mediator.Send(loginUserQuery) });
 
-        [HttpPost("FacebookLogin")]
-        public async Task<IActionResult> PostLoginFacebookAsync([FromBody] LoginUserExternalQuery loginUserExternalQuery) => Ok(new { token = await  _mediator.Send(loginUserExternalQuery)});
+        [HttpPost("ExternalLogin")]
+        public async Task<IActionResult> PostLoginExternalAsync([FromBody] LoginUserExternalQuery loginUserExternalQuery) => Ok(new { token = await  _mediator.Send(loginUserExternalQuery)});
 
         [HttpPost("Register")]
         public async Task<IActionResult> PostRegisterAsync([FromBody] RegisterUserCommand registerUserCommand) => Ok(new { result = await _mediator.Send(registerUserCommand) });

@@ -9,8 +9,6 @@ const Dashboard = () => import('@/views/Dashboard/Index.vue')
 // USER
 const UserIndex = () => import('@/views/Home/User/Index.vue')
 const LoginIndex  = () => import('@/views/Home/User/Login/Index.vue')
-const FacebookLogin  = () => import('@/views/Home/User/Login/Facebook.vue')
-const GoogleLogin  = () => import('@/views/Home/User/Login/Google.vue')
 
 const Register = () => import('@/views/Home/User/Register/Index.vue')
 
@@ -87,18 +85,6 @@ export default new Router({
                     name: 'login',
                     component: LoginIndex,
                     ...NotLoggedIn,
-                    children: [
-                        {
-                            path: 'Google',
-                            name: 'googleLogin',
-                            component: GoogleLogin
-                        },
-                        {
-                            path: 'Facebook',
-                            name: 'facebookLogin',
-                            component: FacebookLogin
-                        }
-                    ]
                 },
                 {
                     path: 'Register',

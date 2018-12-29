@@ -85,7 +85,16 @@ export default {
                 })
         },
         facebook() {
-            this.$router.push({ name: 'facebookLogin' })
+            // Note, this will automatically register and sign in the user 
+			this.$store
+				.dispatch("authentication/facebookLogin")
+				.then(() => {
+					this.$router.push({ name: "home" });
+				})
+				.catch(() => {
+					this.error = true;
+					this.errorMessage = "Failed to register with Facebook";
+				});
         },
         google() {
             this.$router.push({ name: 'googleLogin' })

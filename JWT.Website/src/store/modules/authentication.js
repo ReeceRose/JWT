@@ -1,6 +1,8 @@
 import axios from '@/axios.js'
 import utilities from '@/utilities.js'
 import global from '@/store/modules/global.js'
+import '@/facebook/init.js'
+
 // For reference
 // headers: { Authorization: `Bearer ${getters['uthentication/getToken'] || ''}`}
 const authentication = {
@@ -130,7 +132,46 @@ const authentication = {
                         commit('global/setLoading', false, { root: true })
                     })
             })
-        }
+        },
+        facebookLogin: ({ commit, dispatch }) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                // eslint-disable-next-line
+                FB.login(
+                    loginResponse => {
+                        // handle the response
+                        if (loginResponse.status === "connected") {
+                            // eslint-disable-next-line
+                            FB.api("/me?fields=email", meResponse => {
+                                axios({
+                                    method: 'post',
+                                    url: 'authentication/externalLogin',
+                                    data: { email: meResponse.email, accessToken: loginResponse.authResponse.accessToken },
+                                })
+                                    .then((response) => {
+                                        const token = response.data.token
+                                        dispatch("global/updateToken", token, { root: true })
+                                        resolve()
+                                    })
+                                    .catch(error => {
+                                        reject(error)
+                                    })
+                                    .finally(() => {
+                                        commit('global/setLoading', false, { root: true })
+                                    })
+                            })
+                        // Facebook login error
+                        } else {
+                            reject();
+                        }
+                    },
+                    {
+                        scope: "email",
+                        return_scopes: true
+                    }
+                );
+            })
+        },
     }
 }
 
