@@ -4,13 +4,12 @@ namespace JWT.Application.User.Query.LoginUser.External
 {
     public class LoginUserExternalQuery : IRequest<string>
     {
-        public LoginUserExternalQuery(string accessToken, string provider)
+        public LoginUserExternalQuery(string email, string accessToken)
         {
+            Email = email;
             AccessToken = accessToken;
-            Provider = provider;
         }
-
+        public string Email { get; set; }
         public string AccessToken { get; }
-        public string Provider { get; }
     }
 }
