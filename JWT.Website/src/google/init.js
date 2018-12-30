@@ -1,3 +1,5 @@
+// Disable any warnings about gapi
+/* eslint-disable */
 (() => {
     installClient().then(() => {
         return loadClient()
@@ -26,7 +28,7 @@
                     client_id: '751288967294-9l4nkegml766u1tqdi2pambl2sphnj6d.apps.googleusercontent.com'
                 })
                     .then(() => {
-                        resolve(gapi)
+                        resolve()
                     })
             })
         })

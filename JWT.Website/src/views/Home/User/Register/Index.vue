@@ -100,8 +100,7 @@ export default {
             this.$store
 				.dispatch("authentication/googleLogin")
 				.then(() => {
-                    // this.$router.push({ name: "home" });
-                    console.log('success')
+                    this.$router.push({ name: "home" });
 				})
 				.catch(() => {
 					this.error = true;
