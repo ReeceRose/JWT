@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using JWT.Application.User.Query.GetUserById;
+using JWT.Persistence;
 using JWT.Tests.Context;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserById
@@ -12,7 +12,7 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserById
     {
         public class GetUserByEmailTest : IDisposable
         {
-            public IdentityDbContext Context { get; }
+            public ApplicationDbContext Context { get; }
             public GetUserByIdQueryHandler Handler { get; }
 
             public GetUserByEmailTest()

@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using JWT.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWT.Application.User.Query.GetUserByEmail
 {
     public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, IdentityUser>
     {
-        private readonly IdentityDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public GetUserByEmailQueryHandler(IdentityDbContext context)
+        public GetUserByEmailQueryHandler(ApplicationDbContext context)
         {
             _context = context;
         }

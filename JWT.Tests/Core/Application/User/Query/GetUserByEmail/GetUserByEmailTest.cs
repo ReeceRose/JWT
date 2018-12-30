@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Persistence;
 using JWT.Tests.Context;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
 {
     public class GetUserByEmailTest : IDisposable
     {
-        public IdentityDbContext Context { get; }
+        public ApplicationDbContext Context { get; }
         public GetUserByEmailQueryHandler Handler { get; }
 
         public GetUserByEmailTest()

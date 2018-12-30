@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20181230175546_MoveToApplicationDb.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="Extensions\" />
     <Folder Include="Infrastructure\" />

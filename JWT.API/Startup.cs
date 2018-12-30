@@ -7,6 +7,7 @@ using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.Utilities;
 using JWT.API.Filters;
 using JWT.Infrastructure.Notification;
+using JWT.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -39,7 +40,7 @@ namespace JWT.API
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<INotificationService, NotificationService>();
 
-            services.AddScoped<IdentityDbContext, IdentityDbContext>();
+            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -47,13 +48,13 @@ namespace JWT.API
             });
             services.AddSingleton(mappingConfig.CreateMapper());
 
-            services.AddDbContext<IdentityDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration["ConnectionStrings:Postgres"],
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
             
             services
                 .AddHealthChecks()
-                .AddDbContextCheck<IdentityDbContext>();
+                .AddDbContextCheck<ApplicationDbContext>();
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -63,7 +64,7 @@ namespace JWT.API
                     options.User.RequireUniqueEmail = true;
                     options.SignIn.RequireConfirmedEmail = true;
                 })
-                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services
@@ -164,7 +165,7 @@ namespace JWT.API
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope())
             {
-                using (var context = serviceScope.ServiceProvider.GetService<IdentityDbContext>())
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     context.Database.EnsureCreated();
                     try

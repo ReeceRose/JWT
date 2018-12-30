@@ -1,17 +1,17 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using JWT.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWT.Application.User.Query.GetUserById
 {
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, IdentityUser>
     {
-        private readonly IdentityDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public GetUserByIdQueryHandler(IdentityDbContext context)
+        public GetUserByIdQueryHandler(ApplicationDbContext context)
         {
             _context = context;
         }
