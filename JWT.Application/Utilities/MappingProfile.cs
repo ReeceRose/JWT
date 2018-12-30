@@ -3,7 +3,7 @@ using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.User.Query.LoginUser;
 using Microsoft.AspNetCore.Identity;
 
-namespace JWT.Common
+namespace JWT.Application.Utilities
 {
     public class MappingProfile : Profile
     {

@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-social btn-social btn-block">
+    <button class="btn btn-social btn-social btn-block" @click="submit">
         <slot>
 
         </slot>
@@ -8,7 +8,13 @@
 
 <script>
 export default {
-    
+    name: 'SocialButton',
+    props: {
+        submit: {
+            type: Function,
+            required: true
+        }
+    }
 }
 </script>
 
