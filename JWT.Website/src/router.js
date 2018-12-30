@@ -7,12 +7,15 @@ const Home = () => import('@/views/Home/Index.vue')
 const Dashboard = () => import('@/views/Dashboard/Index.vue')
 
 // USER
-const Login  = () => import('@/views/Home/Login.vue')
-const Register = () => import('@/views/Home/Register.vue')
+const UserIndex = () => import('@/views/Home/User/Index.vue')
+const LoginIndex  = () => import('@/views/Home/User/Login/Index.vue')
+
+const Register = () => import('@/views/Home/User/Register/Index.vue')
+
 const AccessDenied = () => import('@/views/Home/AccessDenied.vue')
-const ResetPassword = () => import('@/views/Home/ResetPassword.vue')
-const ConfirmEmail = () => import('@/views/Home/ConfirmEmail.vue')
-const RegenerateConfirmationEmail = () => import('@/views/Home/RegenerateConfirmationEmail.vue')
+const ResetPassword = () => import('@/views/Home/User/ResetPassword.vue')
+const ConfirmEmail = () => import('@/views/Home/User/ConfirmEmail.vue')
+const RegenerateConfirmationEmail = () => import('@/views/Home/User/RegenerateConfirmationEmail.vue')
 
 Vue.use(Router)
 
@@ -73,16 +76,38 @@ export default new Router({
             component: Home
         },
         {
-            path: '/Login/:redirect?',
-            name: 'login',
-            component: Login,
-            ...NotLoggedIn
-        },
-        {
-            path: '/Register',
-            name: 'register',
-            component: Register,
-            ...NotLoggedIn
+            path: '/User',
+            name: 'user',
+            component: UserIndex,
+            children: [
+                {
+                    path: 'Login/:redirect?',
+                    name: 'login',
+                    component: LoginIndex,
+                    ...NotLoggedIn,
+                },
+                {
+                    path: 'Register',
+                    name: 'register',
+                    component: Register,
+                    ...NotLoggedIn
+                },
+                {
+                    path: 'ResetPassword',
+                    name: 'resetPassword',
+                    component: ResetPassword
+                },
+                {
+                    path: 'ConfirmEmail',
+                    name: 'confirmEmail',
+                    component: ConfirmEmail
+                },
+                {
+                    path: 'RegenerateConfirmationEmail',
+                    name: 'regenerateConfirmationEmail',
+                    component: RegenerateConfirmationEmail
+                },
+            ]
         },
         {
             path: '/Dashboard',
@@ -94,21 +119,6 @@ export default new Router({
             path: '/AccessDenied',
             name: 'accessDenied',
             component: AccessDenied
-        },
-        {
-            path: '/ResetPassword',
-            name: 'resetPassword',
-            component: ResetPassword
-        },
-        {
-            path: '/ConfirmEmail',
-            name: 'confirmEmail',
-            component: ConfirmEmail
-        },
-        {
-            path: '/RegenerateConfirmationEmail',
-            name: 'regenerateConfirmationEmail',
-            component: RegenerateConfirmationEmail
         },
         {
             path: '*',

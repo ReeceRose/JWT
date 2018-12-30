@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Application.User.Query.GetUserClaim;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +48,9 @@ namespace JWT.Application.User.Query.LoginUser
                 throw new InvalidCredentialException();
             }
 
-            return await _mediator.Send(new GenerateLoginTokenQuery(_userManager.GetClaimsAsync(user).Result), cancellationToken: cancellationToken);
+            var claims = _mediator.Send(new GetUserClaimQuery(user), cancellationToken).Result;
+
+            return await _mediator.Send(new GenerateLoginTokenQuery(claims), cancellationToken);
         }
     }
 }

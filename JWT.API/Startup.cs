@@ -4,8 +4,8 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using JWT.Application.Interfaces;
 using JWT.Application.User.Command.RegisterUser;
+using JWT.Application.Utilities;
 using JWT.API.Filters;
-using JWT.Common;
 using JWT.Infrastructure.Notification;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -71,6 +71,11 @@ namespace JWT.API
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = Configuration["Facebook:AppId"];
+                    options.AppSecret = Configuration["Facebook:AppSecret"];
                 })
                 .AddJwtBearer(x =>
                 {
@@ -144,7 +149,7 @@ namespace JWT.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API V1");
                 c.RoutePrefix = string.Empty;
             });
-
+            
             app.UseHealthChecks("/ready");
 
             app.UseAuthentication();

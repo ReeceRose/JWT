@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\" />
-    <Folder Include="User\Model\" />
   </ItemGroup>
 
   <ItemGroup>

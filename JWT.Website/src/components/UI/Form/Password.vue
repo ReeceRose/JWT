@@ -5,7 +5,7 @@
             @blur="validator.$touch()"
             :class="{ 'is-invalid': validator.$error }"                                
             type="password" 
-            id="inputPassword" 
+            :id="confirmationPassword == 'true' ? 'inputPassword' : 'confirmationPassword'" 
             class="form-control" 
             :placeholder="confirmationPassword == 'true' ? 'Confirmation password' : 'Password'"
         >
