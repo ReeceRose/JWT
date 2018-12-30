@@ -3,8 +3,8 @@ using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Token;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
@@ -34,7 +34,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Email
         public void GenerateResetPasswordEmail_EmailSent(string email, string token)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
@@ -54,7 +54,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Email
         public void GenerateResetPasswordEmail_ReturnsNullOnInvalidUser(string email)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
             // Act
             var result = Handler.Handle(new GenerateResetPasswordEmailQuery(email), default(CancellationToken)).Result;
             // Assert

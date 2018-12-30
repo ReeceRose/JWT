@@ -4,10 +4,10 @@ using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
@@ -39,14 +39,14 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public void GenerateEmailConfirmationEmail_EmailSent(string email, string token)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email,
                 EmailConfirmed = false
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
             NotificationService.Setup(n => n.SendNotificationAsync("test", email, "test email", "message")).ReturnsAsync(true);
-            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<IdentityUser>())).ReturnsAsync(false);
+            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(false);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationTokenQuery>(), default(CancellationToken))).ReturnsAsync(token);
             // Act
             var returnedToken = Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None);
@@ -60,7 +60,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnInvalidUser(string email)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
             // Act / Assert
             await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None));
         }
@@ -71,12 +71,12 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnEmailAlreadyConfirmed(string email)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult(requestedUser));
-            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<IdentityUser>())).ReturnsAsync(true);
+            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(true);
             // Act / Assert
             await Assert.ThrowsAsync<EmailIsAlreadyConfirmedException>(() => Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None));
         }

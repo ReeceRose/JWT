@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using JWT.Application.User.Query.GetUserClaim;
-using Microsoft.AspNetCore.Identity;
+using JWT.Domain.Entities;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserClaim
@@ -21,7 +21,7 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserClaim
         public void GetUserClaim_UserIsValid(string userName)
         {
             // Arrange
-            var user = new IdentityUser()
+            var user = new ApplicationUser()
             {
                 UserName = userName,
                 Id = "123"

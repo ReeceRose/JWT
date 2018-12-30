@@ -7,19 +7,19 @@ using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.Utilities;
 using JWT.API.Filters;
 using JWT.Infrastructure.Notification;
-using JWT.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using JWT.Persistence;
+using JWT.Domain.Entities;
 
 namespace JWT.API
 {
@@ -56,7 +56,7 @@ namespace JWT.API
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                     options.Lockout.MaxFailedAccessAttempts = 5;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -15,9 +16,9 @@ namespace JWT.Application.User.Query.GenerateEmailConfirmation.Email
         private readonly IMediator _mediator;
         private readonly INotificationService _notificationService;
         private readonly IConfiguration _configuration;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GenerateEmailConfirmationEmailQueryHandler(IMediator mediator, INotificationService notificationService, IConfiguration configuration, UserManager<IdentityUser> userManager)
+        public GenerateEmailConfirmationEmailQueryHandler(IMediator mediator, INotificationService notificationService, IConfiguration configuration, UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
             _notificationService = notificationService;

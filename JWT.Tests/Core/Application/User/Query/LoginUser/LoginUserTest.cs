@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.LoginUser;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
@@ -34,13 +35,13 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public void LoginUser_ReturnsValidToken(string email, string password, string token)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult(requestedUser));
             SignInManager
-                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<IdentityUser>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Returns(Task.FromResult(SignInResult.Success));
             Mediator.Setup(m => m.Send(It.IsAny<GenerateLoginTokenQuery>(), default(CancellationToken))).Returns(Task.FromResult(token));
             // Act
@@ -55,16 +56,16 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenInvalidCredentials(string email, string password)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken)))
                 .ReturnsAsync(requestedUser);
             SignInManager
-                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<IdentityUser>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(SignInResult.Failed);
-            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<IdentityUser>())).ReturnsAsync(true);
+            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(true);
             // Act / Assert
             await Assert.ThrowsAsync<InvalidCredentialException>(() =>
                 Handler.Handle(new LoginUserQuery(email, password), CancellationToken.None));
@@ -76,7 +77,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenUserNotFound(string email, string password)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((IdentityUser) null));
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((ApplicationUser) null));
             // Act / Assert
             await Assert.ThrowsAsync<InvalidCredentialException>(() => Handler.Handle(new LoginUserQuery(email, password), CancellationToken.None));
         }
@@ -87,14 +88,14 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsAccountLockedException(string email, string password)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken)))
                 .ReturnsAsync(requestedUser);
             SignInManager
-                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<IdentityUser>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(SignInResult.LockedOut);
             // Act / Assert
             // Act / Assert
@@ -107,16 +108,16 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsEmailNotConfirmedException(string email, string password)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken)))
                 .ReturnsAsync(requestedUser);
             SignInManager
-                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<IdentityUser>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(SignInResult.Failed);
-            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<IdentityUser>())).ReturnsAsync(false);
+            UserManager.Setup(u => u.IsEmailConfirmedAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(false);
             // Act / Assert
             await Assert.ThrowsAsync<EmailNotConfirmedException>(() =>
                 Handler.Handle(new LoginUserQuery(email, password), CancellationToken.None));

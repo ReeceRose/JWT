@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using JWT.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -8,9 +9,9 @@ namespace JWT.Application.User.Query.GenerateEmailConfirmation.Token
 {
     public class GenerateEmailConfirmationTokenQueryHandler : IRequestHandler<GenerateEmailConfirmationTokenQuery, string>
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GenerateEmailConfirmationTokenQueryHandler(UserManager<IdentityUser> userManager)
+        public GenerateEmailConfirmationTokenQueryHandler(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using JWT.Application.User.Query.GenerateResetPassword.Token;
+using JWT.Domain.Entities;
 using JWT.Tests.Helpers;
-using Microsoft.AspNetCore.Identity;
 using Moq;
 using Xunit;
 
@@ -25,11 +25,11 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Token
         public void GenerateResetPasswordToken_ReturnsValidToken(string email, string token)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
-            UserManager.Setup(u => u.GeneratePasswordResetTokenAsync(It.IsAny<IdentityUser>())).ReturnsAsync(token);
+            UserManager.Setup(u => u.GeneratePasswordResetTokenAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(token);
             // Act
             var returnedToken = Handler.Handle(new GenerateResetPasswordTokenQuery(requestedUser), CancellationToken.None).Result;
             // Assert

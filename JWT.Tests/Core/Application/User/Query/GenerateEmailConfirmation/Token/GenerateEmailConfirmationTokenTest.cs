@@ -12,16 +12,16 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Token
 {
     public class GenerateEmailConfirmationTokenTest
     {
-        public List<IdentityUser> Users { get; set; }
+        public List<ApplicationUser> Users { get; set; }
         public Mock<MockUserManager> UserManager { get; }
         public GenerateEmailConfirmationTokenQueryHandler Handler { get; }
 
         public GenerateEmailConfirmationTokenTest()
         {
             // Arrange
-            Users = new List<IdentityUser>()
+            Users = new List<ApplicationUser>()
             {
-                new IdentityUser()
+                new ApplicationUser()
                 {
                     Email = "test@test.ca",
                     UserName = "test-user",
@@ -36,7 +36,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Token
         public void GenerateEmailConfirmationToken_ShouldReturnToken()
         {
             // Arrange
-            UserManager.Setup(m => m.GenerateEmailConfirmationTokenAsync(It.IsAny<IdentityUser>())).Returns(Task.FromResult("1234567890"));
+            UserManager.Setup(m => m.GenerateEmailConfirmationTokenAsync(It.IsAny<ApplicationUser>())).Returns(Task.FromResult("1234567890"));
             // Act
             var token = Handler.Handle(new GenerateEmailConfirmationTokenQuery(Users.First()), default(CancellationToken)).Result;
             // Assert

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using JWT.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -8,9 +9,9 @@ namespace JWT.Application.User.Command.AddUserClaim
 {
     public class AddUserClaimCommandHandler : IRequestHandler<AddUserClaimCommand, bool>
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AddUserClaimCommandHandler(UserManager<IdentityUser> userManager)
+        public AddUserClaimCommandHandler(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }

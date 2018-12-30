@@ -1,17 +1,18 @@
-﻿using MediatR;
+﻿using JWT.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Application.User.Command.CreateUser
 {
     public class CreateUserCommand : IRequest<IdentityResult>
     {
-        public CreateUserCommand(IdentityUser user, string password)
+        public CreateUserCommand(ApplicationUser user, string password)
         {
             User = user;
             Password = password;
         }
 
-        public IdentityUser User { get; }
+        public ApplicationUser User { get; }
         public string Password { get; set; }
     }
 }

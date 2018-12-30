@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Entities;
 using JWT.Persistence;
 using JWT.Tests.Context;
-using Microsoft.AspNetCore.Identity;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
@@ -24,7 +24,7 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
         public void GetUserByEmail_ReturnsExpectedUser()
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = "test@test.ca",
                 UserName = "test-user",

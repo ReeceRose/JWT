@@ -5,9 +5,9 @@ using JWT.Application.User.Command.AddUserClaim;
 using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Application.User.Command.RegisterUser
 {
@@ -32,8 +32,8 @@ namespace JWT.Application.User.Command.RegisterUser
                 throw new AccountAlreadyExistsException(email);
             }
 
-            // TODO: Refactor out IdentityUser to ApplicationUser
-            user = _mapper.Map<IdentityUser>(request);
+            // TODO: Refactor out ApplicationUser to ApplicationUser
+            user = _mapper.Map<ApplicationUser>(request);
 
             var result = await _mediator.Send(new CreateUserCommand(user, request.Password), cancellationToken);
             if (!result.Succeeded)

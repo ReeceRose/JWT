@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.GetUserClaim;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -12,11 +13,11 @@ namespace JWT.Application.User.Query.LoginUser
     public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, string>
     {
         private readonly IMediator _mediator;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public LoginUserQueryHandler(IMediator mediator, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public LoginUserQueryHandler(IMediator mediator, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
             _signInManager = signInManager;

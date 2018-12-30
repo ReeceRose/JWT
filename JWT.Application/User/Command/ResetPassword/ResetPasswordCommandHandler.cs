@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -10,9 +11,9 @@ namespace JWT.Application.User.Command.ResetPassword
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, bool>
     {
         private readonly IMediator _mediator;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ResetPasswordCommandHandler(IMediator mediator, UserManager<IdentityUser> userManager)
+        public ResetPasswordCommandHandler(IMediator mediator, UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
             _userManager = userManager;
