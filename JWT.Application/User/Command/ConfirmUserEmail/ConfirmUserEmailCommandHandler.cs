@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
@@ -12,11 +13,13 @@ namespace JWT.Application.User.Command.ConfirmUserEmail
     {
         private readonly IMediator _mediator;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
 
-        public ConfirmUserEmailCommandHandler(IMediator mediator, UserManager<ApplicationUser> userManager)
+        public ConfirmUserEmailCommandHandler(IMediator mediator, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _mediator = mediator;
             _userManager = userManager;
+            _mapper = mapper;
         }
         public async Task<bool> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
         {
@@ -26,7 +29,7 @@ namespace JWT.Application.User.Command.ConfirmUserEmail
                 throw new InvalidUserException();
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+            var result = await _userManager.ConfirmEmailAsync(_mapper.Map<ApplicationUser>(user), request.Token);
 
             return await Task.FromResult(result.Succeeded);
         }

@@ -1,8 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.LoginUser;
+using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
@@ -18,6 +21,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public Mock<IMediator> Mediator { get; }
         public Mock<MockSignInManager> SignInManager { get; }
         public Mock<MockUserManager> UserManager { get; }
+        public IMapper Mapper { get; }
         public LoginUserQueryHandler Handler { get; }
 
         public LoginUserTest()
@@ -26,7 +30,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
             Mediator = new Mock<IMediator>();
             SignInManager = new Mock<MockSignInManager>();
             UserManager = new Mock<MockUserManager>();
-            Handler = new LoginUserQueryHandler(Mediator.Object, SignInManager.Object, UserManager.Object);
+            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
+            Handler = new LoginUserQueryHandler(Mediator.Object, SignInManager.Object, UserManager.Object, Mapper);
         }
 
         [Theory]
@@ -35,7 +40,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public void LoginUser_ReturnsValidToken(string email, string password, string token)
         {
             // Arrange
-            var requestedUser = new ApplicationUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };
@@ -56,7 +61,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenInvalidCredentials(string email, string password)
         {
             // Arrange
-            var requestedUser = new ApplicationUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };
@@ -77,7 +82,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenUserNotFound(string email, string password)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((ApplicationUser) null));
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((ApplicationUserDto) null));
             // Act / Assert
             await Assert.ThrowsAsync<InvalidCredentialException>(() => Handler.Handle(new LoginUserQuery(email, password), CancellationToken.None));
         }
@@ -88,7 +93,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsAccountLockedException(string email, string password)
         {
             // Arrange
-            var requestedUser = new ApplicationUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };
@@ -108,7 +113,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsEmailNotConfirmedException(string email, string password)
         {
             // Arrange
-            var requestedUser = new ApplicationUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };

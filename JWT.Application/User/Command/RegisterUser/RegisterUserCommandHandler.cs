@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Command.AddUserClaim;
 using JWT.Application.User.Command.CreateUser;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Entities;
@@ -32,8 +33,7 @@ namespace JWT.Application.User.Command.RegisterUser
                 throw new AccountAlreadyExistsException(email);
             }
 
-            // TODO: Refactor out ApplicationUser to ApplicationUser
-            user = _mapper.Map<ApplicationUser>(request);
+            user = _mapper.Map<ApplicationUserDto>(request);
 
             var result = await _mediator.Send(new CreateUserCommand(user, request.Password), cancellationToken);
             if (!result.Succeeded)

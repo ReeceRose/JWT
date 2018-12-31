@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.User.Command.CreateUser;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.GetUserClaim;
 using JWT.Application.Utilities;
-using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 
@@ -26,7 +26,7 @@ namespace JWT.Application.User.Query.LoginUser.External
 
             if (user == null)
             {
-                var newUser = new ApplicationUser()
+                var newUser = new ApplicationUserDto()
                 {
                     Email = request.Email,
                     UserName = request.Email,

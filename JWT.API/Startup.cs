@@ -42,9 +42,10 @@ namespace JWT.API
 
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 
-            var mappingConfig = new MapperConfiguration(mc =>
+            var mappingConfig = new MapperConfiguration(cfg =>
             {
-                mc.AddProfile(new MappingProfile());
+                cfg.AddProfile(new MappingProfile());
+                cfg.ValidateInlineMaps = false;
             });
             services.AddSingleton(mappingConfig.CreateMapper());
 
@@ -72,11 +73,6 @@ namespace JWT.API
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddFacebook(options =>
-                {
-                    options.AppId = Configuration["Facebook:AppId"];
-                    options.AppSecret = Configuration["Facebook:AppSecret"];
                 })
                 .AddJwtBearer(x =>
                 {

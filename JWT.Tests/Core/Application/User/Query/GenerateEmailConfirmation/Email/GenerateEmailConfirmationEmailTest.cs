@@ -1,9 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using JWT.Application.Interfaces;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
@@ -21,6 +24,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public Mock<IConfiguration> Configuration { get; }
         public Mock<MockUserManager> UserManager { get; }
         public GenerateEmailConfirmationEmailQueryHandler Handler { get; }
+        public IMapper Mapper { get; }
 
         public GenerateEmailConfirmationEmailTest()
         {
@@ -30,7 +34,8 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
             Configuration = new Mock<IConfiguration>();
             Configuration.SetupGet(x => x["FrontEndUrl"]).Returns("url.com");
             UserManager = new Mock<MockUserManager>();
-            Handler = new GenerateEmailConfirmationEmailQueryHandler(Mediator.Object, NotificationService.Object, Configuration.Object, UserManager.Object);
+            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
+            Handler = new GenerateEmailConfirmationEmailQueryHandler(Mediator.Object, NotificationService.Object, Configuration.Object, UserManager.Object, Mapper);
         }
 
         [Theory]
@@ -39,7 +44,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public void GenerateEmailConfirmationEmail_EmailSent(string email, string token)
         {
             // Arrange
-            var requestedUser = new ApplicationUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email,
                 EmailConfirmed = false
@@ -60,7 +65,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnInvalidUser(string email)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
             // Act / Assert
             await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None));
         }
@@ -71,7 +76,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnEmailAlreadyConfirmed(string email)
         {
             // Arrange
-            var requestedUser = new ApplicationUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };
