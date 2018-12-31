@@ -1,11 +1,15 @@
 FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
 WORKDIR /app
-EXPOSE 50165
-EXPOSE 44301
+EXPOSE 80
+EXPOSE 443
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY ["JWT.API/JWT.API.csproj", "BackJWT.APIend/"]
+COPY ["JWT.API/JWT.API.csproj", "JWT.API/"]
+COPY ["JWT.Domain/JWT.Domain.csproj", "JWT.Domain/"]
+COPY ["JWT.Infrastructure/JWT.Infrastructure.csproj", "JWT.Infrastructure/"]
+COPY ["JWT.Application/JWT.Application.csproj", "JWT.Application/"]
+COPY ["JWT.Persistence/JWT.Persistence.csproj", "JWT.Persistence/"]
 RUN dotnet restore "JWT.API/JWT.API.csproj"
 COPY . .
 WORKDIR "/src/JWT.API"
