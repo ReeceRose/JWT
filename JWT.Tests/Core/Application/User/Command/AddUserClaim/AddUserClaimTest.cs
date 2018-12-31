@@ -48,7 +48,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         [Theory]
         [InlineData("user@test.com", null, "value")]
         [InlineData("user@test.com", "key", null)]
-        public void AddUserClaim_ClaimNotAdded(string email, string key, string value)
+        public async Task AddUserClaim_ClaimNotAdded(string email, string key, string value)
         {
             // Arrange
             var user = new ApplicationUserDto()
@@ -57,7 +57,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
             };
             UserManager.Setup(u => u.AddClaimAsync(It.IsAny<ApplicationUser>(), It.IsAny<Claim>())).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
-            Assert.Throws<AggregateException>(() => Handler.Handle(new AddUserClaimCommand(user, key, value), CancellationToken.None).Result);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Handler.Handle(new AddUserClaimCommand(user, key, value), CancellationToken.None));
         }
     }
 }
