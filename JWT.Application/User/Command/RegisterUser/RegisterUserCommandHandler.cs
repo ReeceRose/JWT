@@ -6,7 +6,6 @@ using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
-using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 
@@ -42,12 +41,6 @@ namespace JWT.Application.User.Command.RegisterUser
             }
 
             await _mediator.Send(new GenerateEmailConfirmationEmailQuery(email), cancellationToken);
-
-            // NOTE: DO NOT DO THIS!!
-            if (request.IsAdmin)
-            {
-                await _mediator.Send(new AddUserClaimCommand(user, "Administrator", ""), cancellationToken);
-            }
 
             return await Task.FromResult(result.Succeeded);
         }

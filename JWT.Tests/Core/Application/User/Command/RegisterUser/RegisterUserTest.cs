@@ -44,7 +44,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Success);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationEmailQuery>(), default(CancellationToken))).ReturnsAsync("123");
             // Act
-            var result = Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None).Result;
+            var result = Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None).Result;
             // Assert
             Assert.True(result);
         }
@@ -58,7 +58,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
             var requestedUser = new ApplicationUserDto() { Email = email };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
             // Act / Assert
-            await Assert.ThrowsAsync<AccountAlreadyExistsException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
+            await Assert.ThrowsAsync<AccountAlreadyExistsException>(() => Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None));
         }
 
         [Theory]
@@ -70,7 +70,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto)null);
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
-            await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None));
         }
     }
 }

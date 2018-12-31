@@ -4,15 +4,13 @@ namespace JWT.Application.User.Command.RegisterUser
 {
     public class RegisterUserCommand : IRequest<bool>
     {
-        public RegisterUserCommand(string email, string password, bool isAdmin)
+        public RegisterUserCommand(string email, string password)
         {
             Email = email;
             Password = password;
-            IsAdmin = isAdmin;
         }
 
         public string Email { get; }
         public string Password { get; }
-        public bool IsAdmin { get; }
     }
 }
