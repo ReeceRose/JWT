@@ -27,6 +27,7 @@
     <ProjectReference Include="..\JWT.Application\JWT.Application.csproj" />
     <ProjectReference Include="..\JWT.Domain\JWT.Domain.csproj" />
     <ProjectReference Include="..\JWT.Infrastructure\JWT.Infrastructure.csproj" />
+    <ProjectReference Include="..\JWT.Persistence\JWT.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

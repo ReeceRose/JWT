@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Command.RegisterUser;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.Utilities;
@@ -17,7 +18,6 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
     public class RegisterUserTest
     {
         public Mock<IMediator> Mediator { get; }
-        public MapperConfiguration MapperConfiguration { get; }
         public IMapper Mapper { get; }
         public RegisterUserCommandHandler Handler { get; }
 
@@ -25,8 +25,11 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         {
             // Arrange
             Mediator = new Mock<IMediator>();
-            MapperConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
-            Mapper = MapperConfiguration.CreateMapper();
+            Mapper = new Mapper(new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+                cfg.ValidateInlineMaps = false;
+            }));
             Handler = new RegisterUserCommandHandler(Mediator.Object, Mapper);
         }
 
@@ -36,12 +39,12 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public void RegisterUser_SuccessfullyRegistersUser(string email, string password)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationEmailQuery>(), default(CancellationToken))).ReturnsAsync(It.IsAny<string>());
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Success);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationEmailQuery>(), default(CancellationToken))).ReturnsAsync("123");
             // Act
-            var result = Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None).Result;
+            var result = Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None).Result;
             // Assert
             Assert.True(result);
         }
@@ -52,10 +55,10 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public async Task RegisterUser_ThrowsAccountAlreadyExistsException(string email, string password)
         {
             // Arrange
-            var requestedUser = new IdentityUser() { Email = email };
+            var requestedUser = new ApplicationUserDto() { Email = email };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
             // Act / Assert
-            await Assert.ThrowsAsync<AccountAlreadyExistsException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
+            await Assert.ThrowsAsync<AccountAlreadyExistsException>(() => Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None));
         }
 
         [Theory]
@@ -64,10 +67,10 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public async Task RegisterUser_FailedToRegistersUser(string email, string password)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser)null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto)null);
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
-            await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password, false), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None));
         }
     }
 }

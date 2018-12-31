@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+using JWT.Application.User.Model;
+using JWT.Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Application.User.Query.GetUserClaim
 {
     public class GetUserClaimQuery : IRequest<List<Claim>>
     {
-        public GetUserClaimQuery(IdentityUser user) => User = user;
+        public GetUserClaimQuery(ApplicationUserDto user) => User = user;
 
-        public IdentityUser User { get; }
+        public ApplicationUserDto User { get; }
     }
 }

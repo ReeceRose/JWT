@@ -1,7 +1,10 @@
 ﻿using System.Threading;
+using AutoMapper;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateResetPassword.Token;
+using JWT.Application.Utilities;
+using JWT.Domain.Entities;
 using JWT.Tests.Helpers;
-using Microsoft.AspNetCore.Identity;
 using Moq;
 using Xunit;
 
@@ -10,13 +13,15 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Token
     public class GenerateResetPasswordTokenTest
     {
         public Mock<MockUserManager> UserManager { get; }
+        public IMapper Mapper { get; }
         public GenerateResetPasswordTokenQueryHandler Handler { get; }
 
         public GenerateResetPasswordTokenTest()
         {
             // Arrange
             UserManager = new Mock<MockUserManager>();
-            Handler = new GenerateResetPasswordTokenQueryHandler(UserManager.Object);
+            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
+            Handler = new GenerateResetPasswordTokenQueryHandler(UserManager.Object, Mapper);
         }
 
         [Theory]
@@ -25,11 +30,11 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Token
         public void GenerateResetPasswordToken_ReturnsValidToken(string email, string token)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };
-            UserManager.Setup(u => u.GeneratePasswordResetTokenAsync(It.IsAny<IdentityUser>())).ReturnsAsync(token);
+            UserManager.Setup(u => u.GeneratePasswordResetTokenAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(token);
             // Act
             var returnedToken = Handler.Handle(new GenerateResetPasswordTokenQuery(requestedUser), CancellationToken.None).Result;
             // Assert

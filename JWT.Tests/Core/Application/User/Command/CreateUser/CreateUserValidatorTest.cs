@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using JWT.Application.User.Command.CreateUser;
-using Microsoft.AspNetCore.Identity;
+using JWT.Application.User.Model;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Command.CreateUser
@@ -21,7 +21,7 @@ namespace JWT.Tests.Core.Application.User.Command.CreateUser
         public void CreateUser_UserIsValid(string userName, string password)
         {
             // Arrange
-            var user = new IdentityUser()
+            var user = new ApplicationUserDto()
             {
                 UserName = userName,
                 Id = "123"
@@ -48,7 +48,7 @@ namespace JWT.Tests.Core.Application.User.Command.CreateUser
         public void CreateUser_PasswordIsValid(string password)
         {
             // Arrange
-            var user = new IdentityUser()
+            var user = new ApplicationUserDto()
             {
                 Email = "test@test.com"
             };
@@ -64,7 +64,7 @@ namespace JWT.Tests.Core.Application.User.Command.CreateUser
         public void CreateUser_PasswordIsInvalid(string password)
         {
             // Arrange
-            var user = new IdentityUser()
+            var user = new ApplicationUserDto()
             {
                 Email = "test@test.com"
             };

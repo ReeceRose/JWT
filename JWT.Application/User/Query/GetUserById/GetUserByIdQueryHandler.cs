@@ -1,24 +1,27 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using JWT.Application.User.Model;
+using JWT.Persistence;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWT.Application.User.Query.GetUserById
 {
-    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, IdentityUser>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, ApplicationUserDto>
     {
-        private readonly IdentityDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetUserByIdQueryHandler(IdentityDbContext context)
+        public GetUserByIdQueryHandler(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<IdentityUser> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ApplicationUserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken: cancellationToken);
+            return _mapper.Map<ApplicationUserDto>(await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken: cancellationToken));
         }
     }
 }

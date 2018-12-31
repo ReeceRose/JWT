@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JWT.Domain\JWT.Domain.csproj" />
+    <ProjectReference Include="..\JWT.Persistence\JWT.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

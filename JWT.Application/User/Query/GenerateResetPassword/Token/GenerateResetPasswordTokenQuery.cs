@@ -1,12 +1,12 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using JWT.Application.User.Model;
+using MediatR;
 
 namespace JWT.Application.User.Query.GenerateResetPassword.Token
 {
     public class GenerateResetPasswordTokenQuery : IRequest<string>
     {
-        public GenerateResetPasswordTokenQuery(IdentityUser user) => User = user;
+        public GenerateResetPasswordTokenQuery(ApplicationUserDto user) => User = user;
 
-        public IdentityUser User { get; }
+        public ApplicationUserDto User { get; }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using JWT.Application.User.Command.ResetPassword;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Application.Utilities;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
@@ -15,6 +19,7 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
     {
         public Mock<IMediator> Mediator { get; }
         public Mock<MockUserManager> UserManager { get; }
+        public IMapper Mapper { get; set; }
         public ResetPasswordCommandHandler Handler { get; }
 
         public ResetPasswordTest()
@@ -22,7 +27,8 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
             // Arrange
             Mediator = new Mock<IMediator>();
             UserManager = new Mock<MockUserManager>();
-            Handler = new ResetPasswordCommandHandler(Mediator.Object, UserManager.Object);
+            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
+            Handler = new ResetPasswordCommandHandler(Mediator.Object, UserManager.Object, Mapper);
         }
 
         // Valid
@@ -32,12 +38,12 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
         public void ResetPassword_ValidPasswordReset(string email, string token, string newPassword)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
-            UserManager.Setup(u => u.ResetPasswordAsync(It.IsAny<IdentityUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            UserManager.Setup(u => u.ResetPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
             // Act
             var result = Handler.Handle(new ResetPasswordCommand(token, email, newPassword), CancellationToken.None).Result;
             // Assert
@@ -50,7 +56,7 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
         public async Task ResetPassword_InvalidUser(string email, string token, string newPassword)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((IdentityUser) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
             // Act / Assert
             await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(new ResetPasswordCommand(token, email, newPassword), CancellationToken.None));
         }
@@ -61,12 +67,12 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
         public async Task ResetPassword_ThrowsFailedToResetPasswordException(string email, string token, string newPassword)
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUserDto()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
-            UserManager.Setup(u => u.ResetPasswordAsync(It.IsAny<IdentityUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
+            UserManager.Setup(u => u.ResetPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
             await Assert.ThrowsAsync<FailedToResetPassword>(() => Handler.Handle(new ResetPasswordCommand(email, token, newPassword), CancellationToken.None));
         }

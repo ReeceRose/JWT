@@ -1,18 +1,18 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using JWT.Application.User.Model;
+using MediatR;
 
 namespace JWT.Application.User.Command.AddUserClaim
 {
     public class AddUserClaimCommand : IRequest<bool>
     {
-        public AddUserClaimCommand(IdentityUser user, string key, string value)
+        public AddUserClaimCommand(ApplicationUserDto user, string key, string value)
         {
             User = user;
             Key = key;
             Value = value;
         }
 
-        public IdentityUser User { get; set; }
+        public ApplicationUserDto User { get; set; }
         public string Key { get; }
         public string Value { get; }
     }
