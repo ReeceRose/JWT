@@ -19,7 +19,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public void RegisterUser_EmailIsValid(string email)
         {
             // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: email, password: "Test1!", isAdmin: false));
+            var result = Validator.Validate(new RegisterUserCommand(email: email, password: "Test1!"));
             // Assert
             Assert.True(result.IsValid);
         }
@@ -31,7 +31,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public void RegisterUser_EmailIsInvalid(string email)
         {
             // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: email, password: "Test1!", isAdmin: false));
+            var result = Validator.Validate(new RegisterUserCommand(email: email, password: "Test1!"));
             // Assert
             Assert.Contains("Email is required", result.Errors.First().ErrorMessage);
             Assert.False(result.IsValid);
@@ -43,7 +43,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public void RegisterUser_PasswordIsValid(string password)
         {
             // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: "test@test.ca", password: password, isAdmin: false));
+            var result = Validator.Validate(new RegisterUserCommand(email: "test@test.ca", password: password));
             // Assert
             Assert.True(result.IsValid);
         }
@@ -57,7 +57,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public void RegisterUser_PasswordIsInvalid(string password)
         {
             // Act
-            var result = Validator.Validate(new RegisterUserCommand(email: "test@test.ca", password: password, isAdmin: false));
+            var result = Validator.Validate(new RegisterUserCommand(email: "test@test.ca", password: password));
             // Assert
             Assert.Contains("Password does not meet security constraints", result.Errors.First().ErrorMessage);
             Assert.False(result.IsValid);

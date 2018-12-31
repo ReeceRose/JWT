@@ -12,13 +12,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using JWT.Persistence;
+using JWT.Domain.Entities;
 
 namespace JWT.API
 {
@@ -39,23 +40,24 @@ namespace JWT.API
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<INotificationService, NotificationService>();
 
-            services.AddScoped<IdentityDbContext, IdentityDbContext>();
+            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 
-            var mappingConfig = new MapperConfiguration(mc =>
+            var mappingConfig = new MapperConfiguration(cfg =>
             {
-                mc.AddProfile(new MappingProfile());
+                cfg.AddProfile(new MappingProfile());
+                cfg.ValidateInlineMaps = false;
             });
             services.AddSingleton(mappingConfig.CreateMapper());
 
-            services.AddDbContext<IdentityDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration["ConnectionStrings:Postgres"],
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
             
             services
                 .AddHealthChecks()
-                .AddDbContextCheck<IdentityDbContext>();
+                .AddDbContextCheck<ApplicationDbContext>();
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                     options.Lockout.MaxFailedAccessAttempts = 5;
@@ -63,7 +65,7 @@ namespace JWT.API
                     options.User.RequireUniqueEmail = true;
                     options.SignIn.RequireConfirmedEmail = true;
                 })
-                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services
@@ -71,11 +73,6 @@ namespace JWT.API
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddFacebook(options =>
-                {
-                    options.AppId = Configuration["Facebook:AppId"];
-                    options.AppSecret = Configuration["Facebook:AppSecret"];
                 })
                 .AddJwtBearer(x =>
                 {
@@ -164,7 +161,7 @@ namespace JWT.API
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope())
             {
-                using (var context = serviceScope.ServiceProvider.GetService<IdentityDbContext>())
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     context.Database.EnsureCreated();
                     try

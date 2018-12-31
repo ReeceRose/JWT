@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Command.AddUserClaim;
 using JWT.Application.User.Command.CreateUser;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Exceptions;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Application.User.Command.RegisterUser
 {
@@ -32,8 +32,7 @@ namespace JWT.Application.User.Command.RegisterUser
                 throw new AccountAlreadyExistsException(email);
             }
 
-            // TODO: Refactor out IdentityUser to ApplicationUser
-            user = _mapper.Map<IdentityUser>(request);
+            user = _mapper.Map<ApplicationUserDto>(request);
 
             var result = await _mediator.Send(new CreateUserCommand(user, request.Password), cancellationToken);
             if (!result.Succeeded)
@@ -42,12 +41,6 @@ namespace JWT.Application.User.Command.RegisterUser
             }
 
             await _mediator.Send(new GenerateEmailConfirmationEmailQuery(email), cancellationToken);
-
-            // NOTE: DO NOT DO THIS!!
-            if (request.IsAdmin)
-            {
-                await _mediator.Send(new AddUserClaimCommand(user, "Administrator", ""), cancellationToken);
-            }
 
             return await Task.FromResult(result.Succeeded);
         }

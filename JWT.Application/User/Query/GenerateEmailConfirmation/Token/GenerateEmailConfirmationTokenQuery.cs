@@ -1,12 +1,12 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using JWT.Application.User.Model;
+using MediatR;
 
 namespace JWT.Application.User.Query.GenerateEmailConfirmation.Token
 {
     public class GenerateEmailConfirmationTokenQuery : IRequest<string>
     {
-        public GenerateEmailConfirmationTokenQuery(IdentityUser user) => User = user;
+        public GenerateEmailConfirmationTokenQuery(ApplicationUserDto user) => User = user;
 
-        public IdentityUser User { get; }
+        public ApplicationUserDto User { get; }
     }
 }

@@ -1,30 +1,34 @@
 ﻿using System;
 using System.Threading;
+using AutoMapper;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Application.Utilities;
+using JWT.Domain.Entities;
+using JWT.Persistence;
 using JWT.Tests.Context;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
 {
     public class GetUserByEmailTest : IDisposable
     {
-        public IdentityDbContext Context { get; }
+        public ApplicationDbContext Context { get; }
+        public IMapper Mapper { get; }
         public GetUserByEmailQueryHandler Handler { get; }
 
         public GetUserByEmailTest()
         {
             // Arrange
             Context = ContextFactory.Create();
-            Handler = new GetUserByEmailQueryHandler(Context);
+            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
+            Handler = new GetUserByEmailQueryHandler(Context, Mapper);
         }
 
         [Fact]
         public void GetUserByEmail_ReturnsExpectedUser()
         {
             // Arrange
-            var requestedUser = new IdentityUser()
+            var requestedUser = new ApplicationUser()
             {
                 Email = "test@test.ca",
                 UserName = "test-user",

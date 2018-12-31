@@ -73,7 +73,7 @@ export default {
             if (this.$v.$invalid) {
                 return
             }
-            this.$store.dispatch('authentication/register', { email: this.email, password: this.password, isAdmin: false })
+            this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
                 .then(() => {
                     this.success = true
                 })
