@@ -27,6 +27,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
             Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
             Handler = new AddUserClaimCommandHandler(UserManager.Object, Mapper);
         }
+
         [Theory]
         [InlineData("user@test.com", "key", "value")]
         [InlineData("user@test.com", "test", "claim")]
