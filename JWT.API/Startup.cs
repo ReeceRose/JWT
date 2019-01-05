@@ -42,10 +42,9 @@ namespace JWT.API
 
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 
-            var mappingConfig = new MapperConfiguration(cfg =>
+            var mappingConfig = new MapperConfiguration(mc =>
             {
-                cfg.AddProfile(new MappingProfile());
-                cfg.ValidateInlineMaps = false;
+                mc.AddProfile(new MappingProfile());
             });
             services.AddSingleton(mappingConfig.CreateMapper());
 
