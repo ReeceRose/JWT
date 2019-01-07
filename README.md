@@ -13,13 +13,14 @@
 
 <p align="center">
     <a href="#about">About</a> •
-    <a href="#key-features">Features</a> •
+    <a href="#features">Features</a> •
     <a href="#setup">Setup</a> •
     <a href="#credits">Credits</a> •
     <a href="#license">License</a>
 </p>
 
-![]()
+## About
+[![Build Status](https://dev.azure.com/ReeceRose/JWT/_apis/build/status/ReeceRose.JWT?branchName=master)](https://dev.azure.com/ReeceRose/JWT/_build/latest?definitionId=1?branchName=master)
 
 ## Features
 
