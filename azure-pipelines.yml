@@ -28,5 +28,5 @@ steps:
   displayName: 'Building docker container'
 - script: |
     docker login -u $(dockerUsername) -p $(dockerPassword)
-    docker push -u (dockerUsername)/$imageName
+    docker push -u $(dockerUsername)/$imageName
 #   docker tag $(imageName)
