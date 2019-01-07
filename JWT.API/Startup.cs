@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using JWT.Persistence;
 using JWT.Domain.Entities;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace JWT.API
 {
@@ -37,7 +38,7 @@ namespace JWT.API
         {
             services.AddApiVersioning();
 
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(Configuration);
             services.AddSingleton<INotificationService, NotificationService>();
 
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
@@ -47,11 +48,10 @@ namespace JWT.API
                 mc.AddProfile(new MappingProfile());
             });
             services.AddSingleton(mappingConfig.CreateMapper());
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Configuration["ConnectionStrings:Postgres"],
-                    optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
             
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySQL(Configuration["ConnectionStrings:MySQL"],
+                    optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
             services
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
@@ -134,8 +134,20 @@ namespace JWT.API
             else
             {
                 app.UseHsts();
-                app.UseCors(builder => { builder.WithOrigins("https://YOURDOMAIN.com"); });
+                app.UseCors(builder =>
+                {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });
+                //                app.UseCors(builder => { builder.WithOrigins("https://YOURDOMAIN.com"); });
             }
+
+            // NGINX Reverse Proxy
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             UpdateDatabase(app);
 
