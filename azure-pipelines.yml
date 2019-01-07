@@ -5,9 +5,11 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  buildConfiguration: 'Release'
-  imageName: 'jwt:$(build.buildId)'
-  -group: secrets
+- name: buildConfiguration
+  value: 'Release'
+- name:  imageName
+  value: 'jwt:$(build.buildId)'
+- group: secrets
 
 steps:
 - task: DotNetCoreCLI@2
@@ -29,4 +31,5 @@ steps:
 - script: |
     docker login -u $(dockerUsername) -p $(dockerPassword)
     docker push $(dockerUsername)/$imageName
+  displayName: 'Pushing to docker hub'
 #   docker tag $(imageName)
