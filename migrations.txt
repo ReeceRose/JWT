@@ -1,2 +1,2 @@
-Add-Migration AddedIdentity -Context ApplicationDbContext
+Add-Migration AddedIdentity -Context ApplicationDbContext -OutputDir Migrations/Identity
 Update-Database

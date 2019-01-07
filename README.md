@@ -20,7 +20,7 @@
 </p>
 
 ## About
-[![Build Status](https://dev.azure.com/ReeceRose/JWT/_apis/build/status/ReeceRose.JWT?branchName=master)](https://dev.azure.com/ReeceRose/JWT/_build/latest?definitionId=1?branchName=master)
+[![Build status](https://dev.azure.com/ReeceRose/JWT/_apis/build/status/JWT-Master)](https://dev.azure.com/ReeceRose/JWT/_build/latest?definitionId=5)
 
 ## Features
 

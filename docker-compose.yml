@@ -1,19 +1,18 @@
 version: '3'
 services:
-  database:
-    image: postgres:11
-    restart: always
+  api:
+    #restart: always
+    image: jwt_api:latest
+    expose:
+      - "5000"
+    build:
+      context: .
+      dockerfile: DockerFile
+  proxy:
+    build:
+      context: JWT.Nginx
+      dockerfile: DockerFile
     ports:
-      - 5432:5432
-    environment:
-      POSTGRE_PASSWORD: password123
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - network
-
-volumes:
-  pgdata:
-networks:
-  network:
-     driver: bridge
+      - "8080:8080"
+    links:
+    - api
