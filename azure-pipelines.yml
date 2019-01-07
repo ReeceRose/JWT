@@ -1,9 +1,13 @@
+trigger:
+  - master
+pr: none
 pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
   buildConfiguration: 'Release'
   imageName: 'jwt:$(build.buildId)'
+  -group: secrets
 
 steps:
 - task: DotNetCoreCLI@2
@@ -14,7 +18,7 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Collection code coverage'
+  displayName: 'Collecting code coverage'
   inputs:
     command: test
     projects: '**/*Tests/*.csproj'
@@ -22,3 +26,7 @@ steps:
 
 - script: docker build -f JWT.API/Dockerfile -t $(imageName) .
   displayName: 'Building docker container'
+- script: |
+    docker login -u $(dockerUsername) -p $(dockerPassword)
+    docker push -u (dockerUsername)/$imageName
+#   docker tag $(imageName)
