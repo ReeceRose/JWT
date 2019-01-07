@@ -11,21 +11,25 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  imageName: 'jwt:$(build.buildId)'
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'run tests'
+  displayName: 'Running tests'
   inputs:
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'collecting code coverage'
+  displayName: 'Collection code coverage'
   inputs:
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'building project'
+#- script: dotnet build --configuration $(buildConfiguration)
+#  displayName: 'Building .NET project'
+
+- script: docker build -f JWT.API/Dockerfile -t $(imageName) .
+  displayName: 'Building docker container'
