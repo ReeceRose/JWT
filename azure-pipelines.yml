@@ -9,7 +9,7 @@ variables:
   value: 'Release'
 - name:  imageName
   value: 'jwt:$(build.buildId)'
-- group: dockersecrets
+- group: docker
 
 steps:
 - task: DotNetCoreCLI@2
