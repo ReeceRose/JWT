@@ -1,15 +1,15 @@
-trigger:
-- master
-pr: none
+# trigger:
+# - master
+# pr: none
 pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
+- group: docker
 - name: buildConfiguration
   value: 'Release'
 - name:  imageName
   value: 'jwt:$(build.buildId)'
-- group: docker
 
 steps:
 - task: DotNetCoreCLI@2
