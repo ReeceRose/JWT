@@ -5,7 +5,7 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-- group: secrets
+- group: docker-secrets
 - name: buildConfiguration
   value: 'Release'
 - name:  imageName
