@@ -29,7 +29,9 @@ steps:
 - script: docker build -f JWT.API/Dockerfile -t $(imageName) .
   displayName: 'Building docker container'
 - script: |
-    docker login -u $(Docker--Username) -p $(Docker--Password)
+    echo $(Docker--Passsword) > temp.txt
+    cat temp.txt | docker login --username --password-stdin
     docker push $(Docker--Username)/$imageName
+    docker logout
   displayName: 'Pushing to docker hub'
 #   docker tag $(imageName)
