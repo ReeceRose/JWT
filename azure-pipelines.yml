@@ -5,11 +5,11 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-- group: dockersecrets
 - name: buildConfiguration
   value: 'Release'
 - name:  imageName
   value: 'jwt:$(build.buildId)'
+- group: dockersecrets
 
 steps:
 - task: DotNetCoreCLI@2
