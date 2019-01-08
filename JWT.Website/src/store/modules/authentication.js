@@ -10,6 +10,14 @@ const authentication = {
     getters: {
         isAdmin: () => utilities.parseJwt(global.state.token).hasOwnProperty("Administrator")
     },
+    mutations: {
+        setCookie: (token) => {
+            this.$cookies.set("token", token)
+        },
+        removeCookie: () => {
+            this.$cookies.set("token", null)
+        }
+    },
     actions: {
         login: ({ commit, dispatch }, payload) => {
             return new Promise((resolve, reject) => {
@@ -23,6 +31,7 @@ const authentication = {
                         const token = response.data.token
                         dispatch("global/updateToken", token, { root: true })
                         if (payload.rememberMe) {
+                            dispatch("setCookie", token)
                             // Store cookie
                         }
                         resolve()
@@ -52,6 +61,7 @@ const authentication = {
                                 })
                                     .then((response) => {
                                         const token = response.data.token
+                                        dispatch("setCookie", token)
                                         dispatch("global/updateToken", token, { root: true })
                                         resolve()
                                     })
@@ -86,6 +96,7 @@ const authentication = {
                         .then((response) => {
                             const token = response.data.token
                             dispatch("global/updateToken", token, { root: true })
+                            dispatch("setCookie", token)
                             resolve()
                         })
                         .catch(() => {
@@ -101,13 +112,14 @@ const authentication = {
                 })
             })
         },
-        logout: ({ commit }) => {
+        logout: ({ commit, dispatch }) => {
             commit("global/removeToken", null, { root: true })
             try {
                 let googleAuth = window.gapi.auth2.getAuthInstance()
                 googleAuth.signOut()
                 // eslint-disable-next-line
                 FB.logout(() => {})
+                dispatch("removeToken")
             // eslint-disable-next-line
             } catch (error) {
                 // If not signed in it will throw an error

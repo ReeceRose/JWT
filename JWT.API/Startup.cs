@@ -48,13 +48,14 @@ namespace JWT.API
                 mc.AddProfile(new MappingProfile());
             });
             services.AddSingleton(mappingConfig.CreateMapper());
-            
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySQL(Configuration["ConnectionStrings:MySQL"],
-                    optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
+
             services
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySQL(Configuration["ConnectionStrings:MySQL"],
+                    optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {

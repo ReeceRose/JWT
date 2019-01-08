@@ -23,8 +23,8 @@ namespace JWT.Application.User.Query.GetUserByEmail
         public async Task<ApplicationUserDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
             return _mapper.Map<ApplicationUserDto>(await _context.Users.FirstOrDefaultAsync(
-                u => String.Equals(u.Email, request.Email, StringComparison.CurrentCultureIgnoreCase),
-                cancellationToken: cancellationToken)); ;
+                u => string.Equals(u.Email, request.Email, StringComparison.CurrentCultureIgnoreCase),
+                cancellationToken: cancellationToken));
         }
     }
 }

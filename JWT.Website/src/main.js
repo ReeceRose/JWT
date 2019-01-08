@@ -3,6 +3,7 @@ Vue.config.productionTip = false
 
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
+VueCookies.config('1d')
 
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)

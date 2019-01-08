@@ -7,7 +7,7 @@ namespace JWT.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
@@ -32,6 +32,13 @@ namespace JWT.Persistence
                 entity.Property(m => m.UserId).HasMaxLength(127);
                 entity.Property(m => m.LoginProvider).HasMaxLength(127);
                 entity.Property(m => m.Name).HasMaxLength(127);
+            });
+            builder.Entity<ApplicationUser>(i =>
+            {
+                i.Property(o => o.EmailConfirmed).HasConversion<int>();
+                i.Property(o => o.LockoutEnabled).HasConversion<int>();
+                i.Property(o => o.PhoneNumberConfirmed).HasConversion<int>();
+                i.Property(o => o.TwoFactorEnabled).HasConversion<int>();
             });
         }
     }
