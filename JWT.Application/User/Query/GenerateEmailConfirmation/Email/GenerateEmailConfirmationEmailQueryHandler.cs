@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
@@ -46,7 +47,7 @@ namespace JWT.Application.User.Query.GenerateEmailConfirmation.Email
             var token = _mediator.Send(new GenerateEmailConfirmationTokenQuery(user), cancellationToken).Result;
 
             await _notificationService.SendNotificationAsync(toName: request.Email, toEmailAddress: request.Email, subject: "Confirm your account",
-                message: $"In order to login you must confirm your account. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
+                message: $"In order to login you must confirm your account. To continue click <a href='{_configuration["FrontEndUrl"]}/User/ConfirmEmail?userId={HttpUtility.UrlEncode(user.Id)}&token={HttpUtility.UrlEncode(token)}'>here</a>");
             
             return await Task.FromResult(token);
         }

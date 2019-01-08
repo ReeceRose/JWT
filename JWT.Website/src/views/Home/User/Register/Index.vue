@@ -75,6 +75,7 @@ export default {
             }
             this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
                 .then(() => {
+                    this.error = null
                     this.success = true
                 })
                 .catch((error) => {

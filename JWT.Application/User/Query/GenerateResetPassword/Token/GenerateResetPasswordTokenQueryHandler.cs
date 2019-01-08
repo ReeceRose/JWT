@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using AutoMapper;
 using JWT.Domain.Entities;
 using MediatR;
@@ -22,9 +21,7 @@ namespace JWT.Application.User.Query.GenerateResetPassword.Token
 
         public async Task<string> Handle(GenerateResetPasswordTokenQuery request, CancellationToken cancellationToken)
         {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(_mapper.Map<ApplicationUser>(request.User));
-            token = HttpUtility.UrlEncode(token);
-            return await Task.FromResult(token);
+            return await Task.FromResult(await _userManager.GeneratePasswordResetTokenAsync(_mapper.Map<ApplicationUser>(request.User)));
         }
     }
 }

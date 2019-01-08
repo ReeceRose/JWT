@@ -144,12 +144,6 @@ namespace JWT.API
                 //                app.UseCors(builder => { builder.WithOrigins("https://YOURDOMAIN.com"); });
             }
 
-            // NGINX Reverse Proxy
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-
             UpdateDatabase(app);
 
             app.UseSwagger();

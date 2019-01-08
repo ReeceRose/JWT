@@ -3,7 +3,7 @@
         <div slot="card-content" class="text-center">
             <div v-if="userId && token">
                 <p v-if="confirmed">Congragulations! Your email has been confirmed. <br>Login <router-link :to="{ name: 'login' }">here</router-link></p>
-                <p v-if="error">Unfortunately your email cannot be confirmed. <br><router-link :to="{ name: 'resendConfirmation' }">Click here to resend confirmation email</router-link></p>
+                <p v-if="error">Unfortunately your email cannot be confirmed. <br><router-link :to="{ name: 'regenerateConfirmationEmail' }">Click here to resend confirmation email</router-link></p>
                 <p v-if="!(error) && !(confirmed)">Trying to confirm email...</p>
             </div>
             <div v-else>
