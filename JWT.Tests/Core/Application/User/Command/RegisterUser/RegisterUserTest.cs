@@ -7,6 +7,7 @@ using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.Utilities;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -39,7 +40,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public void RegisterUser_SuccessfullyRegistersUser(string email, string password)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationEmailQuery>(), default(CancellationToken))).ReturnsAsync(It.IsAny<string>());
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Success);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateEmailConfirmationEmailQuery>(), default(CancellationToken))).ReturnsAsync("123");
@@ -55,7 +56,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public async Task RegisterUser_ThrowsAccountAlreadyExistsException(string email, string password)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto() { Email = email };
+            var requestedUser = new ApplicationUser() { Email = email };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
             // Act / Assert
             await Assert.ThrowsAsync<AccountAlreadyExistsException>(() => Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None));
@@ -67,7 +68,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
         public async Task RegisterUser_FailedToRegistersUser(string email, string password)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto)null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser)null);
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
             await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new RegisterUserCommand(email, password), CancellationToken.None));

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Command.ResetPassword;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.Utilities;
 using JWT.Domain.Entities;
@@ -33,12 +32,12 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
 
         // Valid
         [Theory]
-        [InlineData("test@test.ca", "123456789", "Test1!")]
-        [InlineData("user@domain.com", "987654321", "Password1!")]
+        [InlineData("test@test.ca", "", "v6nQZlSB3Ru2ICZBhUA/4g==")]
+        [InlineData("user@domain.com", "KwySES16QZ7Jicg8XprasQ==", "Password1!")]
         public void ResetPassword_ValidPasswordReset(string email, string token, string newPassword)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
@@ -51,30 +50,30 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
         }
 
         [Theory]
-        [InlineData("test@test.ca", "123456789", "Test1!")]
-        [InlineData("user@domain.com", "987654321", "Password1!")]
+        [InlineData("test@test.ca", "", "v6nQZlSB3Ru2ICZBhUA/4g==")]
+        [InlineData("user@domain.com", "KwySES16QZ7Jicg8Xpr+sQ==", "Password1!")]
         public async Task ResetPassword_InvalidUser(string email, string token, string newPassword)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
             // Act / Assert
             await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(new ResetPasswordCommand(token, email, newPassword), CancellationToken.None));
         }
 
         [Theory]
-        [InlineData("test@test.ca", "123456789", "Test1!")]
-        [InlineData("user@domain.com", "987654321", "Password1!")]
+        [InlineData("test@test.ca", "", "v6nQZlSB3Ru2ICZBhUA/4g==")]
+        [InlineData("user@domain.com", "KwySES16QZ7Jicg8Xpr+sQ==", "Password1!")]
         public async Task ResetPassword_ThrowsFailedToResetPasswordException(string email, string token, string newPassword)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
             UserManager.Setup(u => u.ResetPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
-            await Assert.ThrowsAsync<FailedToResetPassword>(() => Handler.Handle(new ResetPasswordCommand(email, token, newPassword), CancellationToken.None));
+            await Assert.ThrowsAsync<FailedToResetPassword>(() => Handler.Handle(new ResetPasswordCommand(token, email, newPassword), CancellationToken.None));
         }
     }
 }

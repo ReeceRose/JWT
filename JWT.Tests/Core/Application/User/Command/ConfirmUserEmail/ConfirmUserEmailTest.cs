@@ -37,7 +37,7 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
         public void ConfirmUserEmail_SuccessfullyConfirmsEmail(string userId, string token)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Id =  userId
             };
@@ -56,7 +56,7 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
         public async Task ConfirmUser_ThrowsInvalidUserException(string userId, string token)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken))).Returns(Task.FromResult((ApplicationUserDto) null));
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken))).Returns(Task.FromResult((ApplicationUser) null));
             var query = new ConfirmUserEmailCommand(userId, token);
             // Act / Assert
             await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(query, CancellationToken.None));

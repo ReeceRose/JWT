@@ -30,7 +30,9 @@ namespace JWT.Application.User.Command.ResetPassword
                 throw new InvalidUserException();
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, Base64UrlEncoder.Decode(request.Token), request.Password);
+            var token = Base64UrlEncoder.Decode(request.Token);
+
+            var result = await _userManager.ResetPasswordAsync(user, token, request.Password);
             if (!result.Succeeded)
             {
                 throw new FailedToResetPassword();

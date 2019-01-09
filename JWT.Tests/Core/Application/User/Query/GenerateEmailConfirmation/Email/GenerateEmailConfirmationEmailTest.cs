@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.Interfaces;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Application.User.Query.GetUserByEmail;
@@ -44,7 +43,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public void GenerateEmailConfirmationEmail_EmailSent(string email, string token)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email,
                 EmailConfirmed = false
@@ -65,7 +64,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnInvalidUser(string email)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
             // Act / Assert
             await Assert.ThrowsAsync<InvalidUserException>(() => Handler.Handle(new GenerateEmailConfirmationEmailQuery(email), CancellationToken.None));
         }
@@ -76,7 +75,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public async Task GenerateEmailConfirmationEmail_ThrowsErrorOnEmailAlreadyConfirmed(string email)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };

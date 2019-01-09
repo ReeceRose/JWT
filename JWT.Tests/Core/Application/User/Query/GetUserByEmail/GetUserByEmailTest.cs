@@ -13,15 +13,13 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
     public class GetUserByEmailTest : IDisposable
     {
         public ApplicationDbContext Context { get; }
-        public IMapper Mapper { get; }
         public GetUserByEmailQueryHandler Handler { get; }
 
         public GetUserByEmailTest()
         {
             // Arrange
             Context = ContextFactory.Create();
-            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new GetUserByEmailQueryHandler(Context, Mapper);
+            Handler = new GetUserByEmailQueryHandler(Context);
         }
 
         [Fact]
