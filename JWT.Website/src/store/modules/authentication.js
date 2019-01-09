@@ -11,12 +11,7 @@ const authentication = {
         isAdmin: () => utilities.parseJwt(global.state.token).hasOwnProperty("Administrator")
     },
     mutations: {
-        setCookie: (token) => {
-            this.$cookies.set("token", token)
-        },
-        removeCookie: () => {
-            this.$cookies.set("token", null)
-        }
+
     },
     actions: {
         login: ({ commit, dispatch }, payload) => {
@@ -186,6 +181,7 @@ const authentication = {
         resetPassword: ({ commit }, payload) => {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
+                console.log(payload)
                 axios({
                     method: 'post',
                     url: 'authentication/resetPassword',

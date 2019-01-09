@@ -20,7 +20,6 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using JWT.Persistence;
 using JWT.Domain.Entities;
-using Microsoft.AspNetCore.HttpOverrides;
 
 namespace JWT.API
 {

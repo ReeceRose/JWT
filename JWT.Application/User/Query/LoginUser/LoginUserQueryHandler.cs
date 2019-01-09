@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.GetUserClaim;
@@ -36,9 +37,9 @@ namespace JWT.Application.User.Query.LoginUser
                 throw new InvalidCredentialException();
             }
 
-            var mappedUser = _mapper.Map<ApplicationUser>(user);
+            var mappedUser = _mapper.Map<ApplicationUserDto>(user);
             
-            var result = await _signInManager.CheckPasswordSignInAsync(mappedUser, request.Password, true);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
 
             if (result.IsLockedOut)
             {
@@ -47,14 +48,14 @@ namespace JWT.Application.User.Query.LoginUser
 
             if (!(result.Succeeded))
             {
-                if (!(await _userManager.IsEmailConfirmedAsync(mappedUser)))
+                if (!(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     throw new EmailNotConfirmedException();
                 }
                 throw new InvalidCredentialException();
             }
 
-            var claims = _mediator.Send(new GetUserClaimQuery(user), cancellationToken).Result;
+            var claims = _mediator.Send(new GetUserClaimQuery(mappedUser), cancellationToken).Result;
 
             return await _mediator.Send(new GenerateLoginTokenQuery(claims), cancellationToken);
         }

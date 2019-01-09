@@ -19,6 +19,12 @@ const global = {
             state.token = null
             localStorage.removeItem("token")
         },
+        setCookie: (token) => {
+            this.$cookies.set("token", token)
+        },
+        removeCookie: () => {
+            this.$cookies.set("token", null)
+        },
         // LOADING
         setLoading: (state, isLoading) => state.loading = isLoading
     },

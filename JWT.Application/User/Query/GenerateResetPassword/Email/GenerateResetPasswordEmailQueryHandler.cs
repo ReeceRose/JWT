@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateResetPassword.Token;
 using JWT.Application.User.Query.GetUserByEmail;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JWT.Application.User.Query.GenerateResetPassword.Email
 {
@@ -34,7 +34,7 @@ namespace JWT.Application.User.Query.GenerateResetPassword.Email
             var token = _mediator.Send(new GenerateResetPasswordTokenQuery(user), cancellationToken).Result;
 
             await _notificationService.SendNotificationAsync(toName: request.Email, toEmailAddress: request.Email, subject: "Password reset",
-                message: $"You have requested a password reset. To reset our password click <a href='{_configuration["FrontEndUrl"]}/ResetPassword?email={HttpUtility.UrlEncode(user.Email)}&token={HttpUtility.UrlEncode(token)}'>here</a>");
+                message: $"You have requested a password reset. To reset our password click <a href='{_configuration["FrontEndUrl"]}/User/ResetPassword?email={Base64UrlEncoder.Encode(user.Email)}&token={Base64UrlEncoder.Encode(token)}'>here</a>");
 
             return await Task.FromResult(token);
         }
