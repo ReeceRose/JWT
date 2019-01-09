@@ -2,10 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Tests.Helpers;
 using Moq;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading;
-using AutoMapper;
 using JWT.Application.User.Query.GetUserById;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Persistence;
 using JWT.Tests.Context;
