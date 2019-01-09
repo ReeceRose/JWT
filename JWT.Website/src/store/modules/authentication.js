@@ -26,8 +26,7 @@ const authentication = {
                         const token = response.data.token
                         dispatch("global/updateToken", token, { root: true })
                         if (payload.rememberMe) {
-                            dispatch("setCookie", token)
-                            // Store cookie
+                            dispatch("global/updateCookie", token, { root: true })
                         }
                         resolve()
                     })
@@ -56,8 +55,8 @@ const authentication = {
                                 })
                                     .then((response) => {
                                         const token = response.data.token
-                                        dispatch("setCookie", token)
                                         dispatch("global/updateToken", token, { root: true })
+                                        dispatch("global/updateCookie", token, { root: true })
                                         resolve()
                                     })
                                     .catch(error => {
@@ -91,7 +90,7 @@ const authentication = {
                         .then((response) => {
                             const token = response.data.token
                             dispatch("global/updateToken", token, { root: true })
-                            dispatch("setCookie", token)
+                            dispatch("global/updateCookie", token, { root: true })
                             resolve()
                         })
                         .catch(() => {
@@ -114,7 +113,7 @@ const authentication = {
                 googleAuth.signOut()
                 // eslint-disable-next-line
                 FB.logout(() => {})
-                dispatch("removeToken")
+                dispatch("global/updateCookie", null, { root: true })
             // eslint-disable-next-line
             } catch (error) {
                 // If not signed in it will throw an error

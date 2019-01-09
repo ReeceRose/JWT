@@ -17,13 +17,12 @@ const global = {
         },
         removeToken: (state) => {
             state.token = null
-            localStorage.removeItem("token")
         },
         setCookie: (token) => {
-            this.$cookies.set("token", token)
+            window.$cookies.set("token", JSON.stringify(token))
         },
         removeCookie: () => {
-            this.$cookies.set("token", null)
+            window.$cookies.remove("token")
         },
         // LOADING
         setLoading: (state, isLoading) => state.loading = isLoading
@@ -36,10 +35,20 @@ const global = {
         },
         loadToken({ commit }) {
             commit("setLoading", true)
-            if (localStorage.getItem("token")) {
-                commit("setToken", JSON.parse(localStorage.getItem("token")))
+            if (window.$cookies.get("token")) {
+                commit("setToken", window.$cookies.get("token").token)
             }
+            // if (localStorage.getItem("token")) {
+            //     commit("setToken", JSON.parse(localStorage.getItem("token")))
+            // }
             commit("setLoading", false)
+        },
+        updateCookie({ commit }, token) {
+            if (token === null ){
+                commit("removeCookie")
+            } else {
+                commit("setCookie", token)
+            }
         },
         // LOADING
         updateLoading({ commit }, isLoading) {
