@@ -23,7 +23,7 @@ namespace JWT.Application.User.Command.ResetPassword
 
         public async Task<bool> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            var user = _mediator.Send(new GetUserByEmailQuery(Base64UrlEncoder.Decode(request.Email)), cancellationToken).Result;
+            var user = _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result;
 
             if (user == null)
             {

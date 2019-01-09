@@ -181,7 +181,6 @@ const authentication = {
         resetPassword: ({ commit }, payload) => {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
-                console.log(payload)
                 axios({
                     method: 'post',
                     url: 'authentication/resetPassword',

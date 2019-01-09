@@ -84,6 +84,9 @@ export default {
                         })
                         .then(() => {
                             this.passwordReset = true
+                            setTimeout(() => {
+                                this.$router.push({ name: 'login' })
+                            }, 3000)
                         })
                         .catch(() => {
                             this.error = true
