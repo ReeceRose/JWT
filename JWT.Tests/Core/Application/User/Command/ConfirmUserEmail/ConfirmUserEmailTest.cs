@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Command.ConfirmUserEmail;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GetUserById;
 using JWT.Application.Utilities;
 using JWT.Domain.Entities;

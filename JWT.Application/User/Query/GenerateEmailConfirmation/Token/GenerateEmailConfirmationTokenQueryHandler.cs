@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

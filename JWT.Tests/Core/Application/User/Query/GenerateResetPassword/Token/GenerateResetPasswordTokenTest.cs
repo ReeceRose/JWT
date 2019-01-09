@@ -1,8 +1,5 @@
 ﻿using System.Threading;
-using AutoMapper;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateResetPassword.Token;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Tests.Helpers;
 using Moq;
