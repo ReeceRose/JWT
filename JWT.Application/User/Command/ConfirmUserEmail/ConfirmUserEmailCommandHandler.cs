@@ -42,7 +42,7 @@ namespace JWT.Application.User.Command.ConfirmUserEmail
                 _logger.LogInformation($"Confirm User Email: {request.UserId}: Failed confirmation: {result.Errors}");
                 throw new Exception("Failed to confirm email");
             }
-
+            _logger.LogInformation($"Confirm User Email: {request.UserId}: Successful confirmation");
             return await Task.FromResult(result.Succeeded);
         }
     }

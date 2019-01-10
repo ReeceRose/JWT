@@ -1,14 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Application.User.Command.ResetPassword;
 using JWT.Application.User.Query.GetUserByEmail;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -18,7 +17,7 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
     {
         public Mock<IMediator> Mediator { get; }
         public Mock<MockUserManager> UserManager { get; }
-        public IMapper Mapper { get; set; }
+        public Mock<ILogger<ResetPasswordCommandHandler>> Logger { get; set; }
         public ResetPasswordCommandHandler Handler { get; }
 
         public ResetPasswordTest()
@@ -26,8 +25,8 @@ namespace JWT.Tests.Core.Application.User.Command.ResetPassword
             // Arrange
             Mediator = new Mock<IMediator>();
             UserManager = new Mock<MockUserManager>();
-            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new ResetPasswordCommandHandler(Mediator.Object, UserManager.Object, Mapper);
+            Logger = new Mock<ILogger<ResetPasswordCommandHandler>>();
+            Handler = new ResetPasswordCommandHandler(Mediator.Object, UserManager.Object, Logger.Object);
         }
 
         // Valid
