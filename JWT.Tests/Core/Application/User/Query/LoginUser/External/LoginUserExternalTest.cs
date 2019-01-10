@@ -2,15 +2,18 @@
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using JWT.Application.User.Command.CreateUser;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.GetUserClaim;
 using JWT.Application.User.Query.LoginUser.External;
+using JWT.Application.Utilities;
+using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -19,13 +22,17 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser.External
     public class LoginUserExternalTest
     {
         public Mock<IMediator> Mediator { get; }
+        public IMapper Mapper { get; }
+        public Mock<ILogger<LoginUserExternalQueryHandler>> Logger { get; }
         public LoginUserExternalQueryHandler Handler { get; }
 
         public LoginUserExternalTest()
         {
             // Arrange
             Mediator = new Mock<IMediator>();
-            Handler = new LoginUserExternalQueryHandler(Mediator.Object);
+            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
+            Logger = new Mock<ILogger<LoginUserExternalQueryHandler>>();
+            Handler = new LoginUserExternalQueryHandler(Mediator.Object, Mapper, Logger.Object);
         }
 
         [Theory]
@@ -34,7 +41,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser.External
         public async Task LoginUserExternal_ReturnsToken(string email, string accessToken, string jwtToken)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 Email = email
             };
@@ -53,7 +60,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser.External
         {
             // Arrange
             var claims = new List<Claim>();
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Success);
             Mediator.Setup(m => m.Send(It.IsAny<GetUserClaimQuery>(), default(CancellationToken))).ReturnsAsync(claims);
             Mediator.Setup(m => m.Send(It.IsAny<GenerateLoginTokenQuery>(), default(CancellationToken))).ReturnsAsync(jwtToken);
@@ -68,7 +75,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser.External
         public async Task LoginUserExternal_FailedToCreateNewUser(string email, string accessToken)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto)null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser)null);
             Mediator.Setup(m => m.Send(It.IsAny<CreateUserCommand>(), default(CancellationToken))).ReturnsAsync(IdentityResult.Failed());
             // Act / Assert
             await Assert.ThrowsAsync<InvalidRegisterException>(() => Handler.Handle(new LoginUserExternalQuery(email, accessToken), CancellationToken.None));

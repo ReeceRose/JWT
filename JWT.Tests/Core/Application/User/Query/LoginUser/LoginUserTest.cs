@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateLoginToken;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Application.User.Query.LoginUser;
@@ -11,6 +10,7 @@ using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -22,6 +22,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public Mock<MockSignInManager> SignInManager { get; }
         public Mock<MockUserManager> UserManager { get; }
         public IMapper Mapper { get; }
+        public Mock<ILogger<LoginUserQueryHandler>> Logger { get; }
         public LoginUserQueryHandler Handler { get; }
 
         public LoginUserTest()
@@ -31,7 +32,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
             SignInManager = new Mock<MockSignInManager>();
             UserManager = new Mock<MockUserManager>();
             Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new LoginUserQueryHandler(Mediator.Object, SignInManager.Object, UserManager.Object, Mapper);
+            Logger = new Mock<ILogger<LoginUserQueryHandler>>();
+            Handler = new LoginUserQueryHandler(Mediator.Object, SignInManager.Object, UserManager.Object, Mapper, Logger.Object);
         }
 
         [Theory]
@@ -40,7 +42,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public void LoginUser_ReturnsValidToken(string email, string password, string token)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
@@ -61,7 +63,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenInvalidCredentials(string email, string password)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
@@ -82,7 +84,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsInvalidCredentialExceptionWhenUserNotFound(string email, string password)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((ApplicationUserDto) null));
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult((ApplicationUser) null));
             // Act / Assert
             await Assert.ThrowsAsync<InvalidCredentialException>(() => Handler.Handle(new LoginUserQuery(email, password), CancellationToken.None));
         }
@@ -93,12 +95,11 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsAccountLockedException(string email, string password)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken)))
-                .ReturnsAsync(requestedUser);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync(requestedUser);
             SignInManager
                 .Setup(s => s.CheckPasswordSignInAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(SignInResult.LockedOut);
@@ -113,7 +114,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public async Task LoginUser_ThrowsEmailNotConfirmedException(string email, string password)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };

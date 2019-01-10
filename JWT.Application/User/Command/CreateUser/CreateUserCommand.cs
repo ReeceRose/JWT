@@ -1,5 +1,4 @@
 ﻿using JWT.Application.User.Model;
-using JWT.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 

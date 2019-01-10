@@ -10,6 +10,9 @@ const authentication = {
     getters: {
         isAdmin: () => utilities.parseJwt(global.state.token).hasOwnProperty("Administrator")
     },
+    mutations: {
+
+    },
     actions: {
         login: ({ commit, dispatch }, payload) => {
             return new Promise((resolve, reject) => {
@@ -23,7 +26,7 @@ const authentication = {
                         const token = response.data.token
                         dispatch("global/updateToken", token, { root: true })
                         if (payload.rememberMe) {
-                            // Store cookie
+                            dispatch("global/updateCookie", token, { root: true })
                         }
                         resolve()
                     })
@@ -53,6 +56,7 @@ const authentication = {
                                     .then((response) => {
                                         const token = response.data.token
                                         dispatch("global/updateToken", token, { root: true })
+                                        dispatch("global/updateCookie", token, { root: true })
                                         resolve()
                                     })
                                     .catch(error => {
@@ -86,6 +90,7 @@ const authentication = {
                         .then((response) => {
                             const token = response.data.token
                             dispatch("global/updateToken", token, { root: true })
+                            dispatch("global/updateCookie", token, { root: true })
                             resolve()
                         })
                         .catch(() => {
@@ -101,18 +106,13 @@ const authentication = {
                 })
             })
         },
-        logout: ({ commit }) => {
+        logout: ({ commit, dispatch }) => {
             commit("global/removeToken", null, { root: true })
-            try {
-                let googleAuth = window.gapi.auth2.getAuthInstance()
-                googleAuth.signOut()
-                // eslint-disable-next-line
-                FB.logout(() => {})
+            let googleAuth = window.gapi.auth2.getAuthInstance()
+            googleAuth.signOut()
             // eslint-disable-next-line
-            } catch (error) {
-                // If not signed in it will throw an error
-            }
-
+            FB.logout(() => {})
+            dispatch("global/updateCookie", null, { root: true })
         },
         register: ({ commit }, payload) => {
             return new Promise((resolve, reject) => {

@@ -87,6 +87,7 @@ export default {
 					rememberMe: this.rememberMe
 				})
 				.then(() => {
+					this.error = false
 					this.$router.push({ name: "home" });
 				})
 				.catch(error => {

@@ -1,11 +1,12 @@
 ﻿using System.Threading;
 using JWT.Application.Interfaces;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Token;
 using JWT.Application.User.Query.GetUserByEmail;
+using JWT.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -16,6 +17,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Email
         public Mock<IMediator> Mediator { get; }
         public Mock<INotificationService> NotificationService { get; }
         public Mock<IConfiguration> Configuration { get; }
+        public Mock<ILogger<GenerateResetPasswordEmailQueryHandler>> Logger { get; }
         public GenerateResetPasswordEmailQueryHandler Handler { get; }
 
         public GenerateResetPasswordEmailTest()
@@ -25,7 +27,8 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Email
             NotificationService = new Mock<INotificationService>();
             Configuration = new Mock<IConfiguration>();
             Configuration.SetupGet(x => x["FrontEndUrl"]).Returns("url.com");
-            Handler = new GenerateResetPasswordEmailQueryHandler(Mediator.Object, NotificationService.Object, Configuration.Object);
+            Logger = new Mock<ILogger<GenerateResetPasswordEmailQueryHandler>>();
+            Handler = new GenerateResetPasswordEmailQueryHandler(Mediator.Object, NotificationService.Object, Configuration.Object, Logger.Object);
         }
         // Email sent
         [Theory]
@@ -34,7 +37,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Email
         public void GenerateResetPasswordEmail_EmailSent(string email, string token)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
@@ -54,7 +57,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Email
         public void GenerateResetPasswordEmail_ReturnsNullOnInvalidUser(string email)
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUserDto) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).ReturnsAsync((ApplicationUser) null);
             // Act
             var result = Handler.Handle(new GenerateResetPasswordEmailQuery(email), default(CancellationToken)).Result;
             // Assert

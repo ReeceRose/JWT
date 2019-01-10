@@ -9,6 +9,7 @@ using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Tests.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -18,6 +19,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
     {
         public Mock<MockUserManager> UserManager { get; }
         public IMapper Mapper { get; }
+        public Mock<ILogger<AddUserClaimCommandHandler>> Logger { get; }
         public AddUserClaimCommandHandler Handler { get; }
 
         public AddUserClaimTest()
@@ -25,7 +27,8 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
             // Arrange
             UserManager = new Mock<MockUserManager>();
             Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new AddUserClaimCommandHandler(UserManager.Object, Mapper);
+            Logger = new Mock<ILogger<AddUserClaimCommandHandler>>();
+            Handler = new AddUserClaimCommandHandler(UserManager.Object, Mapper, Logger.Object);
         }
 
         [Theory]
