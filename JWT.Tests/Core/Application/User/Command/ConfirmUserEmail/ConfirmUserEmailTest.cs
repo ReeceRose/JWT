@@ -1,14 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Application.User.Command.ConfirmUserEmail;
 using JWT.Application.User.Query.GetUserById;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -18,16 +17,16 @@ namespace JWT.Tests.Core.Application.User.Command.ConfirmUserEmail
     {
         public Mock<IMediator> Mediator { get; }
         public Mock<MockUserManager> UserManager { get; }
+        public Mock<ILogger<ConfirmUserEmailCommandHandler>> Logger { get; }
         public ConfirmUserEmailCommandHandler Handler { get; }
-        public IMapper Mapper { get; }
 
         public ConfirmUserEmailTest()
         {
             // Arrange
             Mediator = new Mock<IMediator>();
             UserManager = new Mock<MockUserManager>();
-            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new ConfirmUserEmailCommandHandler(Mediator.Object, UserManager.Object, Mapper);
+            Logger = new Mock<ILogger<ConfirmUserEmailCommandHandler>>();
+            Handler = new ConfirmUserEmailCommandHandler(Mediator.Object, UserManager.Object, Logger.Object);
         }
 
         [Theory]
