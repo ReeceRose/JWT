@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using JWT.Persistence;
 using JWT.Domain.Entities;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Http;
 
 namespace JWT.API
 {
@@ -46,7 +48,15 @@ namespace JWT.API
             {
                 mc.AddProfile(new MappingProfile());
             });
+
             services.AddSingleton(mappingConfig.CreateMapper());
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
             services
                 .AddHealthChecks()
@@ -86,7 +96,8 @@ namespace JWT.API
                         ValidateAudience = true,
                         ValidAudience = Configuration["JWT:Audience"]
                     };
-                });
+                })
+                .AddCookie();
 
             services.AddAuthorization(options =>
             {
@@ -98,7 +109,11 @@ namespace JWT.API
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
-            
+
+            services.AddCors();
+
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
             services.AddMvc(
                     options =>
                     {
@@ -113,13 +128,11 @@ namespace JWT.API
                 c.SwaggerDoc("v1", new Info { Title = "JWT API", Version = "v1" });
             });
 
-            services.AddCors();
-
             services.AddMediatR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
         {
             if (env.IsDevelopment())
             {
@@ -140,9 +153,8 @@ namespace JWT.API
                     builder.AllowAnyMethod();
                     builder.AllowAnyOrigin();
                 });
-                //                app.UseCors(builder => { builder.WithOrigins("https://YOURDOMAIN.com"); });
             }
-
+            
             UpdateDatabase(app);
 
             app.UseSwagger();
@@ -155,9 +167,28 @@ namespace JWT.API
             app.UseHealthChecks("/ready");
 
             app.UseAuthentication();
+
+            app.Use(async (context, next) =>
+            {
+                string path = context.Request.Path.Value;
+                if (path != null && !path.ToLower().Contains("/api"))
+                {
+                    // XSRF-TOKEN used by angular in the $http if provided
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN",
+                        tokens.RequestToken, new CookieOptions
+                        {
+                            HttpOnly = false,
+                            Secure = true
+                        }
+                    );
+                }
+ 
+                await next();
+            });
+
             app.UseHttpsRedirection();
             app.UseMvc();
-
         }
 
         private static void UpdateDatabase(IApplicationBuilder app)

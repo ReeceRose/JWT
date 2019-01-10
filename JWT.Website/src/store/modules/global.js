@@ -1,12 +1,16 @@
+import axios from "../../axios";
+
 const global = {
     namespaced: true,
     state: {
         token: null,
-        loading: false
+        crsfToken: null,
+        loading: false,
     },
     getters: {
         // TOKEN
         getToken: state => state.token,
+        getCrsfToken: state => state.crsfToken,
         // LOADING
         isLoading: state => state.loading
     },
@@ -20,6 +24,9 @@ const global = {
         },
         setCookie: (token) => {
             window.$cookies.set("token", JSON.stringify(token))
+        },
+        setCrsfToken: (state, token) => {
+            state.crsfToken = token
         },
         removeCookie: () => {
             window.$cookies.remove("token")
@@ -35,12 +42,16 @@ const global = {
         },
         loadToken({ commit }) {
             commit("setLoading", true)
+            axios.get('home/')
+                .then((response) => {
+                    // console.log(response)
+                    window.$cookies.set("X-XSRF-TOKEN", response.data.token)
+                    axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token
+                })
+                .catch(() => {})
             if (window.$cookies.get("token")) {
                 commit("setToken", window.$cookies.get("token").token)
             }
-            // if (localStorage.getItem("token")) {
-            //     commit("setToken", JSON.parse(localStorage.getItem("token")))
-            // }
             commit("setLoading", false)
         },
         updateCookie({ commit }, token) {
