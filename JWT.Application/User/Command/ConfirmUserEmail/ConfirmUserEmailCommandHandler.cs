@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JWT.Application.User.Command.ConfirmUserEmail
@@ -15,20 +15,22 @@ namespace JWT.Application.User.Command.ConfirmUserEmail
     {
         private readonly IMediator _mediator;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMapper _mapper;
+        private readonly ILogger<ConfirmUserEmailCommandHandler> _logger;
 
-        public ConfirmUserEmailCommandHandler(IMediator mediator, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public ConfirmUserEmailCommandHandler(IMediator mediator, UserManager<ApplicationUser> userManager, ILogger<ConfirmUserEmailCommandHandler> logger)
         {
             _mediator = mediator;
             _userManager = userManager;
-            _mapper = mapper;
+            _logger = logger;
         }
+
         public async Task<bool> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
         {
             var user = await _mediator.Send(new GetUserByIdQuery(Base64UrlEncoder.Decode(request.UserId)), cancellationToken);
 
             if (user == null)
             {
+                _logger.LogInformation($"Confirm User Email: {request.UserId}: Failed confirmation: User does not exist");
                 throw new InvalidUserException();
             }
             
@@ -37,9 +39,10 @@ namespace JWT.Application.User.Command.ConfirmUserEmail
 
             if (!result.Succeeded)
             {
+                _logger.LogInformation($"Confirm User Email: {request.UserId}: Failed confirmation: {result.Errors}");
                 throw new Exception("Failed to confirm email");
             }
-
+            _logger.LogInformation($"Confirm User Email: {request.UserId}: Successful confirmation");
             return await Task.FromResult(result.Succeeded);
         }
     }

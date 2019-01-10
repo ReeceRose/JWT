@@ -339,3 +339,5 @@ ASALocalRun/
 
 **/azure-secrets.json
 .vscode
+
+JWT.API/Logs

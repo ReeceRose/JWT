@@ -10,6 +10,7 @@ using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -21,6 +22,7 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
         public Mock<MockSignInManager> SignInManager { get; }
         public Mock<MockUserManager> UserManager { get; }
         public IMapper Mapper { get; }
+        public Mock<ILogger<LoginUserQueryHandler>> Logger { get; }
         public LoginUserQueryHandler Handler { get; }
 
         public LoginUserTest()
@@ -30,7 +32,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
             SignInManager = new Mock<MockSignInManager>();
             UserManager = new Mock<MockUserManager>();
             Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new LoginUserQueryHandler(Mediator.Object, SignInManager.Object, UserManager.Object, Mapper);
+            Logger = new Mock<ILogger<LoginUserQueryHandler>>();
+            Handler = new LoginUserQueryHandler(Mediator.Object, SignInManager.Object, UserManager.Object, Mapper, Logger.Object);
         }
 
         [Theory]

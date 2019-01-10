@@ -1,16 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Application.Interfaces;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Token;
 using JWT.Application.User.Query.GetUserByEmail;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -22,8 +21,8 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
         public Mock<INotificationService> NotificationService { get; }
         public Mock<IConfiguration> Configuration { get; }
         public Mock<MockUserManager> UserManager { get; }
+        public Mock<ILogger<GenerateEmailConfirmationEmailQueryHandler>> Logger { get; }
         public GenerateEmailConfirmationEmailQueryHandler Handler { get; }
-        public IMapper Mapper { get; }
 
         public GenerateEmailConfirmationEmailTest()
         {
@@ -33,8 +32,8 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateEmailConfirmation.Email
             Configuration = new Mock<IConfiguration>();
             Configuration.SetupGet(x => x["FrontEndUrl"]).Returns("url.com");
             UserManager = new Mock<MockUserManager>();
-            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new GenerateEmailConfirmationEmailQueryHandler(Mediator.Object, NotificationService.Object, Configuration.Object, UserManager.Object, Mapper);
+            Logger = new Mock<ILogger<GenerateEmailConfirmationEmailQueryHandler>>();
+            Handler = new GenerateEmailConfirmationEmailQueryHandler(Mediator.Object, NotificationService.Object, Configuration.Object, UserManager.Object, Logger.Object);
         }
 
         [Theory]
