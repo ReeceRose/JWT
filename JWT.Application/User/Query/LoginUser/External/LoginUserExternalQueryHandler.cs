@@ -9,6 +9,7 @@ using JWT.Application.User.Query.GetUserClaim;
 using JWT.Application.Utilities;
 using JWT.Domain.Exceptions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace JWT.Application.User.Query.LoginUser.External
 {
@@ -16,11 +17,13 @@ namespace JWT.Application.User.Query.LoginUser.External
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly ILogger<LoginUserExternalQueryHandler> _logger;
 
-        public LoginUserExternalQueryHandler(IMediator mediator, IMapper mapper)
+        public LoginUserExternalQueryHandler(IMediator mediator, IMapper mapper, ILogger<LoginUserExternalQueryHandler> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<string> Handle(LoginUserExternalQuery request, CancellationToken cancellationToken)
@@ -40,7 +43,8 @@ namespace JWT.Application.User.Query.LoginUser.External
 
                 if (!result.Succeeded)
                 {
-                    throw new InvalidRegisterException("Failed to register account with Facebook");
+                    _logger.LogInformation($"LoginUserExternal: {request.Email}: Failed login: Failed to create a local user");
+                    throw new InvalidRegisterException("Failed to register account with third party login provider");
                 }
             }
 
