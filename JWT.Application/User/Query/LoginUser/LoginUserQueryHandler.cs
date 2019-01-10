@@ -11,6 +11,7 @@ using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace JWT.Application.User.Query.LoginUser
 {
@@ -20,14 +21,16 @@ namespace JWT.Application.User.Query.LoginUser
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly ILogger<LoginUserQueryHandler> _logger;
 
 
-        public LoginUserQueryHandler(IMediator mediator, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public LoginUserQueryHandler(IMediator mediator, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IMapper mapper, ILogger<LoginUserQueryHandler> logger)
         {
             _mediator = mediator;
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
+            _logger = logger;
         }
         
         public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
@@ -60,6 +63,8 @@ namespace JWT.Application.User.Query.LoginUser
             }
 
             var claims = _mediator.Send(new GetUserClaimQuery(mappedUser), cancellationToken).Result;
+
+            _logger.LogInformation($"User: {user.Email} logged in successfully");
 
             return await _mediator.Send(new GenerateLoginTokenQuery(claims), cancellationToken);
         }

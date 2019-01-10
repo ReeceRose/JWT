@@ -22,6 +22,7 @@ using JWT.Persistence;
 using JWT.Domain.Entities;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace JWT.API
 {
@@ -54,7 +55,7 @@ namespace JWT.API
             services
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
-
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySQL(Configuration["ConnectionStrings:MySQL"],
                     optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
@@ -123,7 +124,7 @@ namespace JWT.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery, ILoggerFactory logger)
         {
             if (env.IsDevelopment())
             {
@@ -154,7 +155,10 @@ namespace JWT.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API V1");
                 c.RoutePrefix = string.Empty;
             });
-            
+
+
+            logger.AddFile("Logs/JWT.txt");
+
             app.UseHealthChecks("/ready");
 
             app.UseAuthentication();
