@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Model;
@@ -39,6 +37,7 @@ namespace JWT.Application.User.Query.LoginUser
             
             if (user == null)
             {
+                _logger.LogInformation($"LoginUser: {request.Email}: Failed login: User does not exist");
                 throw new InvalidCredentialException();
             }
 
@@ -48,23 +47,24 @@ namespace JWT.Application.User.Query.LoginUser
 
             if (result.IsLockedOut)
             {
+                _logger.LogInformation($"LoginUser: {request.Email}: Failed login: Account is locked out");
                 throw new AccountLockedException();
             }
-
-            await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
 
             if (!(result.Succeeded))
             {
                 if (!(await _userManager.IsEmailConfirmedAsync(user)))
                 {
+                    _logger.LogInformation($"LoginUser: {request.Email}: Failed login: Email not confirmed");
                     throw new EmailNotConfirmedException();
                 }
+                _logger.LogInformation($"LoginUser: {request.Email}: Failed login: Invalid credentials");
                 throw new InvalidCredentialException();
             }
 
             var claims = _mediator.Send(new GetUserClaimQuery(mappedUser), cancellationToken).Result;
 
-            _logger.LogInformation($"User: {user.Email} logged in successfully");
+            _logger.LogInformation($"LoginUser: {user.Email}: Successful login");
 
             return await _mediator.Send(new GenerateLoginTokenQuery(claims), cancellationToken);
         }
