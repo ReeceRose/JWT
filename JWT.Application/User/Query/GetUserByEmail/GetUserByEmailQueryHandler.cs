@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using JWT.Application.User.Model;
+using JWT.Domain.Entities;
 using JWT.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWT.Application.User.Query.GetUserByEmail
 {
-    public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, ApplicationUserDto>
+    public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, ApplicationUser>
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
 
-        public GetUserByEmailQueryHandler(ApplicationDbContext context, IMapper mapper)
+        public GetUserByEmailQueryHandler(ApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<ApplicationUserDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+        public async Task<ApplicationUser> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<ApplicationUserDto>(await _context.Users.FirstOrDefaultAsync(
-                u => String.Equals(u.Email, request.Email, StringComparison.CurrentCultureIgnoreCase),
-                cancellationToken: cancellationToken)); ;
+            return await _context.Users.FirstOrDefaultAsync(
+                u => string.Equals(u.Email, request.Email, StringComparison.CurrentCultureIgnoreCase),
+                cancellationToken: cancellationToken);
         }
     }
 }

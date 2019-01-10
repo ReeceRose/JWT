@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using JWT.Application.User.Command.CreateUser;
 using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateLoginToken;
@@ -14,15 +15,17 @@ namespace JWT.Application.User.Query.LoginUser.External
     public class LoginUserExternalQueryHandler : IRequestHandler<LoginUserExternalQuery, string>
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public LoginUserExternalQueryHandler(IMediator mediator)
+        public LoginUserExternalQueryHandler(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         public async Task<string> Handle(LoginUserExternalQuery request, CancellationToken cancellationToken)
         {
-            var user = _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result;
+            var user = _mapper.Map<ApplicationUserDto>(_mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result);
 
             if (user == null)
             {

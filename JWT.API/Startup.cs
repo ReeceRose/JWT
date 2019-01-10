@@ -20,7 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using JWT.Persistence;
 using JWT.Domain.Entities;
-using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Http;
 
 namespace JWT.API
 {
@@ -47,14 +48,16 @@ namespace JWT.API
             {
                 mc.AddProfile(new MappingProfile());
             });
+
             services.AddSingleton(mappingConfig.CreateMapper());
-            
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySQL(Configuration["ConnectionStrings:MySQL"],
-                    optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
+
             services
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySQL(Configuration["ConnectionStrings:MySQL"],
+                    optionsBuilder => { optionsBuilder.MigrationsAssembly("JWT.Persistence"); }));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -86,7 +89,8 @@ namespace JWT.API
                         ValidateAudience = true,
                         ValidAudience = Configuration["JWT:Audience"]
                     };
-                });
+                })
+                .AddCookie();
 
             services.AddAuthorization(options =>
             {
@@ -98,6 +102,8 @@ namespace JWT.API
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+
+            services.AddCors();
             
             services.AddMvc(
                     options =>
@@ -113,13 +119,11 @@ namespace JWT.API
                 c.SwaggerDoc("v1", new Info { Title = "JWT API", Version = "v1" });
             });
 
-            services.AddCors();
-
             services.AddMediatR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
         {
             if (env.IsDevelopment())
             {
@@ -140,15 +144,8 @@ namespace JWT.API
                     builder.AllowAnyMethod();
                     builder.AllowAnyOrigin();
                 });
-                //                app.UseCors(builder => { builder.WithOrigins("https://YOURDOMAIN.com"); });
             }
-
-            // NGINX Reverse Proxy
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-
+            
             UpdateDatabase(app);
 
             app.UseSwagger();
@@ -161,9 +158,9 @@ namespace JWT.API
             app.UseHealthChecks("/ready");
 
             app.UseAuthentication();
+
             app.UseHttpsRedirection();
             app.UseMvc();
-
         }
 
         private static void UpdateDatabase(IApplicationBuilder app)

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Query.GetUserById;
@@ -6,6 +7,7 @@ using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JWT.Application.User.Command.ConfirmUserEmail
 {
@@ -23,13 +25,20 @@ namespace JWT.Application.User.Command.ConfirmUserEmail
         }
         public async Task<bool> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
         {
-            var user = await _mediator.Send(new GetUserByIdQuery(request.UserId), cancellationToken);
+            var user = await _mediator.Send(new GetUserByIdQuery(Base64UrlEncoder.Decode(request.UserId)), cancellationToken);
+
             if (user == null)
             {
                 throw new InvalidUserException();
             }
+            
+            var result = await _userManager.ConfirmEmailAsync(user,
+                Base64UrlEncoder.Decode(request.Token));
 
-            var result = await _userManager.ConfirmEmailAsync(_mapper.Map<ApplicationUser>(user), request.Token);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to confirm email");
+            }
 
             return await Task.FromResult(result.Succeeded);
         }

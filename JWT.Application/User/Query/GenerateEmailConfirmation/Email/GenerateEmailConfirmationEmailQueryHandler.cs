@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.Interfaces;
@@ -9,6 +10,7 @@ using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JWT.Application.User.Query.GenerateEmailConfirmation.Email
 {
@@ -38,15 +40,15 @@ namespace JWT.Application.User.Query.GenerateEmailConfirmation.Email
                 throw new InvalidUserException();
             }
 
-            if (await _userManager.IsEmailConfirmedAsync(_mapper.Map<ApplicationUser>(user)))
+            if (await _userManager.IsEmailConfirmedAsync(user))
             {
                 throw new EmailIsAlreadyConfirmedException();
             }
-
+            
             var token = _mediator.Send(new GenerateEmailConfirmationTokenQuery(user), cancellationToken).Result;
-
+            Console.WriteLine(token);
             await _notificationService.SendNotificationAsync(toName: request.Email, toEmailAddress: request.Email, subject: "Confirm your account",
-                message: $"In order to login you must confirm your account. To continue click <a href='{_configuration["FrontEndUrl"]}/ConfirmEmail?userId={user.Id}&token={token}'>here</a>");
+                message: $"In order to login you must confirm your account. To continue click <a href='{_configuration["FrontEndUrl"]}/User/ConfirmEmail?userId={Base64UrlEncoder.Encode(user.Id)}&token={Base64UrlEncoder.Encode(token)}'>here</a>");
             
             return await Task.FromResult(token);
         }

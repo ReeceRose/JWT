@@ -31,9 +31,9 @@ namespace JWT.Application.User.Command.RegisterUser
                 throw new AccountAlreadyExistsException(email);
             }
 
-            user = _mapper.Map<ApplicationUserDto>(request);
+            var mappedUser = _mapper.Map<ApplicationUserDto>(request);
 
-            var result = await _mediator.Send(new CreateUserCommand(user, request.Password), cancellationToken);
+            var result = await _mediator.Send(new CreateUserCommand(mappedUser, request.Password), cancellationToken);
             if (!result.Succeeded)
             {
                 throw new InvalidRegisterException();

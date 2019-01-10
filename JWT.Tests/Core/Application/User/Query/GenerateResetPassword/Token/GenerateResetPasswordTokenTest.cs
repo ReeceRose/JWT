@@ -1,8 +1,5 @@
 ﻿using System.Threading;
-using AutoMapper;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateResetPassword.Token;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Tests.Helpers;
 using Moq;
@@ -13,15 +10,13 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Token
     public class GenerateResetPasswordTokenTest
     {
         public Mock<MockUserManager> UserManager { get; }
-        public IMapper Mapper { get; }
         public GenerateResetPasswordTokenQueryHandler Handler { get; }
 
         public GenerateResetPasswordTokenTest()
         {
             // Arrange
             UserManager = new Mock<MockUserManager>();
-            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
-            Handler = new GenerateResetPasswordTokenQueryHandler(UserManager.Object, Mapper);
+            Handler = new GenerateResetPasswordTokenQueryHandler(UserManager.Object);
         }
 
         [Theory]
@@ -30,7 +25,7 @@ namespace JWT.Tests.Core.Application.User.Query.GenerateResetPassword.Token
         public void GenerateResetPasswordToken_ReturnsValidToken(string email, string token)
         {
             // Arrange
-            var requestedUser = new ApplicationUserDto()
+            var requestedUser = new ApplicationUser()
             {
                 Email = email
             };
