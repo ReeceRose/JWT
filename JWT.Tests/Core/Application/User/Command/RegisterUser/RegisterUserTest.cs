@@ -10,6 +10,7 @@ using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -19,6 +20,7 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
     {
         public Mock<IMediator> Mediator { get; }
         public IMapper Mapper { get; }
+        public Mock<ILogger<RegisterUserCommandHandler>> Logger { get; }
         public RegisterUserCommandHandler Handler { get; }
 
         public RegisterUserTest()
@@ -30,7 +32,8 @@ namespace JWT.Tests.Core.Application.User.Command.RegisterUser
                 cfg.AddProfile(new MappingProfile());
                 cfg.ValidateInlineMaps = false;
             }));
-            Handler = new RegisterUserCommandHandler(Mediator.Object, Mapper);
+            Logger = new Mock<ILogger<RegisterUserCommandHandler>>();
+            Handler = new RegisterUserCommandHandler(Mediator.Object, Mapper, Logger.Object);
         }
 
         [Theory]
