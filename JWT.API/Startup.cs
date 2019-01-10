@@ -51,13 +51,6 @@ namespace JWT.API
 
             services.AddSingleton(mappingConfig.CreateMapper());
 
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
             services
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
@@ -111,9 +104,7 @@ namespace JWT.API
             });
 
             services.AddCors();
-
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
-
+            
             services.AddMvc(
                     options =>
                     {
@@ -167,25 +158,6 @@ namespace JWT.API
             app.UseHealthChecks("/ready");
 
             app.UseAuthentication();
-
-            app.Use(async (context, next) =>
-            {
-                string path = context.Request.Path.Value;
-                if (path != null && !path.ToLower().Contains("/api"))
-                {
-                    // XSRF-TOKEN used by angular in the $http if provided
-                    var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append("XSRF-TOKEN",
-                        tokens.RequestToken, new CookieOptions
-                        {
-                            HttpOnly = false,
-                            Secure = true
-                        }
-                    );
-                }
- 
-                await next();
-            });
 
             app.UseHttpsRedirection();
             app.UseMvc();

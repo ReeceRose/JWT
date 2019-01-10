@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Model;
@@ -45,6 +47,8 @@ namespace JWT.Application.User.Query.LoginUser
             {
                 throw new AccountLockedException();
             }
+
+            await _userManager.AddClaimAsync(user, new Claim("Administrator", ""));
 
             if (!(result.Succeeded))
             {

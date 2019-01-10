@@ -42,13 +42,6 @@ const global = {
         },
         loadToken({ commit }) {
             commit("setLoading", true)
-            axios.get('home/')
-                .then((response) => {
-                    // console.log(response)
-                    window.$cookies.set("X-XSRF-TOKEN", response.data.token)
-                    axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token
-                })
-                .catch(() => {})
             if (window.$cookies.get("token")) {
                 commit("setToken", window.$cookies.get("token").token)
             }

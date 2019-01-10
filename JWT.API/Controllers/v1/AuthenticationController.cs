@@ -21,7 +21,6 @@ namespace JWT.API.Controllers.v1
 
         public AuthenticationController(IMediator mediator) => _mediator = mediator;
 
-        [ValidateAntiForgeryToken]
         [HttpPost("Login")]
         public async Task<IActionResult> PostLoginAsync([FromBody] LoginUserQuery loginUserQuery) => Ok(new { token = await _mediator.Send(loginUserQuery) });
 
