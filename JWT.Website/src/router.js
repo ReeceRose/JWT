@@ -100,12 +100,14 @@ export default new Router({
                 {
                     path: 'ConfirmEmail',
                     name: 'confirmEmail',
-                    component: ConfirmEmail
+                    component: ConfirmEmail,
+                    ...NotLoggedIn
                 },
                 {
                     path: 'RegenerateConfirmationEmail',
                     name: 'regenerateConfirmationEmail',
-                    component: RegenerateConfirmationEmail
+                    component: RegenerateConfirmationEmail,
+                    ...NotLoggedIn
                 },
             ]
         },
