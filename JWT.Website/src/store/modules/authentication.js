@@ -1,8 +1,8 @@
 import axios from '@/axios.js'
 import utilities from '@/utilities.js'
 import global from '@/store/modules/global.js'
-import '@/facebook/init.js'
-import '@/google/init.js'
+import '@/authentication/facebook.js'
+import '@/authentication/google.js'
 // For reference
 // headers: { Authorization: `Bearer ${getters['uthentication/getToken'] || ''}`}
 const authentication = {
