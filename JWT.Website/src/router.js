@@ -4,7 +4,11 @@ import store from '@/store/store.js'
 
 // Lazy load all imports
 const Home = () => import('@/views/Home/Index.vue')
+
+// Dashboard
 const Dashboard = () => import('@/views/Dashboard/Index.vue')
+const UserDashboard = () => import('@/views/Dashboard/Users/Index.vue')
+const DetailedUserDashboard = () => import('@/views/Dashboard/Users/DetailedUser.vue')
 
 // USER
 const UserIndex = () => import('@/views/Home/User/Index.vue')
@@ -115,7 +119,21 @@ export default new Router({
             path: '/Dashboard',
             name: 'dashboard',
             component: Dashboard,
-            ...AdminProtected
+            ...AdminProtected,
+            children: [
+                {
+                    path: 'Users',
+                    name: 'userDashboard',
+                    component: UserDashboard,
+                    children: [
+                        {
+                            path: ':id',
+                            name: 'detailedUserDashboard',
+                            component: DetailedUserDashboard
+                        }
+                    ]
+                }
+            ]
         },
         {
             path: '/AccessDenied',
