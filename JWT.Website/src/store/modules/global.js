@@ -34,18 +34,19 @@ const global = {
     },
     actions: {
         // TOKEN
-        updateToken({ commit }, token) {
+        updateToken: ({ commit }, token) => {
             commit("setToken", token)
             localStorage.setItem("token", JSON.stringify(token))
         },
-        loadToken({ commit }) {
+        loadToken: ({ commit, dispatch, state }) => {
             commit("setLoading", true)
             if (window.$cookies.get("token")) {
+                dispatch("authentication/refreshToken", state.token, { root: true })
                 commit("setToken", window.$cookies.get("token").token)
             }
             commit("setLoading", false)
         },
-        updateCookie({ commit }, token) {
+        updateCookie: ({ commit }, token) => {
             if (token === null ){
                 commit("removeCookie")
             } else {
@@ -55,7 +56,7 @@ const global = {
         // LOADING
         updateLoading({ commit }, isLoading) {
             commit("setLoading", isLoading)
-        }
+        },
     }
 }
 

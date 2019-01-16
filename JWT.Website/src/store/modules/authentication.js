@@ -208,7 +208,30 @@ const authentication = {
                         commit('global/setLoading', false, { root: true })
                     })
             })
-        }
+        },
+        // Called on reload
+        refreshToken: ({ dispatch }, token) => {
+            axios({
+                method: 'get',
+                url: 'authentication/refresh',
+                data: { token: token }
+            })
+                .then((response) => {
+                    const token = response.data.token
+                    // dispatch("global/updateToken", token, { root: true })
+                    // dispatch("global/updateCookie", token, { root: true })
+                })
+                .catch(() => {
+                    console.log('error')
+                    // dispatch("global/updateToken", null, { root: true })
+                    // dispatch("global/updateCookie", null, { root: true })
+                })
+        },
+        verifyAdminToken: ({ getters }) => {
+            return new Promise((resolve, reject) => {
+                
+            })
+        },
     }
 }
 
