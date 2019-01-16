@@ -2,8 +2,8 @@ window.fbAsyncInit = function() {
     // eslint-disable-next-line
     FB.init({
         appId: "780843438933865",
-        autoLogAppEvents: true,
-        xfbml: true,
+        autoLogAppEvents: false,
+        xfbml: false,
         version: "v3.2"
     });
 };
