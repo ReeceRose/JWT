@@ -43,10 +43,5 @@ namespace JWT.API.Controllers.v1
 
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> PostResetPasswordAsync([FromBody] ResetPasswordCommand resetPasswordCommand) => Ok(new { result = await _mediator.Send(resetPasswordCommand) });
-
-        [Authorize]
-        [HttpPost("refresh")]
-        public async Task<IActionResult> PostRefreshTokenAsync([FromBody] RefreshTokenCommand refreshTokenCommand) => Ok(new { result = await _mediator.Send(refreshTokenCommand)});
-
     }
 }

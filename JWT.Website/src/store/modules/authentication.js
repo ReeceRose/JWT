@@ -212,12 +212,14 @@ const authentication = {
         // Called on reload
         refreshToken: ({ dispatch }, token) => {
             axios({
-                method: 'get',
+                method: 'post',
                 url: 'authentication/refresh',
-                data: { token: token }
+                data: { token: token },
+                headers: { Authorization: `Bearer ${token}`}
             })
                 .then((response) => {
-                    const token = response.data.token
+                    console.log(response)
+                    // const token = response.data.token
                     // dispatch("global/updateToken", token, { root: true })
                     // dispatch("global/updateCookie", token, { root: true })
                 })
