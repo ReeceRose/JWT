@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using JWT.Application.User.Command.ConfirmUserEmail;
+using JWT.Application.User.Command.RefreshToken;
 using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.User.Command.ResetPassword;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
@@ -7,6 +8,7 @@ using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.LoginUser;
 using JWT.Application.User.Query.LoginUser.External;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.API.Controllers.v1
@@ -41,5 +43,10 @@ namespace JWT.API.Controllers.v1
 
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> PostResetPasswordAsync([FromBody] ResetPasswordCommand resetPasswordCommand) => Ok(new { result = await _mediator.Send(resetPasswordCommand) });
+
+        [Authorize]
+        [HttpPost("refresh")]
+        public async Task<IActionResult> PostRefreshTokenAsync([FromBody] RefreshTokenCommand refreshTokenCommand) => Ok(new { result = await _mediator.Send(refreshTokenCommand)});
+
     }
 }
