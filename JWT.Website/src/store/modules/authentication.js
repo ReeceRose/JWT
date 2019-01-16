@@ -209,29 +209,19 @@ const authentication = {
                     })
             })
         },
-        // Called on reload
-        refreshToken: ({ dispatch }, token) => {
-            axios({
-                method: 'post',
-                url: 'authentication/refresh',
-                data: { token: token },
-                headers: { Authorization: `Bearer ${token}`}
-            })
-                .then((response) => {
-                    console.log(response)
-                    // const token = response.data.token
-                    // dispatch("global/updateToken", token, { root: true })
-                    // dispatch("global/updateCookie", token, { root: true })
-                })
-                .catch(() => {
-                    console.log('error')
-                    // dispatch("global/updateToken", null, { root: true })
-                    // dispatch("global/updateCookie", null, { root: true })
-                })
-        },
-        verifyAdminToken: ({ getters }) => {
+        verifyIsAdmin: ({ rootGetters }) => {
             return new Promise((resolve, reject) => {
-                
+                axios({
+                    method: 'get',
+                    url: 'admin/verify',
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
             })
         },
     }

@@ -38,10 +38,9 @@ const global = {
             commit("setToken", token)
             localStorage.setItem("token", JSON.stringify(token))
         },
-        loadToken: ({ commit, dispatch, state }) => {
+        loadToken: ({ commit }) => {
             commit("setLoading", true)
             if (window.$cookies.get("token")) {
-                dispatch("authentication/refreshToken", state.token, { root: true })
                 commit("setToken", window.$cookies.get("token").token)
             }
             commit("setLoading", false)

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using JWT.Application.User.Command.ConfirmUserEmail;
-using JWT.Application.User.Command.RefreshToken;
 using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.User.Command.ResetPassword;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
@@ -8,7 +7,6 @@ using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.LoginUser;
 using JWT.Application.User.Query.LoginUser.External;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.API.Controllers.v1

@@ -10,10 +10,11 @@ namespace JWT.API.Controllers.v1
     [ApiController]
     public class AdminController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Index()
+        // If the user is authenticated this will simply just return Ok, if not return an error
+        [HttpGet("Verify")]
+        public IActionResult GetVerifyIsAdmin()
         {
-            return Ok();
+            return Ok(new { result = true });
         }
     }
 }

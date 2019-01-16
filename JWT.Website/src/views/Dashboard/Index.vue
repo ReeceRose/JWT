@@ -36,6 +36,17 @@ export default {
         userClick() {
             this.$router.push({ name: 'userDashboard' })
         }
+    },
+    beforeCreate() {
+        this.$store.dispatch("authentication/verifyIsAdmin")
+            .then(() => {
+                // Nothing
+            })
+            .catch(() => {
+                // This will clean up the tokens
+                this.$store.dispatch("authentication/logout")
+                this.$router.push({ name: 'home' })
+            })
     }
 }
 </script>
