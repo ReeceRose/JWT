@@ -15,7 +15,7 @@ export default {
         }
     },
     beforeCreate() {
-        axios.get('https://localhost:5001/ready')
+        axios.get('https://localhost:5001/health')
         .then((response) => {
             this.result = response.data
         })

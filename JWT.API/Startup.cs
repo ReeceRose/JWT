@@ -159,7 +159,7 @@ namespace JWT.API
 
             logger.AddFile("Logs/JWT.txt");
 
-            app.UseHealthChecks("/ready");
+            app.UseHealthChecks("/health");
 
             app.UseAuthentication();
 
