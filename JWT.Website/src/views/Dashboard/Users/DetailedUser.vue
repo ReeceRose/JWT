@@ -12,7 +12,10 @@
                         <li><span class="item">Date Joined: {{ user.dateJoined }}</span></li>
                         <li>
                             <span class="item" v-if="user.emailConfirmed">Email Confirmed</span>
-                            <span class="item" v-else><button class="btn btn-primary">Send Confirmation Email</button></span>
+                            <span class="item" v-else>
+                                <button class="btn btn-primary">Send Confirmation Email</button>
+                                <button class="btn btn-primary">Force Email Confirmation</button>
+                            </span>
                         </li>
                         <li>
                             <span class="item" v-if="user.accountEnabled"><button class="btn btn-primary">Disable Account</button></span>
