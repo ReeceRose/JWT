@@ -1,7 +1,7 @@
 <template>
     <div>
         <ApiHealth/>
-        <div v-if="this.$route.name === 'dashboard' ">
+        <div v-if="this.$route.name === 'dashboard'">
             <h1 class="text-left pt-3">
                 Admin Dashboard
             </h1>
@@ -15,6 +15,8 @@
                     </div>
                 </HeaderCard>
             </div>
+            <!-- Verify is admin only on inital load of dashboard -->
+            {{ verifyIsAdmin() }}
         </div>
         <div v-else>
             <router-view></router-view>
@@ -40,18 +42,18 @@ export default {
     methods: {
         userClick() {
             this.$router.push({ name: 'userDashboard' })
+        },
+        verifyIsAdmin() {
+            this.$store.dispatch("authentication/verifyIsAdmin")
+                .then(() => {
+                    // Nothing
+                })
+                .catch(() => {
+                    // This will clean up the tokens
+                    this.$store.dispatch("authentication/logout")
+                    this.$router.push({ name: 'home' })
+                })
         }
-    },
-    beforeCreate() {
-        this.$store.dispatch("authentication/verifyIsAdmin")
-            .then(() => {
-                // Nothing
-            })
-            .catch(() => {
-                // This will clean up the tokens
-                this.$store.dispatch("authentication/logout")
-                this.$router.push({ name: 'home' })
-            })
     }
 }
 </script>
