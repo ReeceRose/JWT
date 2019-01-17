@@ -12,11 +12,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(user, index) in users" :key="index">
+                <tr v-for="user in users" :key="user.id" @click="viewDetailedUser(user.id)" class="pointer">
                     <td>{{ user.email }}</td>
                     <td>{{ user.dateJoined }}</td>
-                    <td>{{ user.accountEnabled }}</td>
                     <td>{{ user.emailConfirmed }}</td>
+                    <td>{{ user.accountEnabled }}</td>
                     <td>Edit | Delete</td>
                 </tr>
             </tbody>
@@ -34,19 +34,32 @@ export default {
         return {
             users: [
                 {
+                    id: '123123',
                     email: 'email here',
                     dateJoined: 'date here',
-                    accountEnabled: false,
-                    emailConfirmed: false
+                    accountEnabled: true,
+                    emailConfirmed: true
                 },
                 {
+                    id: '3123',
                     email: 'email here 2',
                     dateJoined: 'date here 2',
-                    accountEnabled: false,
-                    emailConfirmed: false
+                    accountEnabled: true,
+                    emailConfirmed: true
                 },
             ]
+        }
+    },
+    methods: {
+        viewDetailedUser(id) {
+            console.log(id)
         }
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.pointer {
+    cursor: pointer;
+}
+</style>
