@@ -17,7 +17,7 @@
                     <td>{{ user.dateJoined }}</td>
                     <td>{{ user.emailConfirmed }}</td>
                     <td>{{ user.accountEnabled }}</td>
-                    <td>Edit | Delete</td>
+                    <td><button class="btn btn-primary" @click="viewDetailedUser(user.id)">Edit</button></td>
                 </tr>
             </tbody>
         </table>
@@ -52,6 +52,7 @@ export default {
     },
     methods: {
         viewDetailedUser(id) {
+            this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
             console.log(id)
         }
     }
