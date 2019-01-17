@@ -1,5 +1,5 @@
 <template>
-	<FormCard title="Login" :submit="submit" v-if="this.$route.name === 'login'">
+	<FormNarrowCard title="Login" :submit="submit" v-if="this.$route.name === 'login'">
 		<div slot="card-information">
 			<p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>
             <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
@@ -28,26 +28,26 @@
 				<GoogleButton :submit="google" />
 			</div>
 		</div>
-	</FormCard>
+	</FormNarrowCard>
 	<div v-else>
 		<router-view></router-view>
 	</div>
 </template>
 
 <script>
-import FormCard from "@/components/UI/Card/FormCard.vue";
-import FormEmail from "@/components/UI/Form/Email.vue";
-import FormPassword from "@/components/UI/Form/Password.vue";
-import Strike from "@/components/UI/Form/Strike.vue";
-import FacebookButton from "@/components/UI/Button/Social/Facebook.vue";
-import GoogleButton from "@/components/UI/Button/Social/Google.vue";
+import FormNarrowCard from '@/components/UI/Card/Form/FormNarrowCard.vue'
+import FormEmail from "@/components/UI/Form/Email.vue"
+import FormPassword from "@/components/UI/Form/Password.vue"
+import Strike from "@/components/UI/Form/Strike.vue"
+import FacebookButton from "@/components/UI/Button/Social/Facebook.vue"
+import GoogleButton from "@/components/UI/Button/Social/Google.vue"
 
-import { required, minLength, email } from "vuelidate/lib/validators";
+import { required, minLength, email } from "vuelidate/lib/validators"
 
 export default {
 	name: "LoginIndex",
 	components: {
-		FormCard,
+		FormNarrowCard,
 		FormEmail,
 		FormPassword,
 		Strike,

@@ -1,5 +1,5 @@
 <template>
-    <FormCard title="Register" :submit="submit">
+    <FormNarrowCard title="Register" :submit="submit">
         <div slot="card-information">
             <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
             <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
@@ -19,11 +19,11 @@
             <FacebookButton :submit="facebook"/>
             <GoogleButton :submit="google"/>
         </div>
-    </FormCard>
+    </FormNarrowCard>
 </template>
 
 <script>
-import FormCard from '@/components/UI/Card/FormCard.vue'
+import FormNarrowCard from '@/components/UI/Card/Form/FormNarrowCard.vue'
 import FormEmail from '@/components/UI/Form/Email.vue'
 import FormPassword from '@/components/UI/Form/Password.vue'
 import Strike from '@/components/UI/Form/Strike.vue'
@@ -35,7 +35,7 @@ const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=
 
 export default {
     components: {
-        FormCard,
+        FormNarrowCard,
         FormEmail,
         FormPassword,
         Strike,

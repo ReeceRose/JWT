@@ -4,9 +4,6 @@
             <div class="card custom-card my-5">
                 <div class="custom-card-body">
                     <h5 class="custom-card-title text-center">{{ title }}</h5>
-                    <slot name="card-information">
-
-                    </slot>
                     <slot name="card-content">
 
                     </slot>

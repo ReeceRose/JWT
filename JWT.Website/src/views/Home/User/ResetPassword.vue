@@ -1,35 +1,35 @@
 <template>
-  <FormCard title="Reset Password" :submit="submit">
-        <div slot="card-information">
-            <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
-            <p v-if="passwordReset" class="text-success text-center mb-3">Password has been reset</p>
-            <p v-if="error" class="text-danger text-center mb-3">An error has occured, please try again</p>
+    <FormNarrowCard title="Reset Password" :submit="submit">
+            <div slot="card-information">
+                <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
+                <p v-if="passwordReset" class="text-success text-center mb-3">Password has been reset</p>
+                <p v-if="error" class="text-danger text-center mb-3">An error has occured, please try again</p>
+            </div>
+        <div slot="card-content">
+            <div v-if="!token">
+                <FormEmail
+                    v-model="email"
+                    :validator="$v.email"
+                />
+            </div>
+            <div v-else>
+                <FormPassword
+                    v-model="password"
+                    :validator="$v.password"
+                />
+                <FormPassword
+                    v-model="confirmationPassword"
+                    confirmationPassword="true"
+                    :validator="$v.confirmationPassword"
+                />
+            </div>
+            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Reset Password</button>
         </div>
-    <div slot="card-content">
-        <div v-if="!token">
-            <FormEmail
-                v-model="email"
-                :validator="$v.email"
-            />
-        </div>
-        <div v-else>
-            <FormPassword
-                v-model="password"
-                :validator="$v.password"
-            />
-            <FormPassword
-                v-model="confirmationPassword"
-                confirmationPassword="true"
-                :validator="$v.confirmationPassword"
-            />
-        </div>
-        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Reset Password</button>
-    </div>
-  </FormCard>
+    </FormNarrowCard>
 </template>
 
 <script>
-import FormCard from "@/components/UI/Card/FormCard.vue"
+import FormNarrowCard from '@/components/UI/Card/Form/FormNarrowCard.vue'
 import FormEmail from "@/components/UI/Form/Email.vue"
 import FormPassword from "@/components/UI/Form/Password.vue"
 
@@ -39,7 +39,7 @@ const passwordRegex = helpers.regex("passwordRegex", /^(?=.*[a-z])(?=.*[A-Z])(?=
 export default {
     name: "ResetPassword",
     components: {
-        FormCard,
+        FormNarrowCard,
         FormEmail,
         FormPassword
     },
