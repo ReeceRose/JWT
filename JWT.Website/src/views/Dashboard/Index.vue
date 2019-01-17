@@ -1,7 +1,8 @@
 <template>
     <div>
         <ApiHealth/>
-        <div v-if="this.$route.name === 'dashboard'">
+        <!-- Verify is admin only on inital load of dashboard -->
+        <div v-if="this.$route.name === 'dashboard' && verifyIsAdmin()" >
             <h1 class="text-left pt-3">
                 Admin Dashboard
             </h1>
@@ -15,8 +16,6 @@
                     </div>
                 </HeaderCard>
             </div>
-            <!-- Verify is admin only on inital load of dashboard -->
-            {{ verifyIsAdmin() }}
         </div>
         <div v-else>
             <router-view></router-view>
