@@ -15,6 +15,7 @@
 
 <script>
 export default {
+    name: 'WideCard',
     props: {
         title: String
     },
