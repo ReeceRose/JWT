@@ -40,7 +40,6 @@ export default {
     methods: {
         viewDetailedUser(id) {
             this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
-            console.log(id)
         },
         getAllUsers() {
             this.$store.dispatch("users/getUsers")

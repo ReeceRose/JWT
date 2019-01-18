@@ -90,22 +90,22 @@ export default {
 			this.$store
 				.dispatch("authentication/facebookLogin")
 				.then(() => {
-					this.$router.push({ name: "home" });
+					this.$router.push({ name: "home" })
 				})
 				.catch(() => {
 					this.error = true;
-					this.errorMessage = "Failed to register with Facebook";
+					this.errorMessage = "Failed to register with Facebook"
 				});
         },
 		google() {
             this.$store
 				.dispatch("authentication/googleLogin")
 				.then(() => {
-                    this.$router.push({ name: "home" });
+                    this.$router.push({ name: "home" })
 				})
 				.catch(() => {
-					this.error = true;
-					this.errorMessage = "Failed to login with Google";
+					this.error = true
+					this.errorMessage = "Failed to login with Google"
 				});
 		}
     }

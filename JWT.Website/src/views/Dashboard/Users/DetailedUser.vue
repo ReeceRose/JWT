@@ -44,8 +44,23 @@ export default {
                     dateJoined: '12/12/2018',
                     accountEnabled: true,
                     emailConfirmed: true
-                }
+            }
         }
+    },
+    methods: {
+            getUser(userId) {
+            this.$store.dispatch("users/getUser", userId)
+                .then((users) => {
+                    console.log(users)
+                    // this.users = users
+                })
+                .catch(() => {
+                    this.error = true
+                })
+        }
+    },
+    created() {
+        this.getUser(this.$route.params.id)
     }
 }
 </script>
