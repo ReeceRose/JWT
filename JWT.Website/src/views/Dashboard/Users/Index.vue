@@ -1,6 +1,7 @@
 <template>
     <div v-if="this.$route.name === 'userDashboard' " class="pt-3 table-responsive">
         <h2 class="text-center pb-4">Users</h2>
+        <h5 v-if="error" class="text-danger">Failed to load users</h5>
         <table border="1" class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
@@ -15,8 +16,8 @@
                 <tr v-for="user in users" :key="user.id" @click="viewDetailedUser(user.id)" class="pointer">
                     <td>{{ user.email }}</td>
                     <td>{{ user.dateJoined }}</td>
-                    <td>{{ user.emailConfirmed }}</td>
-                    <td>{{ user.accountEnabled }}</td>
+                    <td class="upper">{{ user.emailConfirmed }}</td>
+                    <td class="upper">{{ user.lockoutEnabled }}</td>
                     <td><button class="btn btn-primary" @click="viewDetailedUser(user.id)">Edit</button></td>
                 </tr>
             </tbody>
@@ -32,29 +33,27 @@ export default {
     name: 'UserDashboard',
     data() {
         return {
-            users: [
-                {
-                    id: '123123',
-                    email: 'email here',
-                    dateJoined: 'date here',
-                    accountEnabled: true,
-                    emailConfirmed: true
-                },
-                {
-                    id: '3123',
-                    email: 'email here 2',
-                    dateJoined: 'date here 2',
-                    accountEnabled: true,
-                    emailConfirmed: true
-                },
-            ]
+            users: [],
+            error: false
         }
     },
     methods: {
         viewDetailedUser(id) {
             this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
             console.log(id)
+        },
+        getAllUsers() {
+            this.$store.dispatch("users/getUsers")
+                .then((users) => {
+                    this.users = users
+                })
+                .catch(() => {
+                    this.error = true
+                })
         }
+    },
+    created() {
+        this.getAllUsers()
     }
 }
 </script>
@@ -62,5 +61,8 @@ export default {
 <style lang="scss" scoped>
 .pointer {
     cursor: pointer;
+}
+.upper::first-letter {
+    text-transform: capitalize;
 }
 </style>

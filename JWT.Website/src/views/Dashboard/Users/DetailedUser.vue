@@ -18,7 +18,7 @@
                             </span>
                         </li>
                         <li>
-                            <span class="item" v-if="user.accountEnabled"><button class="btn btn-primary">Disable Account</button></span>
+                            <span class="item" v-if="user.lockoutEnabled"><button class="btn btn-primary">Disable Account</button></span>
                             <span class="item" v-else><button class="btn btn-primary">Enable Account</button></span>
                         </li>
                     </ul>

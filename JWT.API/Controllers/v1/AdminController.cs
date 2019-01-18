@@ -1,6 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using JWT.Application.User.Query.GetAllUsers;
+using JWT.Application.User.Query.GetUserCount;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,11 @@ namespace JWT.API.Controllers.v1
         [HttpGet("Verify")]
         public IActionResult GetVerifyIsAdmin() { return Ok(new { result = true }); }
 
+        // TODO: Pagination
+        [HttpGet("Users")]
+        public async Task<IActionResult> GetAllUsers() { return Ok(new { result = await _mediator.Send(new GetAllUsersQuery() )}); }
+
         [HttpGet("Users/Count")]
-        public async Task<IActionResult> GetUserCountAsync() { return Ok(new  { result = await _mediator.Send(new GetAllUsersQuery())}); }
+        public async Task<IActionResult> GetUserCountAsync() { return Ok(new { result = await _mediator.Send(new GetUserCountQuery())}); }
     }
 }

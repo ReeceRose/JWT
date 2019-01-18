@@ -22,20 +22,6 @@ namespace JWT.Application.User.Query.GetAllUsers
             _mapper = mapper;
         }
 
-        public async Task<List<ApplicationUserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
-        {
-            var users = await _dbContext.Users.ToListAsync(cancellationToken: cancellationToken);
-            var mappedUsers = _mapper.Map<List<ApplicationUserDto>>(users);
-//            var users = _mapper.Map<List<ApplicationUserDto>>(await _dbContext.Users.ToListAsync(cancellationToken: cancellationToken));
-//            return users;
-            return mappedUsers;
-//            return Task.FromResult(users);
-//            return Task.FromResult(_mapper.Map<List<ApplicationUserDto>>(_dbContext.Users.ToListAsync(cancellationToken: cancellationToken)));
-
-
-//            return _mapper.Map<List<ApplicationUserDto>, List<ApplicationUser>>(_dbContext.Users.ToList());
-//            return Task.FromResult(_dbContext.Users.ToList());
-//            return _mapper.Map<List<ApplicationUserDto>>(await _dbContext.Users.ToListAsync().Result);
-        }
+        public async Task<List<ApplicationUserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken) => _mapper.Map<List<ApplicationUserDto>>(await _dbContext.Users.ToListAsync(cancellationToken: cancellationToken));
     }
 }
