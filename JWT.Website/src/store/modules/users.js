@@ -12,13 +12,15 @@ const users = {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
-                    url: 'users/getUserCount',
+                    url: 'admin/users/count',
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {
+                        console.log(response)
                         resolve(response.data.count)
                     })
-                    .catch(() => {
+                    .catch((error) => {
+                        console.log(error)
                         reject()
                     })
             })

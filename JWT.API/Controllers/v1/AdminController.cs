@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using JWT.Application.User.Query.GetAllUsers;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.API.Controllers.v1
@@ -10,11 +14,18 @@ namespace JWT.API.Controllers.v1
     [ApiController]
     public class AdminController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public AdminController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         // If the user is authenticated this will simply just return Ok, if not return an error
         [HttpGet("Verify")]
-        public IActionResult GetVerifyIsAdmin()
-        {
-            return Ok(new { result = true });
-        }
+        public IActionResult GetVerifyIsAdmin() { return Ok(new { result = true }); }
+
+        [HttpGet("Users/Count")]
+        public async Task<IActionResult> GetUserCountAsync() { return Ok(new  { result = await _mediator.Send(new GetAllUsersQuery())}); }
     }
 }
