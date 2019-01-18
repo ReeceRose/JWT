@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Domain.Entities
 {
@@ -22,5 +24,6 @@ namespace JWT.Domain.Entities
             Two Factor Enabled
             Username
          */
+        public DateTime DateJoined { get; set; }
     }
 }

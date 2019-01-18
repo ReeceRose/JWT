@@ -40,6 +40,9 @@ namespace JWT.Persistence
                 i.Property(o => o.PhoneNumberConfirmed).HasConversion<int>();
                 i.Property(o => o.TwoFactorEnabled).HasConversion<int>();
             });
+            builder.Entity<ApplicationUser>()
+                .Property(b => b.DateJoined)
+                .HasDefaultValueSql("now()");
         }
     }
 }

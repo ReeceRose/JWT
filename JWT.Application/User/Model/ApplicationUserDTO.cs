@@ -1,4 +1,6 @@
-﻿namespace JWT.Application.User.Model
+﻿using System;
+
+namespace JWT.Application.User.Model
 {
     public class ApplicationUserDto
     {
@@ -7,5 +9,6 @@
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
         public bool LockoutEnabled { get; set; }
+        public DateTime DateJoined { get; set; }
     }
 }

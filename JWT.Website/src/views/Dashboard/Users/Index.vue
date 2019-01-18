@@ -15,7 +15,7 @@
             <tbody>
                 <tr v-for="user in users" :key="user.id" @click="viewDetailedUser(user.id)" class="pointer">
                     <td>{{ user.email }}</td>
-                    <td>{{ user.dateJoined }}</td>
+                    <td>{{ user.dateJoined.substr(0, 10) }}</td>
                     <td class="upper">{{ user.emailConfirmed }}</td>
                     <td class="upper">{{ user.lockoutEnabled }}</td>
                     <td><button class="btn btn-primary" @click="viewDetailedUser(user.id)">Edit</button></td>
