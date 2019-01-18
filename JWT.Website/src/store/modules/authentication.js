@@ -1,6 +1,5 @@
 import axios from '@/axios.js'
 import utilities from '@/utilities.js'
-import global from '@/store/modules/global.js'
 import '@/authentication/facebook.js'
 import '@/authentication/google.js'
 // For reference
@@ -8,7 +7,9 @@ import '@/authentication/google.js'
 const authentication = {
     namespaced: true,
     getters: {
-        isAdmin: () => utilities.parseJwt(global.state.token).hasOwnProperty("Administrator")
+        isAdmin: (state, getters, rootState) => {
+            return utilities.parseJwt(rootState.global.token).hasOwnProperty("Administrator")
+        }    
     },
     mutations: {
 

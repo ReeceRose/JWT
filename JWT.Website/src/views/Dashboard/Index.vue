@@ -52,7 +52,21 @@ export default {
                     this.$store.dispatch("authentication/logout")
                     this.$router.push({ name: 'home' })
                 })
+            // Won't be reached if not true    
+            return true
+        },
+        getUserCount() {
+            this.$store.dispatch("users/getCount")
+                .then((userCount) => {
+                    this.userCount = userCount
+                })
+                .catch(() => {
+                    this.userCount = 'Failed to load'
+                })
         }
+    },
+    created() {
+        this.getUserCount()
     }
 }
 </script>
