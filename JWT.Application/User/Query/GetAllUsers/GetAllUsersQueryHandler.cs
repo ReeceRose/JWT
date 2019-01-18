@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using JWT.Application.User.Model;
-using JWT.Domain.Entities;
 using JWT.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

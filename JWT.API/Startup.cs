@@ -21,7 +21,6 @@ using Swashbuckle.AspNetCore.Swagger;
 using JWT.Persistence;
 using JWT.Domain.Entities;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace JWT.API

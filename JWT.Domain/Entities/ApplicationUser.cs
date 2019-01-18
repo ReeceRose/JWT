@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Domain.Entities
