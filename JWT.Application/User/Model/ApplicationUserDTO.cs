@@ -8,7 +8,7 @@ namespace JWT.Application.User.Model
         public string UserName { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
-        public bool LockoutEnabled { get; set; }
+        public bool AccountEnabled { get; set; }
         public DateTime DateJoined { get; set; }
     }
 }

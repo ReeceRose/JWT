@@ -8,6 +8,7 @@
     <Compile Remove="Migrations\20181230175546_MoveToApplicationDb.cs" />
     <Compile Remove="Migrations\20190107193035_test.cs" />
     <Compile Remove="Migrations\Identity\20190118033749_test.cs" />
+    <Compile Remove="Migrations\Identity\20190122211017_test.cs" />
   </ItemGroup>
 
   <ItemGroup>

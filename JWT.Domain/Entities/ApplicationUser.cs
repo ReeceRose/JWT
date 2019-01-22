@@ -24,5 +24,7 @@ namespace JWT.Domain.Entities
             Username
          */
         public DateTime DateJoined { get; set; }
+        // Different from Lockout Enabled as that's for password attempts
+        public bool AccountEnabled { get; set; }
     }
 }

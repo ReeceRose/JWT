@@ -6,6 +6,6 @@ namespace JWT.Application.User.Command.DisableUser
     {
         public DisableUserCommand(string userId) => UserId = userId;
 
-        public string UserId { get; set; }
+        public string UserId { get; }
     }
 }

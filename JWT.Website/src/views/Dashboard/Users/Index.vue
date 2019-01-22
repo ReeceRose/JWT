@@ -17,7 +17,7 @@
                     <td>{{ user.email }}</td>
                     <td>{{ user.dateJoined.substr(0, 10) }}</td>
                     <td class="upper">{{ user.emailConfirmed }}</td>
-                    <td class="upper">{{ user.lockoutEnabled }}</td>
+                    <td class="upper">{{ user.accountEnabled }}</td>
                     <td><button class="btn btn-primary" @click="viewDetailedUser(user.id)">Edit</button></td>
                 </tr>
             </tbody>

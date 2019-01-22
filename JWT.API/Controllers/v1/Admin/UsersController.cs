@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using JWT.Application.User.Command.DisableUser;
+using JWT.Application.User.Command.EnableUser;
 using JWT.Application.User.Query.GetAllUsers;
 using JWT.Application.User.Query.GetAUserById;
 using JWT.Application.User.Query.GetUserCount;
@@ -30,10 +32,10 @@ namespace JWT.API.Controllers.v1.Admin
         public async Task<IActionResult> GetAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
 
         [HttpGet("{UserId}/Enable")]
-        public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+        public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new EnableUserCommand(userId)) }); }
 
         [HttpGet("{UserId}/Disable")]
-        public async Task<IActionResult> GetDisableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+        public async Task<IActionResult> GetDisableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new DisableUserCommand(userId)) }); }
 
         [HttpGet("Count")]
         public async Task<IActionResult> GetUserCountAsync() { return Ok(new { result = await _mediator.Send(new GetUserCountQuery()) }); }

@@ -4,6 +4,10 @@
             <div class="col">
                 <h2 class="text-center pb-4">User</h2>
                 <p v-if="error" class="text-danger text-center">Failed to load user</p>
+                <p v-if="accountDisabledError" class="text-danger text-center">Failed to disable user</p>
+                <p v-if="accountEnabledError" class="text-danger text-center">Failed to enable user</p>
+                <p v-if="accountEnabled" class="text-success text-center">Account has been enabled</p>
+                <p v-if="accountDisabled" class="text-success text-center">Account has been disabled</p>
             </div>
         </div>
         <WideCard :title="user.email" v-if="user">
@@ -19,7 +23,7 @@
                             </span>
                         </li>
                         <li>
-                            <span class="item" v-if="user.lockoutEnabled"><button class="btn btn-primary" @click="disableAccount(user.id)">Disable Account</button></span>
+                            <span class="item" v-if="user.accountEnabled"><button class="btn btn-primary" @click="disableAccount(user.id)">Disable Account</button></span>
                             <span class="item" v-else><button class="btn btn-primary" @click="enableAccount(user.id)">Enable Account</button></span>
                         </li>
                     </ul>
@@ -40,7 +44,11 @@ export default {
     data() {
         return {
             user: false,
-            error: false
+            error: false,
+            accountDisabled: false,
+            accountDisabledError: false,
+            accountEnabled: false,
+            accountEnabledError: false
         }
     },
     methods: {
@@ -62,20 +70,34 @@ export default {
         },
         enableAccount(userId) {
             this.$store.dispatch("users/enable", userId)
-                .then((response) => {
-                    console.log(response)
+                .then(() => {
+                    this.user.accountEnabled = true
+                    this.accountEnabled = true
                 })
                 .catch(() => {
-                    console.log('cannot enable account')
+                    this.accountEnabledError = true
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.accountEnabled = false 
+                        this.accountEnabledError = false
+                    }, 3000)
                 })
         },
         disableAccount(userId) {
             this.$store.dispatch("users/disable", userId)
-                .then((response) => {
-                    console.log(response)
+                .then(() => {
+                    this.user.accountEnabled = false
+                    this.accountDisabled = true
                 })
                 .catch(() => {
-                    console.log('cannot disable account')
+                    this.accountDisabledError = true
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.accountDisabled = false 
+                        this.accountDisabledError = false
+                    }, 3000)
                 })
         }
     },
@@ -93,7 +115,7 @@ ul {
         font-size: 1.2rem;
 
         .btn {
-            margin: 5px 0;
+            margin: 5px 5px;
         }
     }
 }
