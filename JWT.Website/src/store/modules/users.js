@@ -2,8 +2,9 @@ import axios from '@/axios.js'
 const users = {
     namespaced: true,
     actions: {
-        userCount: ({ rootGetters }) => {
+        userCount: ({ commit, rootGetters }) => {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
                     url: 'users/count',
@@ -15,10 +16,14 @@ const users = {
                     .catch(() => {
                         reject()
                     })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         },
-        users: ({ rootGetters }) => {
+        users: ({ commit, rootGetters }) => {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
                     url: 'users/',
@@ -30,10 +35,14 @@ const users = {
                     .catch(() => {
                         reject()
                     })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         },
-        userById: ({ rootGetters }, userId) => {
+        userById: ({ commit, rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
                     url: `users/${userId}`,
@@ -44,12 +53,16 @@ const users = {
                         resolve(response.data.result)
                     })
                     .catch(() => {
-                        reject(error)
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
                     })
             })
         },
-        forceEmailConfirmation: ({ rootGetters }, userId) => {
+        forceEmailConfirmation: ({ commit, rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
                     url: `users/${userId}/ForceEmailConfirmation`,
@@ -61,10 +74,14 @@ const users = {
                     .catch(() => {
                         reject()
                     })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         },
-        sendEmailConfirmation: ({ rootGetters }, email) => {
+        sendEmailConfirmation: ({ commit, rootGetters }, email) => {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
                     url: 'authentication/GenerateConfirmationEmail',
@@ -77,37 +94,48 @@ const users = {
                     .catch(() => {
                         reject()
                     })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         },
-        enableAccount: ({ rootGetters }, userId) => {
+        enableAccount: ({ commit, rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
                     url: `users/${userId}/enable`,
                     data: { userId: userId },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
-                    .then((response) => {
+                    .then(() => {
                         resolve()
                     })
                     .catch(() => {
                         reject()
                     })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         },
-        disableAccount: ({ rootGetters }, userId) => {
+        disableAccount: ({ commit, rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
                     url: `users/${userId}/disable`,
                     data: { userId: userId },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
-                    .then((response) => {
+                    .then(() => {
                         resolve()
                     })
                     .catch(() => {
                         reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
                     })
             })
         },
