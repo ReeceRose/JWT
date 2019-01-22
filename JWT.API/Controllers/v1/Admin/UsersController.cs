@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using JWT.Application.User.Query.GetAllUsers;
+using JWT.Application.User.Query.GetAUserById;
 using JWT.Application.User.Query.GetUserCount;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +24,11 @@ namespace JWT.API.Controllers.v1.Admin
         }
 
         // TODO: Pagination
-        [HttpGet("All")]
+        [HttpGet]
         public async Task<IActionResult> GetAllUsers() { return Ok(new { result = await _mediator.Send(new GetAllUsersQuery()) }); }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAUserById([FromQuery] string id) { return Ok(new { result = await _mediator.Send(new GetAllUsersQuery()) }); }
+        [HttpGet("{UserId}")]
+        public async Task<IActionResult> GetAUserById(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
 
         [HttpGet("Count")]
         public async Task<IActionResult> GetUserCountAsync() { return Ok(new { result = await _mediator.Send(new GetUserCountQuery()) }); }

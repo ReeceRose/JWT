@@ -5,11 +5,13 @@
                 <h2 class="text-center pb-4">User</h2>
             </div>
         </div>
-        <WideCard :title="user.email">
+        <WideCard :title="user.email || ''">
+
             <div slot="card-content">
-                <div class="col-12">
+                <p v-if="error" class="text-danger">Failed to load user</p>
+                <div v-else class="col-12">
                     <ul>
-                        <li><span class="item">Date Joined: {{ user.dateJoined }}</span></li>
+                        <li><span class="item">Date Joined: {{ user.dateJoined.substr(0, 10) }}</span></li>
                         <li>
                             <span class="item" v-if="user.emailConfirmed">Email Confirmed</span>
                             <span class="item" v-else>
@@ -38,21 +40,15 @@ export default {
     },
     data() {
         return {
-            user: {
-                    id: '123123',
-                    email: 'test@gmail.com',
-                    dateJoined: '12/12/2018',
-                    accountEnabled: true,
-                    emailConfirmed: true
-            }
+            user: false,
+            error: false
         }
     },
     methods: {
             getUser(userId) {
             this.$store.dispatch("users/getUser", userId)
-                .then((users) => {
-                    console.log(users)
-                    // this.users = users
+                .then((user) => {
+                    this.user = user
                 })
                 .catch(() => {
                     this.error = true

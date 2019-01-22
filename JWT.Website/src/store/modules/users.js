@@ -27,7 +27,7 @@ const users = {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
-                    url: 'users/all',
+                    url: 'users/',
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {
@@ -40,17 +40,18 @@ const users = {
         },
         getUser: ({ rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
+                console.log(userId)
                 axios({
                     method: 'get',
-                    url: 'users/'+userId,
+                    url: `users/${userId}`,
                     data: { userId: userId },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {
                         resolve(response.data.result)
                     })
-                    .catch(() => {
-                        reject()
+                    .catch((error) => {
+                        reject(error)
                     })
             })
         }
