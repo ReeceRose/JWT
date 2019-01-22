@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using JWT.Application.User.Query.GetAllUsers;
-using JWT.Application.User.Query.GetUserCount;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.API.Controllers.v1.Admin

@@ -40,7 +40,6 @@ const users = {
         },
         getUser: ({ rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
-                console.log(userId)
                 axios({
                     method: 'get',
                     url: `users/${userId}`,
@@ -50,8 +49,40 @@ const users = {
                     .then((response) => {
                         resolve(response.data.result)
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         reject(error)
+                    })
+            })
+        },
+        enable: ({ rootGetters }, userId) => {
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'get',
+                    url: `users/${userId}/enable`,
+                    data: { userId: userId },
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
+                })
+                    .then((response) => {
+                        resolve(response.data.result)
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+            })
+        },
+        disable: ({ rootGetters }, userId) => {
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'get',
+                    url: `users/${userId}/disable`,
+                    data: { userId: userId },
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
+                })
+                    .then((response) => {
+                        resolve(response.data.result)
+                    })
+                    .catch(() => {
+                        reject()
                     })
             })
         }

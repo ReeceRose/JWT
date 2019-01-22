@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Application.User.Query.GetAllUsers;
 using JWT.Application.User.Query.GetAUserById;
 using JWT.Application.User.Query.GetUserCount;
@@ -25,10 +24,16 @@ namespace JWT.API.Controllers.v1.Admin
 
         // TODO: Pagination
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers() { return Ok(new { result = await _mediator.Send(new GetAllUsersQuery()) }); }
+        public async Task<IActionResult> GetAllUsersAsync() { return Ok(new { result = await _mediator.Send(new GetAllUsersQuery()) }); }
 
         [HttpGet("{UserId}")]
-        public async Task<IActionResult> GetAUserById(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+        public async Task<IActionResult> GetAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+
+        [HttpGet("{UserId}/Enable")]
+        public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+
+        [HttpGet("{UserId}/Disable")]
+        public async Task<IActionResult> GetDisableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
 
         [HttpGet("Count")]
         public async Task<IActionResult> GetUserCountAsync() { return Ok(new { result = await _mediator.Send(new GetUserCountQuery()) }); }
