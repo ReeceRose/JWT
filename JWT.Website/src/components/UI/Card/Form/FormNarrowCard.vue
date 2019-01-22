@@ -1,6 +1,9 @@
 <template>
     <NarrowCard :title="title">
         <div slot="card-content">
+            <slot name="card-information">
+
+            </slot>
             <form class="custom-form" @submit.prevent="submit">
                 <slot name="card-content">
 

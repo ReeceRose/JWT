@@ -60,7 +60,7 @@ export default {
 			password: "",
 			rememberMe: true,
 			redirect: this.$route.params.redirect,
-			error: null,
+			error: false,
 			errorMessage: "Failed to login. Please try again"
 		};
 	},
@@ -88,47 +88,40 @@ export default {
 				})
 				.then(() => {
 					this.error = false
-					this.$router.push({ name: "home" });
+					this.$router.push({ name: "home" })
 				})
-				.catch(error => {
+				.catch((error) => {
 					if (error.response) {
-						if (
-							String(error.response.data.error[0])
-								.toLowerCase()
-								.includes("email not confirmed")
-						) {
-							this.$router.push({ name: "confirmEmail" });
+						if (String(error.response.data.error[0]).toLowerCase().includes("email not confirmed")) {
+							this.$router.push({ name: "confirmEmail" })
 						}
-						this.errorMessage = error.response.data.error[0];
+						this.errorMessage = error.response.data.error[0]
 					}
-					this.error = true;
-				});
+					this.error = true
+				})
 		},
 		facebook() {
 			this.$store
 				.dispatch("authentication/facebookLogin")
 				.then(() => {
-					this.$router.push({ name: "home" });
+					this.$router.push({ name: "home" })
 				})
 				.catch(() => {
-					this.error = true;
-					this.errorMessage = "Failed to login with Facebook";
-				});
+					this.error = true
+					this.errorMessage = "Failed to login with Facebook"
+				})
 		},
 		google() {
             this.$store
 				.dispatch("authentication/googleLogin")
 				.then(() => {
-                    this.$router.push({ name: "home" });
+                    this.$router.push({ name: "home" })
 				})
 				.catch(() => {
-					this.error = true;
-					this.errorMessage = "Failed to login with Google";
-				});
+					this.error = true
+					this.errorMessage = "Failed to login with Google"
+				})
 		}
 	}
-};
+}
 </script>
-
-<style lang="scss" scoped>
-</style>

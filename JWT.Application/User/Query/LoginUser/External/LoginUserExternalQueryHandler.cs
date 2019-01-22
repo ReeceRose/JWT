@@ -47,6 +47,10 @@ namespace JWT.Application.User.Query.LoginUser.External
                     throw new InvalidRegisterException("Failed to register account with third party login provider");
                 }
             }
+            else
+            {
+                if (user.AccountEnabled) throw new AccountLockedException();
+            }
 
             var claims = _mediator.Send(new GetUserClaimQuery(user), cancellationToken).Result;
 
