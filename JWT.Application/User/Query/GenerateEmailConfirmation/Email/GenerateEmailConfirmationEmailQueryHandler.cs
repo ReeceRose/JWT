@@ -32,7 +32,7 @@ namespace JWT.Application.User.Query.GenerateEmailConfirmation.Email
 
         public async Task<string> Handle(GenerateEmailConfirmationEmailQuery request, CancellationToken cancellationToken)
         {
-            var user = _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken).Result;
+            var user = await _mediator.Send(new GetUserByEmailQuery(request.Email), cancellationToken);
 
             if (user == null)
             {
@@ -44,7 +44,7 @@ namespace JWT.Application.User.Query.GenerateEmailConfirmation.Email
                 throw new EmailIsAlreadyConfirmedException();
             }
             
-            var token = _mediator.Send(new GenerateEmailConfirmationTokenQuery(user), cancellationToken).Result;
+            var token = await _mediator.Send(new GenerateEmailConfirmationTokenQuery(user), cancellationToken);
 
             await _notificationService.SendNotificationAsync(toName: request.Email, toEmailAddress: request.Email, subject: "Confirm your account",
                 message: $"In order to login you must confirm your account. To continue click <a href='{_configuration["FrontEndUrl"]}/User/ConfirmEmail?userId={Base64UrlEncoder.Encode(user.Id)}&token={Base64UrlEncoder.Encode(token)}'>here</a>");

@@ -54,6 +54,38 @@ const users = {
                     })
             })
         },
+        forceEmailConfirmation: ({ rootGetters }, userId) => {
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'get',
+                    url: `users/${userId}/ForceEmailConfirmation`,
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+            })
+        },
+        sendEmailConfirmation: ({ rootGetters }, email) => {
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'get',
+                    url: 'authentication/GenerateConfirmationEmail',
+                    data: { email: email },
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        reject()
+                    })
+            })
+        },
         enable: ({ rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
                 axios({
@@ -63,7 +95,7 @@ const users = {
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {
-                        resolve(response.data.result)
+                        resolve()
                     })
                     .catch(() => {
                         reject()
@@ -79,7 +111,7 @@ const users = {
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {
-                        resolve(response.data.result)
+                        resolve()
                     })
                     .catch(() => {
                         reject()

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using JWT.Application.User.Command.DisableUser;
 using JWT.Application.User.Command.EnableUser;
+using JWT.Application.User.Command.ForceEmailConfirmation;
 using JWT.Application.User.Query.GetAllUsers;
 using JWT.Application.User.Query.GetAUserById;
 using JWT.Application.User.Query.GetUserCount;
@@ -30,6 +31,9 @@ namespace JWT.API.Controllers.v1.Admin
 
         [HttpGet("{UserId}")]
         public async Task<IActionResult> GetAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+
+        [HttpGet("{UserId}/ForceEmailConfirmation")]
+        public async Task<IActionResult> GetSend(string userId) { return Ok(new { result = await _mediator.Send(new ForceEmailConfirmationCommand(userId)) }); }
 
         [HttpGet("{UserId}/Enable")]
         public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new EnableUserCommand(userId)) }); }

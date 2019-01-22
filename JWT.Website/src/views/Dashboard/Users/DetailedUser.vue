@@ -4,10 +4,18 @@
             <div class="col">
                 <h2 class="text-center pb-4">User</h2>
                 <p v-if="error" class="text-danger text-center">Failed to load user</p>
-                <p v-if="accountDisabledError" class="text-danger text-center">Failed to disable user</p>
-                <p v-if="accountEnabledError" class="text-danger text-center">Failed to enable user</p>
-                <p v-if="accountEnabled" class="text-success text-center">Account has been enabled</p>
+
                 <p v-if="accountDisabled" class="text-success text-center">Account has been disabled</p>
+                <p v-if="accountEnabledError" class="text-danger text-center">Failed to enable user</p>
+
+                <p v-if="accountEnabled" class="text-success text-center">Account has been enabled</p>
+                <p v-if="accountDisabledError" class="text-danger text-center">Failed to disable user</p>
+
+                <p v-if="emailSent" class="text-success text-center">Email has been sent</p>
+                <p v-if="emailNotSent" class="text-danger text-center">Email cannot be sent</p>
+
+                <p v-if="emailedConfirmed" class="text-success text-center">Email has been confirmed</p>
+                <p v-if="emailedConfirmedError" class="text-danger text-center">Email cannot be confirmed</p>
             </div>
         </div>
         <WideCard :title="user.email" v-if="user">
@@ -18,7 +26,7 @@
                         <li>
                             <span class="item" v-if="user.emailConfirmed">Email Confirmed</span>
                             <span class="item" v-else>
-                                <button class="btn btn-primary" @click="sendConfirmationEmail(user.id)">Send Confirmation Email</button>
+                                <button class="btn btn-primary" @click="sendConfirmationEmail(user.email)">Send Confirmation Email</button>
                                 <button class="btn btn-primary" @click="forceEmailConfirmaiton(user.id)">Force Email Confirmation</button>
                             </span>
                         </li>
@@ -48,7 +56,11 @@ export default {
             accountDisabled: false,
             accountDisabledError: false,
             accountEnabled: false,
-            accountEnabledError: false
+            accountEnabledError: false,
+            emailSent: false,
+            emailNotSent: false,
+            emailedConfirmed: false,
+            emailedConfirmedError: false
         }
     },
     methods: {
@@ -62,11 +74,37 @@ export default {
                     this.error = true
                 })
         },
-        sendConfirmationEmail(userId) {
-            console.log(userId)
+        sendConfirmationEmail(email) {
+            this.$store.dispatch("authentication/regenerateConfirmationEmail", { email: email })
+                .then(() => {
+                    this.user.accountEnabled = true
+                    this.emailSent = true
+                })
+                .catch(() => {
+                    this.emailNotSent = true
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.emailSent = false 
+                        this.emailNotSent = false
+                    }, 3000)
+                })
         },
         forceEmailConfirmaiton(userId) {
-
+            this.$store.dispatch("users/forceEmailConfirmation", userId)
+                .then(() => {
+                    this.user.emailConfirmed = true
+                    this.emailedConfirmed = true
+                })
+                .catch(() => {
+                    this.emailedConfirmedError = true
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        this.emailedConfirmed = false 
+                        this.emailedConfirmedError = false
+                    }, 3000)
+                })
         },
         enableAccount(userId) {
             this.$store.dispatch("users/enable", userId)
