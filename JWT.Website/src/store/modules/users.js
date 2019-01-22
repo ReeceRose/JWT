@@ -1,14 +1,8 @@
 import axios from '@/axios.js'
 const users = {
     namespaced: true,
-    getters: {
-
-    },
-    mutations: {
-
-    },
     actions: {
-        getCount: ({ rootGetters }) => {
+        userCount: ({ rootGetters }) => {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
@@ -23,7 +17,7 @@ const users = {
                     })
             })
         },
-        getUsers: ({ rootGetters }) => {
+        users: ({ rootGetters }) => {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
@@ -38,7 +32,7 @@ const users = {
                     })
             })
         },
-        getUser: ({ rootGetters }, userId) => {
+        userById: ({ rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
@@ -80,13 +74,12 @@ const users = {
                     .then(() => {
                         resolve()
                     })
-                    .catch((error) => {
-                        console.log(error)
+                    .catch(() => {
                         reject()
                     })
             })
         },
-        enable: ({ rootGetters }, userId) => {
+        enableAccount: ({ rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
@@ -102,7 +95,7 @@ const users = {
                     })
             })
         },
-        disable: ({ rootGetters }, userId) => {
+        disableAccount: ({ rootGetters }, userId) => {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
@@ -117,7 +110,84 @@ const users = {
                         reject()
                     })
             })
-        }
+        },
+        confirmEmail: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'users/confirmEmail',
+                    data: { userId: payload.userId, token: payload.token },
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
+        
+        regenerateConfirmationEmail: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'users/generateConfirmationEmail',
+                    data: { email: payload.email },
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
+        resetPassword: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'users/resetPassword',
+                    data: { token: payload.token, email: payload.email, password: payload.password },
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
+        generateResetPasswordEmail: ({ commit }, payload) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'post',
+                    url: 'users/generateResetPasswordEmail',
+                    data: { email: payload.email },
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
     }
 }
 

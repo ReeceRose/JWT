@@ -65,9 +65,8 @@ export default {
     },
     methods: {
         getUser(userId) {
-            this.$store.dispatch("users/getUser", userId)
+            this.$store.dispatch("users/userById", userId)
                 .then((user) => {
-                    console.log(user)
                     this.user = user
                 })
                 .catch(() => {
@@ -107,7 +106,7 @@ export default {
                 })
         },
         enableAccount(userId) {
-            this.$store.dispatch("users/enable", userId)
+            this.$store.dispatch("users/enableAccount", userId)
                 .then(() => {
                     this.user.accountEnabled = true
                     this.accountEnabled = true
@@ -123,7 +122,7 @@ export default {
                 })
         },
         disableAccount(userId) {
-            this.$store.dispatch("users/disable", userId)
+            this.$store.dispatch("users/disableAccount", userId)
                 .then(() => {
                     this.user.accountEnabled = false
                     this.accountDisabled = true

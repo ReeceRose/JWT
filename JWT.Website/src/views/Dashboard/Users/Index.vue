@@ -42,7 +42,7 @@ export default {
             this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
         },
         getAllUsers() {
-            this.$store.dispatch("users/getUsers")
+            this.$store.dispatch("users/users")
                 .then((users) => {
                     this.users = users
                 })

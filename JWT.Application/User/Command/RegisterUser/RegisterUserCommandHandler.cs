@@ -27,15 +27,17 @@ namespace JWT.Application.User.Command.RegisterUser
         public async Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var email = request.Email;
-            var user = _mediator.Send(new GetUserByEmailQuery(email), cancellationToken).Result;
+            var user = await _mediator.Send(new GetUserByEmailQuery(email), cancellationToken);
+
 
             if (user != null)
             {
                 _logger.LogInformation($"Register User: {email}: Registration failed: User does not exist");
-                throw new AccountAlreadyExistsException(email);
+                throw new AccountAlreadyExistsException();
             }
-
+            
             var mappedUser = _mapper.Map<ApplicationUserDto>(request);
+            mappedUser.AccountEnabled = true;
 
             var result = await _mediator.Send(new CreateUserCommand(mappedUser, request.Password), cancellationToken);
             if (!result.Succeeded)

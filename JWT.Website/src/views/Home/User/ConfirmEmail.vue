@@ -33,7 +33,7 @@ export default {
     methods: {
         confirmEmail() {
             if (this.userId && this.token) {
-                this.$store.dispatch('authentication/confirmEmail', { userId: this.userId, token: this.token })
+                this.$store.dispatch('users/confirmEmail', { userId: this.userId, token: this.token })
                 .then(() => {
                     this.confirmed = true
                     setTimeout(() => {

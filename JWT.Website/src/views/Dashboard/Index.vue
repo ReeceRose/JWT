@@ -56,7 +56,7 @@ export default {
             return true
         },
         getUserCount() {
-            this.$store.dispatch("users/getCount")
+            this.$store.dispatch("users/userCount")
                 .then((userCount) => {
                     this.userCount = userCount
                 })
