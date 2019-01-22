@@ -18,7 +18,6 @@ namespace JWT.API.Controllers.v1.Admin
 {
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Authorize(Policy = "AdministratorOnly")]
     [Produces("application/json")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -32,26 +31,33 @@ namespace JWT.API.Controllers.v1.Admin
 
         // TODO: Pagination
         [HttpGet]
+        [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetAllUsersAsync() { return Ok(new { result = await _mediator.Send(new GetAllUsersQuery()) }); }
 
         [HttpGet("Count")]
+        [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetUserCountAsync() { return Ok(new { result = await _mediator.Send(new GetUserCountQuery()) }); }
 
         // User specific actions
 
-        [HttpGet("{UserId}")]
-        public async Task<IActionResult> GetAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+        [HttpGet("Details/{UserId}")]
+        [Authorize(Policy = "AdministratorOnly")]
+        public async Task<IActionResult> GetUserDetailsAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
 
-        [HttpGet("{UserId}/ForceEmailConfirmation")]
+        [HttpGet("ForceEmailConfirmation/{UserId}")]
+        [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetForceEmailConfirmationAsync(string userId) { return Ok(new { result = await _mediator.Send(new ForceEmailConfirmationCommand(userId)) }); }
 
-        [HttpGet("{UserId}/Enable")]
+        [HttpGet("Enable/{UserId}")]
+        [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new EnableUserCommand(userId)) }); }
 
-        [HttpGet("{UserId}/Disable")]
+        [HttpGet("Disable/{UserId}")]
+        [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetDisableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new DisableUserCommand(userId)) }); }
 
-        [HttpGet("{UserId}/Delete")]
+        [HttpGet("Delete/{UserId}")]
+        [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetRemoveUserAsync(string userId) { return Ok(new { result = await _mediator.Send(new RemoveUserCommand(userId)) }); }
 
         [HttpPost("ConfirmEmail")]

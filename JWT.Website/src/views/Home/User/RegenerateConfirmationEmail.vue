@@ -39,12 +39,14 @@ export default {
     },
     methods: {
         submit() {
-             this.$store.dispatch('authentication/regenerateConfirmationEmail', { email: this.email })
+             this.$store.dispatch('users/regenerateConfirmationEmail', { email: this.email })
                 .then(() => {
                     this.sent = true
+                    this.error = false
                 })
                 .catch(() => {
                     this.error = true
+                    this.sent = false
                 })
         }
     }

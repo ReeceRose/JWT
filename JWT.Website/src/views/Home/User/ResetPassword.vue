@@ -77,7 +77,7 @@ export default {
                         return
                     }
                     this.$store
-                        .dispatch("authentication/resetPassword", {
+                        .dispatch("users/resetPassword", {
                             token: this.token,
                             email: this.email,
                             password: this.password
@@ -96,7 +96,7 @@ export default {
                     return
                 }
                     this.$store
-                        .dispatch("authentication/generateResetPasswordEmail", {
+                        .dispatch("usersgenerateResetPasswordEmail", {
                             email: this.email
                         })
                         .then(() => {

@@ -45,7 +45,7 @@ const users = {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
-                    url: `users/${userId}`,
+                    url: `users/details/${userId}`,
                     data: { userId: userId },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
@@ -65,7 +65,7 @@ const users = {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
-                    url: `users/${userId}/ForceEmailConfirmation`,
+                    url: `users/forceEmailConfirmation/${userId}`,
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then(() => {
@@ -104,7 +104,7 @@ const users = {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
-                    url: `users/${userId}/enable`,
+                    url: `users/enable/${userId}`,
                     data: { userId: userId },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
@@ -124,7 +124,7 @@ const users = {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
-                    url: `users/${userId}/disable`,
+                    url: `users/disable/${userId}`,
                     data: { userId: userId },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
@@ -144,7 +144,7 @@ const users = {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'post',
-                    url: 'users/confirmEmail',
+                    url: 'users/ConfirmEmail/',
                     data: { userId: payload.userId, token: payload.token },
                 })
                     .then(() => {
@@ -158,7 +158,6 @@ const users = {
                     })
             })
         },
-        
         regenerateConfirmationEmail: ({ commit }, payload) => {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
@@ -204,6 +203,25 @@ const users = {
                     method: 'post',
                     url: 'users/generateResetPasswordEmail',
                     data: { email: payload.email },
+                })
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
+        deleteUser: ({ commit, rootGetters }, userId) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'get',
+                    url: `users/delete/${userId}`,
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then(() => {
                         resolve()
