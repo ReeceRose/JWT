@@ -1,7 +1,14 @@
 <template>
     <div v-if="this.$route.name === 'userDashboard' " class="pt-3 table-responsive">
-        <h2 class="text-center pb-4">Users</h2>
-        <h5 v-if="error" class="text-danger">Failed to load users</h5>
+        <div class="text-right">
+            <h2 class="text-center">Users</h2>
+            <i class="fas fa-sync-alt pointer" @click="getAllUsers"></i>
+        </div>
+
+        <div>
+            <h5 v-if="error" class="text-danger">Failed to load users</h5>
+        </div>
+
         <table border="1" class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
