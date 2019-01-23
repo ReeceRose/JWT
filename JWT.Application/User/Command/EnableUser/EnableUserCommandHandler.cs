@@ -1,21 +1,23 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using JWT.Application.User.Command.UpdateUser;
 using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Exceptions;
 using JWT.Persistence;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace JWT.Application.User.Command.EnableUser
 {
     public class EnableUserCommandHandler: IRequestHandler<EnableUserCommand, bool>
     {
         private readonly IMediator _mediator;
-        private readonly ApplicationDbContext _context;
+        private readonly ILogger<EnableUserCommandHandler> _logger;
 
-        public EnableUserCommandHandler(IMediator mediator, ApplicationDbContext context)
+        public EnableUserCommandHandler(IMediator mediator, ILogger<EnableUserCommandHandler> logger)
         {
             _mediator = mediator;
-            _context = context;
+            _logger = logger;
         }
 
         public async Task<bool> Handle(EnableUserCommand request, CancellationToken cancellationToken)
@@ -28,12 +30,9 @@ namespace JWT.Application.User.Command.EnableUser
             }
 
             user.AccountEnabled = true;
-
-            var result = _context.Users.Update(user);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return await Task.FromResult(result.Entity.AccountEnabled);
+            _logger.LogInformation($"Enable User: {request.UserId}: Account enabled");
+            await _mediator.Send(new UpdateUserCommand(user), cancellationToken);
+            return await Task.FromResult(true);
         }
     }
 }

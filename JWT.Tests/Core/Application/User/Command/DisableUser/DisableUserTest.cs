@@ -5,7 +5,6 @@ using JWT.Application.User.Command.UpdateUser;
 using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
-using JWT.Persistence;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
