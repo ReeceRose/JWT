@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using JWT.Application.User.Command.UpdateUser;
 using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Exceptions;
 using JWT.Persistence;
@@ -10,12 +11,10 @@ namespace JWT.Application.User.Command.DisableUser
     public class DisableUserCommandHandler : IRequestHandler<DisableUserCommand, bool>
     {
         private readonly IMediator _mediator;
-        private readonly ApplicationDbContext _context;
 
-        public DisableUserCommandHandler(IMediator mediator, ApplicationDbContext context)
+        public DisableUserCommandHandler(IMediator mediator)
         {
             _mediator = mediator;
-            _context = context;
         }
 
         public async Task<bool> Handle(DisableUserCommand request, CancellationToken cancellationToken)
@@ -29,11 +28,8 @@ namespace JWT.Application.User.Command.DisableUser
 
             user.AccountEnabled = false;
 
-            var result = _context.Users.Update(user);
-
-            await _context.SaveChangesAsync(cancellationToken);
-            
-            return await Task.FromResult(result.Entity.AccountEnabled);
+            await _mediator.Send(new UpdateUserCommand(user), cancellationToken);
+            return await Task.FromResult(true);
         }
     }
 }
