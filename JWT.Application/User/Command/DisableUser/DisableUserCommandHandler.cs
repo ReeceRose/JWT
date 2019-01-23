@@ -5,16 +5,19 @@ using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Exceptions;
 using JWT.Persistence;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace JWT.Application.User.Command.DisableUser
 {
     public class DisableUserCommandHandler : IRequestHandler<DisableUserCommand, bool>
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<DisableUserCommandHandler> _logger;
 
-        public DisableUserCommandHandler(IMediator mediator)
+        public DisableUserCommandHandler(IMediator mediator, ILogger<DisableUserCommandHandler> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         public async Task<bool> Handle(DisableUserCommand request, CancellationToken cancellationToken)
@@ -27,7 +30,7 @@ namespace JWT.Application.User.Command.DisableUser
             }
 
             user.AccountEnabled = false;
-
+            _logger.LogInformation($"Disable User: {request.UserId}: Account disabled");
             await _mediator.Send(new UpdateUserCommand(user), cancellationToken);
             return await Task.FromResult(true);
         }

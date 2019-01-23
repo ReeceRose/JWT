@@ -6,6 +6,7 @@ using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
 using JWT.Persistence;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -14,13 +15,15 @@ namespace JWT.Tests.Core.Application.User.Command.DisableUser
     public class DisableUserTest
     {
         public Mock<IMediator> Mediator { get; }
+        public Mock<ILogger<DisableUserCommandHandler>> Logger { get; }
         public DisableUserCommandHandler Handler { get; }
 
         public DisableUserTest()
         {
             // Arrange
             Mediator = new Mock<IMediator>();
-            Handler = new DisableUserCommandHandler(Mediator.Object);
+            Logger = new Mock<ILogger<DisableUserCommandHandler>>();
+            Handler = new DisableUserCommandHandler(Mediator.Object, Logger.Object);
         }
 
         [Theory]
