@@ -29,6 +29,23 @@
                 </tr>
             </tbody>
         </table>
+        <ul class="pagination">
+            <li class="page-item" :class="c == 1 ? 'disabled' : ''">
+                <span class="page-link" @click="setPage(c-1)">Previous</span>
+            </li>
+            <li class="page-item" :class="c == 1 ? 'disabled' : ''">
+                <span class="page-link" @click="setPage(1)">First</span>
+            </li>
+            <li v-for="(page, index) in  pageCount" :key="index" class="page-item" :class="page == c ? 'active' : ''">
+                <span class="page-link" @click="setPage(page)">{{ page }}</span>
+            </li>
+            <li class="page-item" :class="c == pageCount ? 'disabled' : ''">
+                <span class="page-link" @click="setPage(pageCount)">Last</span>
+            </li>
+            <li class="page-item" :class="c == pageCount ? 'disabled' : ''">
+                <span class="page-link" @click="setPage(c+1)">Next</span>
+            </li>
+        </ul>
     </div>
     <div v-else>
         <router-view></router-view>
@@ -41,7 +58,14 @@ export default {
     data() {
         return {
             users: [],
-            error: false
+            error: false,
+            currentPage: 1,
+            pageCount: 1
+        }
+    },
+    computed: {
+        c() {
+            return this.currentPage
         }
     },
     methods: {
@@ -49,13 +73,19 @@ export default {
             this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
         },
         getAllUsers() {
-            this.$store.dispatch("users/users", { currentPage: 1, pageSize: 10})
+            this.$store.dispatch("users/users", { currentPage: this.currentPage, pageSize: 10})
                 .then((result) => {
                     this.users = result.users
+                    this.pageCount = result.paginationModel.totalPages
                 })
                 .catch(() => {
                     this.error = true
                 })
+        },
+        setPage(pageIndex) {
+            if (pageIndex <= 0 || pageIndex > this.pageCount) return
+            this.currentPage = pageIndex
+            this.getAllUsers()
         }
     },
     created() {
