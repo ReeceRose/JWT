@@ -1,13 +1,9 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.User.Command.RemoveUser;
-using JWT.Application.User.Command.UpdateUser;
 using JWT.Application.User.Query.GetUserById;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;
-using JWT.Persistence;
-using JWT.Tests.Context;
 using JWT.Tests.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

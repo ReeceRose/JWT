@@ -1,5 +1,4 @@
-﻿using JWT.Application.User.Command.DisableUser;
-using JWT.Application.User.Command.EnableUser;
+﻿using JWT.Application.User.Command.EnableUser;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Command.EnableUser

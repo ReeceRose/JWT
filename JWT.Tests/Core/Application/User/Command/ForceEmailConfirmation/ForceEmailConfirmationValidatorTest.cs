@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using JWT.Application.User.Command.EnableUser;
-using JWT.Application.User.Command.ForceEmailConfirmation;
+﻿using JWT.Application.User.Command.ForceEmailConfirmation;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Command.ForceEmailConfirmation
