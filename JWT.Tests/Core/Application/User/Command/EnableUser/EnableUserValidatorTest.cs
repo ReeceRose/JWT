@@ -1,16 +1,17 @@
 ﻿using JWT.Application.User.Command.DisableUser;
+using JWT.Application.User.Command.EnableUser;
 using Xunit;
 
-namespace JWT.Tests.Core.Application.User.Command.DisableUser
+namespace JWT.Tests.Core.Application.User.Command.EnableUser
 {
-    public class DisableUserValidatorTest
+    public class EnableUserValidatorTest
     {
-        public DisableUserCommandValidator Validator { get; }
+        public EnableUserCommandValidator Validator { get; }
 
-        public DisableUserValidatorTest()
+        public EnableUserValidatorTest()
         {
             // Arrange
-            Validator = new DisableUserCommandValidator();
+            Validator = new EnableUserCommandValidator();
         }
 
         [Theory]
@@ -19,7 +20,7 @@ namespace JWT.Tests.Core.Application.User.Command.DisableUser
         public void DisableUser_UserIdIsValid(string userId)
         {
             // Act
-            var result = Validator.Validate(new DisableUserCommand(userId));
+            var result = Validator.Validate(new EnableUserCommand(userId));
             // Assert
             Assert.True(result.IsValid);
         }
@@ -30,7 +31,7 @@ namespace JWT.Tests.Core.Application.User.Command.DisableUser
         public void DisableUser_UserIdIsInvalid(string userId)
         {
             // Act
-            var result = Validator.Validate(new DisableUserCommand(userId));
+            var result = Validator.Validate(new EnableUserCommand(userId));
             // Assert
             Assert.False(result.IsValid);
             Assert.Equal("User ID required", result.Errors[0].ErrorMessage);

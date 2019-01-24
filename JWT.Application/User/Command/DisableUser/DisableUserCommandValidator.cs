@@ -9,7 +9,6 @@ namespace JWT.Application.User.Command.DisableUser
             RuleFor(c => c.UserId)
                .NotEmpty().WithMessage("User ID required")
                .NotNull().WithMessage("User ID required");
-
         }
     }
 }
