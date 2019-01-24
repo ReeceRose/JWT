@@ -10,6 +10,7 @@ using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.GetAllUsers;
 using JWT.Application.User.Query.GetAUserById;
 using JWT.Application.User.Query.GetUserCount;
+using JWT.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,35 +31,35 @@ namespace JWT.API.Controllers.v1.Admin
         }
 
         // TODO: Pagination
-        [HttpGet]
+        [HttpPost]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetAllUsersAsync() { return Ok(new { result = await _mediator.Send(new GetAllUsersQuery()) }); }
+        public async Task<IActionResult> PostAllUsersAsync([FromBody] PaginationModel model) => Ok(new { result = await _mediator.Send(new GetAllUsersQuery(model)) });
 
         [HttpGet("Count")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetUserCountAsync() { return Ok(new { result = await _mediator.Send(new GetUserCountQuery()) }); }
+        public async Task<IActionResult> GetUserCountAsync() => Ok(new { result = await _mediator.Send(new GetUserCountQuery()) });
 
         // User specific actions
 
         [HttpGet("Details/{UserId}")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetUserDetailsAsync(string userId) { return Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) }); }
+        public async Task<IActionResult> GetUserDetailsAsync(string userId) => Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) });
 
         [HttpGet("ForceEmailConfirmation/{UserId}")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetForceEmailConfirmationAsync(string userId) { return Ok(new { result = await _mediator.Send(new ForceEmailConfirmationCommand(userId)) }); }
+        public async Task<IActionResult> GetForceEmailConfirmationAsync(string userId) => Ok(new { result = await _mediator.Send(new ForceEmailConfirmationCommand(userId)) });
 
         [HttpGet("Enable/{UserId}")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new EnableUserCommand(userId)) }); }
+        public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) => Ok(new { result = await _mediator.Send(new EnableUserCommand(userId)) });
 
         [HttpGet("Disable/{UserId}")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetDisableAUserByIdAsync(string userId) { return Ok(new { result = await _mediator.Send(new DisableUserCommand(userId)) }); }
+        public async Task<IActionResult> GetDisableAUserByIdAsync(string userId) => Ok(new { result = await _mediator.Send(new DisableUserCommand(userId)) });
 
         [HttpGet("Delete/{UserId}")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetRemoveUserAsync(string userId) { return Ok(new { result = await _mediator.Send(new RemoveUserCommand(userId)) }); }
+        public async Task<IActionResult> GetRemoveUserAsync(string userId) => Ok(new { result = await _mediator.Send(new RemoveUserCommand(userId)) });
 
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> PostConfirmEmailAsync([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });

@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.User.Query.GetAllUsers;
+using JWT.Domain.Entities;
 using MediatR;
 
 namespace JWT.Application.User.Query.GetUserCount
@@ -16,7 +17,7 @@ namespace JWT.Application.User.Query.GetUserCount
 
         public async Task<int> Handle(GetUserCountQuery request, CancellationToken cancellationToken)
         {
-            var users = await _mediator.Send(new GetAllUsersQuery(), cancellationToken);
+            var users = await _mediator.Send(new GetAllUsersQuery(null), cancellationToken);
             return users?.Count ?? 0;
         }
     }

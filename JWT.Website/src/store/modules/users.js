@@ -25,8 +25,12 @@ const users = {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 axios({
-                    method: 'get',
+                    method: 'post',
                     url: 'users/',
+                    data: {
+                        CurrentPage: 1,
+                        PageSize: 10
+                    },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {
