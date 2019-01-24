@@ -49,7 +49,7 @@ export default {
             this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
         },
         getAllUsers() {
-            this.$store.dispatch("users/users")
+            this.$store.dispatch("users/users", { currentPage: 2, pageSize: 10})
                 .then((users) => {
                     this.users = users
                 })

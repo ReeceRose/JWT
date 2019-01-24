@@ -21,15 +21,15 @@ const users = {
                     })
             })
         },
-        users: ({ commit, rootGetters }) => {
+        users: ({ commit, rootGetters }, payload) => {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'post',
                     url: 'users/',
                     data: {
-                        CurrentPage: 1,
-                        PageSize: 10
+                        CurrentPage: payload.currentPage,
+                        PageSize: payload.pageSize
                     },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
