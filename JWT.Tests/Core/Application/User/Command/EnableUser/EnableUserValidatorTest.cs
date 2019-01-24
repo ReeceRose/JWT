@@ -17,7 +17,7 @@ namespace JWT.Tests.Core.Application.User.Command.EnableUser
         [Theory]
         [InlineData("1234567890")]
         [InlineData("0987654321")]
-        public void DisableUser_UserIdIsValid(string userId)
+        public void EnableUser_UserIdIsValid(string userId)
         {
             // Act
             var result = Validator.Validate(new EnableUserCommand(userId));
@@ -28,7 +28,7 @@ namespace JWT.Tests.Core.Application.User.Command.EnableUser
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void DisableUser_UserIdIsInvalid(string userId)
+        public void Enable_UserIdIsInvalid(string userId)
         {
             // Act
             var result = Validator.Validate(new EnableUserCommand(userId));
