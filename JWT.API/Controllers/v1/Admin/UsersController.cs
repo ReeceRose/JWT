@@ -5,10 +5,12 @@ using JWT.Application.User.Command.EnableUser;
 using JWT.Application.User.Command.ForceEmailConfirmation;
 using JWT.Application.User.Command.RemoveUser;
 using JWT.Application.User.Command.ResetPassword;
+using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.GetAllUsers;
 using JWT.Application.User.Query.GetAUserById;
+using JWT.Application.User.Query.GetPaginatedUsers;
 using JWT.Application.User.Query.GetUserCount;
 using JWT.Domain.Entities;
 using MediatR;
@@ -33,7 +35,7 @@ namespace JWT.API.Controllers.v1.Admin
         // TODO: Pagination
         [HttpPost]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> PostAllUsersAsync([FromBody] PaginationModel model) => Ok(new { result = await _mediator.Send(new GetAllUsersQuery(model)) });
+        public async Task<IActionResult> PostAllUsersAsync([FromBody] PaginationModel model) => Ok(new { result = await _mediator.Send(new GetPaginatedUsersQuery(model)) });
 
         [HttpGet("Count")]
         [Authorize(Policy = "AdministratorOnly")]

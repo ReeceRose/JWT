@@ -34,6 +34,7 @@ const users = {
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {
+                        console.log(response.data.result)
                         resolve(response.data.result)
                     })
                     .catch(() => {

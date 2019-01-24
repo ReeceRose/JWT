@@ -24,14 +24,7 @@ namespace JWT.Application.User.Query.GetAllUsers
         public async Task<List<ApplicationUserDto>> Handle(GetAllUsersQuery request,
             CancellationToken cancellationToken)
         {
-            if (request.PaginationModel == null) return _mapper.Map<List<ApplicationUserDto>>(await _dbContext.Users.ToListAsync(cancellationToken));
-            var users = _dbContext.Users.OrderBy(u => u.Email);
-            request.PaginationModel.Count = users.Count();
-            var result = await users.
-                Skip((request.PaginationModel.CurrentPage - 1) * request.PaginationModel.Count)
-                .Take(request.PaginationModel.PageSize)
-                .ToListAsync(cancellationToken);
-            return _mapper.Map<List<ApplicationUserDto>>(result);
+            return _mapper.Map<List<ApplicationUserDto>>(await _dbContext.Users.ToListAsync(cancellationToken));
         }
     }
 }

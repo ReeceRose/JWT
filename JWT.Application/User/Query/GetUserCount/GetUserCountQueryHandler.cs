@@ -17,7 +17,7 @@ namespace JWT.Application.User.Query.GetUserCount
 
         public async Task<int> Handle(GetUserCountQuery request, CancellationToken cancellationToken)
         {
-            var users = await _mediator.Send(new GetAllUsersQuery(null), cancellationToken);
+            var users = await _mediator.Send(new GetAllUsersQuery(), cancellationToken);
             return users?.Count ?? 0;
         }
     }
