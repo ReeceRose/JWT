@@ -62,7 +62,7 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserById
 
             public void Dispose()
             {
-                Context?.Dispose();
+                ContextFactory.Destroy(Context);
             }
         }
     }

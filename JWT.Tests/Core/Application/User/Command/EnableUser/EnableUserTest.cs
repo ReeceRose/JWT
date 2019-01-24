@@ -44,13 +44,13 @@ namespace JWT.Tests.Core.Application.User.Command.EnableUser
         [InlineData("0987654321", "test@test.ca")]
         public async Task EnableUser_ReturnsTrue(string userId, string email)
         {
+            // Arrange
             var requestedUser = new ApplicationUser()
             {
                 Id = userId,
                 Email = email,
                 AccountEnabled = false
             };
-            // Arrange
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default(CancellationToken)))
                 .ReturnsAsync(requestedUser);
             Mediator.Setup(m => m.Send(It.IsAny<UpdateUserCommand>(), default(CancellationToken))).ReturnsAsync(true);
