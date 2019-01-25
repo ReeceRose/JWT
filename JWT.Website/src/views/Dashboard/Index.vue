@@ -1,8 +1,8 @@
 <template>
     <div>
         <ApiHealth/>
-        <!-- Verify is admin only on inital load of dashboard -->
-        <div v-if="this.$route.name === 'dashboard' && verifyIsAdmin()" >
+        <!-- <div v-if="this.$route.name === 'dashboard' && verifyIsAdmin()" > -->
+        <div v-if="this.$route.name === 'dashboard'" >
             <h1 class="text-left pt-3">
                 Admin Dashboard
             </h1>
@@ -66,6 +66,7 @@ export default {
         }
     },
     created() {
+        this.verifyIsAdmin()
         this.getUserCount()
     }
 }

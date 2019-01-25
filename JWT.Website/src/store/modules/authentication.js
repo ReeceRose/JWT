@@ -106,10 +106,13 @@ const authentication = {
         },
         logout: ({ commit, dispatch }) => {
             commit("global/removeToken", null, { root: true })
-            let googleAuth = window.gapi.auth2.getAuthInstance()
-            googleAuth.signOut()
-            // eslint-disable-next-line
-            FB.logout(() => {})
+            try {
+                let googleAuth = window.gapi.auth2.getAuthInstance()
+                googleAuth.signOut()
+                // eslint-disable-next-line
+                FB.logout(() => {})
+            // eslint-disable-next-line                
+            } catch(error) { }
             dispatch("global/updateCookie", null, { root: true })
         },
         register: ({ commit }, payload) => {

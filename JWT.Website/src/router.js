@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store/store.js'
+import utilities from '@/utilities.js'
 
 // Lazy load all imports
 const Home = () => import('@/views/Home/Index.vue')
@@ -17,6 +18,8 @@ const LoginIndex  = () => import('@/views/Home/User/Login/Index.vue')
 const Register = () => import('@/views/Home/User/Register/Index.vue')
 
 const AccessDenied = () => import('@/views/Home/AccessDenied.vue')
+const SessionExpired = () => import('@/views/Home/SessionExpired.vue')
+
 const ResetPassword = () => import('@/views/Home/User/ResetPassword.vue')
 const ConfirmEmail = () => import('@/views/Home/User/ConfirmEmail.vue')
 const RegenerateConfirmationEmail = () => import('@/views/Home/User/RegenerateConfirmationEmail.vue')
@@ -63,16 +66,9 @@ const NotLoggedIn = {
     }
 }
 
-export default new Router({
+const router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
-    beforeEach: (to, from, next) => {
-        store.commit('global/setLoading', true)
-        next()
-    },
-    afterEach: () => {
-        store.commit('global/setLoading', false)
-    },
     routes: [
         {
             path: '/',
@@ -141,8 +137,30 @@ export default new Router({
             component: AccessDenied
         },
         {
+            path: '/SessionExpired',
+            name: 'sessionExpired',
+            component: SessionExpired
+        },
+        {
             path: '*',
             component: Home
         }
     ]
 })
+
+router.beforeEach((to, from, next) =>  {
+    if (store.getters['global/getToken']) {
+        let token = store.getters['global/getToken']
+        let parsedToken = utilities.parseJwt(JSON.stringify(token))
+        var result = store.dispatch("global/checkExpiration", parsedToken.exp, { root: true })
+        if (result) {
+            next()
+        } else {
+            store.dispatch("authentication/logout", { root: true })
+            next({ name: 'sessionExpired' })
+        }
+    }
+    next()
+})
+
+export default router
