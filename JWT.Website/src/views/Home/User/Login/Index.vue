@@ -9,10 +9,10 @@
 			<FormEmail v-model="email" :validator="$v.email"/>
 			<FormPassword v-model="password" :validator="$v.password"/>
 
-			<div class="custom-control custom-checkbox mb-3">
+			<!-- <div class="custom-control custom-checkbox mb-3">
 				<input v-model="rememberMe" type="checkbox" class="custom-control-input" id="inputRememberMe">
 				<label class="custom-control-label" for="inputRememberMe">Remember password</label>
-			</div>
+			</div> -->
 			<div class="mb-3">
 				<router-link :to="{ name: 'resetPassword' }">Forgot your password?</router-link>
 			</div>

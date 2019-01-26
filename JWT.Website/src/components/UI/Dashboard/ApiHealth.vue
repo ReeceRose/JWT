@@ -19,7 +19,7 @@ export default {
         .then((response) => {
             this.result = response.data
         })
-        .catch((error) => {
+        .catch(() => {
             this.result = 'Not Available'
         })
     }

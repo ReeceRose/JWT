@@ -2,7 +2,9 @@
     <div v-if="this.$route.name === 'userDashboard' " class="pt-3 table-responsive">
         <h2 class="text-center">Users</h2 >
 
-        <div class="text-right">
+        <SearchBar class="col-12" :submit="searchEmail"/>
+
+        <div class="text-right col-1 offset-11">
             <i class="fas fa-sync-alt pointer" @click="getAllUsers"></i>
         </div>
 
@@ -54,8 +56,13 @@
 </template>
 
 <script>
+import SearchBar from '@/components/UI/SearchBar.vue'
+
 export default {
     name: 'UserDashboard',
+    components: {
+        SearchBar
+    },
     data() {
         return {
             users: [],
@@ -70,6 +77,10 @@ export default {
         }
     },
     methods: {
+        searchEmail(event) {
+            let email = event.target[0].value
+            
+        },
         viewDetailedUser(id) {
             this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
         },
