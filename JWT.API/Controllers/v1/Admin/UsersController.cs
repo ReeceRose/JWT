@@ -9,7 +9,6 @@ using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.GetAllUsersPaginated;
 using JWT.Application.User.Query.GetAUserById;
-using JWT.Application.User.Query.GetPaginatedResults;
 using JWT.Application.User.Query.GetUserCount;
 using JWT.Application.User.Query.SearchUsersByEmail;
 using JWT.Domain.Entities;

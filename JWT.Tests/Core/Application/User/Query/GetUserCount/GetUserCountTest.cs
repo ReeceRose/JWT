@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GetAllUsers;
 using JWT.Application.User.Query.GetUserCount;
 using JWT.Domain.Entities;

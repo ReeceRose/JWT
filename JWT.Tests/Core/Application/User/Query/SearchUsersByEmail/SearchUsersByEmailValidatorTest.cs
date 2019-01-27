@@ -1,5 +1,4 @@
-﻿using JWT.Application.User.Query.GetUserByEmail;
-using JWT.Application.User.Query.SearchUsersByEmail;
+﻿using JWT.Application.User.Query.SearchUsersByEmail;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Query.SearchUsersByEmail

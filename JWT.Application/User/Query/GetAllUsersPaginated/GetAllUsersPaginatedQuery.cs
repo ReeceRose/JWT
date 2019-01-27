@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using JWT.Application.User.Model;
+﻿using JWT.Application.User.Model;
 using JWT.Domain.Entities;
 using MediatR;
 
