@@ -49,8 +49,28 @@ const users = {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
-                    url: `users/details/${userId}`,
+                    url: `users/details/id/${userId}`,
                     data: { userId: userId },
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
+                })
+                    .then((response) => {
+                        resolve(response.data.result)
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
+            })
+        },
+        userByEmail: ({ commit, rootGetters }, email) => {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'get',
+                    url: `users/details/email/${email}`,
+                    data: { email: email },
                     headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then((response) => {

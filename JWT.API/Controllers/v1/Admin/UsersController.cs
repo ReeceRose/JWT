@@ -5,13 +5,13 @@ using JWT.Application.User.Command.EnableUser;
 using JWT.Application.User.Command.ForceEmailConfirmation;
 using JWT.Application.User.Command.RemoveUser;
 using JWT.Application.User.Command.ResetPassword;
-using JWT.Application.User.Model;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
-using JWT.Application.User.Query.GetAllUsers;
+using JWT.Application.User.Query.GetAllUsersPaginated;
 using JWT.Application.User.Query.GetAUserById;
-using JWT.Application.User.Query.GetPaginatedUsers;
+using JWT.Application.User.Query.GetPaginatedResults;
 using JWT.Application.User.Query.GetUserCount;
+using JWT.Application.User.Query.SearchUsersByEmail;
 using JWT.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -32,10 +32,10 @@ namespace JWT.API.Controllers.v1.Admin
             _mediator = mediator;
         }
 
-        // TODO: Pagination
         [HttpPost]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> PostAllUsersAsync([FromBody] PaginationModel model) => Ok(new { result = await _mediator.Send(new GetPaginatedUsersQuery(model)) });
+        public async Task<IActionResult> PostAllUsersAsync([FromBody] PaginationModel model) => Ok(new { result = await _mediator.Send(new GetAllUsersPaginatedQuery(model)) });
+
 
         [HttpGet("Count")]
         [Authorize(Policy = "AdministratorOnly")]
@@ -43,9 +43,13 @@ namespace JWT.API.Controllers.v1.Admin
 
         // User specific actions
 
-        [HttpGet("Details/{UserId}")]
+        [HttpGet("Details/Id/{UserId}")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetUserDetailsAsync(string userId) => Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) });
+        public async Task<IActionResult> GetUserDetailsByIdAsync(string userId) => Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) });
+
+        [HttpGet("Details/Email/{Email}")]
+        [Authorize(Policy = "AdministratorOnly")]
+        public async Task<IActionResult> GetUserDetailsByEmailAsync(string email) => Ok(new { result = await _mediator.Send(new SearchUsersByEmailQuery(email)) });
 
         [HttpGet("ForceEmailConfirmation/{UserId}")]
         [Authorize(Policy = "AdministratorOnly")]

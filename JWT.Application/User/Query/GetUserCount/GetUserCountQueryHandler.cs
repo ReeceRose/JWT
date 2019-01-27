@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using JWT.Application.User.Query.GetAllUsers;
-using JWT.Domain.Entities;
 using MediatR;
 
 namespace JWT.Application.User.Query.GetUserCount

@@ -39,6 +39,9 @@
                         <li>
                             <span class="item"><button class="btn btn-primary" @click="deleteUser(user.id)">Delete User</button></span>
                         </li>
+                        <li>
+                            <button class="btn btn-primary mt-4" @click="previous">Return <i class="fas fa-undo"></i></button>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -156,6 +159,9 @@ export default {
                         this.deleteUserError = false
                     }, 3000)
                 })
+        },
+        previous() {
+            this.$router.go(-1)
         }
     },
     created() {

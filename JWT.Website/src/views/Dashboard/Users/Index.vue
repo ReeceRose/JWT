@@ -79,7 +79,19 @@ export default {
     methods: {
         searchEmail(event) {
             let email = event.target[0].value
-            
+            if (email === '' || email === null) {
+                this.getAllUsers()
+                return
+            }
+            this.$store.dispatch("users/userByEmail", email)
+                .then((result) => {
+                    this.users = result.users
+                    this.pageCount = result.paginationModel.totalPages
+                    this.error = false
+                })
+                .catch(() => {
+                    this.error = true
+                })
         },
         viewDetailedUser(id) {
             this.$router.push({ name: 'detailedUserDashboard', params: { id: id } })
@@ -89,6 +101,7 @@ export default {
                 .then((result) => {
                     this.users = result.users
                     this.pageCount = result.paginationModel.totalPages
+                    this.error = false
                 })
                 .catch(() => {
                     this.error = true

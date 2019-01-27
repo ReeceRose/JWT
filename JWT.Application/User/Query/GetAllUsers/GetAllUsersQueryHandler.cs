@@ -1,30 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using JWT.Application.User.Model;
+using JWT.Domain.Entities;
 using JWT.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWT.Application.User.Query.GetAllUsers
 {
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<ApplicationUserDto>>
+    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<ApplicationUser>>
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly ApplicationDbContext _context;
 
-        public GetAllUsersQueryHandler(ApplicationDbContext dbContext, IMapper mapper)
+        public GetAllUsersQueryHandler(ApplicationDbContext context)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _context = context;
         }
 
-        public async Task<List<ApplicationUserDto>> Handle(GetAllUsersQuery request,
+        public async Task<List<ApplicationUser>> Handle(GetAllUsersQuery request,
             CancellationToken cancellationToken)
         {
-            return _mapper.Map<List<ApplicationUserDto>>(await _dbContext.Users.ToListAsync(cancellationToken));
+            return await _context.Users.ToListAsync(cancellationToken: cancellationToken);
         }
     }
 }
