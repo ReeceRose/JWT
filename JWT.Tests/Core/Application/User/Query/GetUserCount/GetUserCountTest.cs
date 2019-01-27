@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JWT.Application.User.Model;
 using JWT.Application.User.Query.GetAllUsers;
 using JWT.Application.User.Query.GetUserCount;
+using JWT.Domain.Entities;
 using MediatR;
 using Moq;
 using Xunit;
@@ -26,7 +27,7 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserCount
         public async Task GetUserCount_ReturnsZero()
         {
             // Arrange
-            Mediator.Setup(m => m.Send(It.IsAny<GetAllUsersQuery>(), default(CancellationToken))).ReturnsAsync((List<ApplicationUserDto>) null);
+            Mediator.Setup(m => m.Send(It.IsAny<GetAllUsersQuery>(), default(CancellationToken))).ReturnsAsync((List<ApplicationUser>) null);
             // Act
             var result = await Handler.Handle(new GetUserCountQuery(), CancellationToken.None);
             // Assert
@@ -40,10 +41,10 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserCount
         public async Task GetUserCount_ReturnsValidCount(int userCount)
         {
             // Arrange
-            var users = new List<ApplicationUserDto>();
+            var users = new List<ApplicationUser>();
             for (var i = 0; i < userCount; i++)
             {
-                users.Add(new ApplicationUserDto());
+                users.Add(new ApplicationUser());
             }
 
             Mediator.Setup(m => m.Send(It.IsAny<GetAllUsersQuery>(), default(CancellationToken))).ReturnsAsync(users);
