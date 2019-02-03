@@ -20,15 +20,16 @@ namespace JWT.Tests.Core.Application.User.Query.GetUserByEmail
             Handler = new GetUserByEmailQueryHandler(Context);
         }
 
-        [Fact]
-        public void GetUserByEmail_ReturnsExpectedUser()
+        [Theory]
+        [InlineData("test@test.ca", "test-user", "123")]
+        public void GetUserByEmail_ReturnsExpectedUser(string email, string userName, string id)
         {
             // Arrange
             var requestedUser = new ApplicationUser()
             {
-                Email = "test@test.ca",
-                UserName = "test-user",
-                Id = "123"
+                Email = email,
+                UserName = userName,
+                Id = id
             };
             // Act
             var returnedUser = Handler.Handle(new GetUserByEmailQuery(requestedUser.Email), CancellationToken.None).Result;
