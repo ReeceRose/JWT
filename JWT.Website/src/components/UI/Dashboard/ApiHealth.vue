@@ -16,7 +16,7 @@ export default {
     },
     beforeCreate() {
         axios.get('https://localhost:5001/health')
-        // axios.get('http://159.203.18.146/health')
+        // axios.get('https://reecerose.ddns.net/health')
         .then((response) => {
             this.result = response.data
         })
