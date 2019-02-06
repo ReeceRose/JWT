@@ -37,19 +37,17 @@ namespace JWT.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApiVersioning();
-
-            services.AddSingleton(Configuration);
-            services.AddSingleton<INotificationService, NotificationService>();
-
-            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
-
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
             });
 
+            services.AddApiVersioning();
+
+            services.AddSingleton(Configuration);
             services.AddSingleton(mappingConfig.CreateMapper());
+            services.AddSingleton<INotificationService, NotificationService>();
+            services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 
             services
                 .AddHealthChecks()
@@ -111,7 +109,6 @@ namespace JWT.API
                         options.Filters.Add(typeof(CustomExceptionFilterAttribute));
                     })
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                //TODO: ADD A BASE VALIDATOR CLASS SO WE DON'T DEPEND ON ONE VALIDATOR TO REGISTER ALL VALIDATORS
                 .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<RegisterUserCommandValidator>());
 
             services.AddSwaggerGen(c =>
