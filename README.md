@@ -14,8 +14,6 @@
 <p align="center">
     <a href="#about">About</a> •
     <a href="#features">Features</a> •
-    <a href="#setup">Setup</a> •
-    <a href="#credits">Credits</a> •
     <a href="#license">License</a>
 </p>
 
@@ -25,47 +23,11 @@
 
 ---
 
-
-## Setup
-
-Before you begin, you need to setup the required secrets in Azure Key Vault. [Click here](SECRETS.md) to set them up
-
-### With Source
-
-To clone and run this application, you'll need [Git](https://git-scm.com), [Docker](https://www.docker.com/products/docker-desktop), [.NET Core 2.2](https://www.microsoft.com/net/download) and [Node.js](https://nodejs.org/en/download/)) installed on your computer. 
-From your command line:
-
-```bash
-mkdir JWT
-cd JWT
-git clone https://github.com/ReeceRose/JWT-FullStack-Example .
-
-More commands coming soon!
-```
-
-### With Docker
-
-To setup and run this application with docker only (no source code), you'll only need [Docker](https://www.docker.com/) installed. 
-From your command line:
-```bash
-Commands coming soon!
-```
-
----
-
-## Credits
-
-This software uses the following open source packages:
-
-- [AutoMapper](https://automapper.org/)
-
----
-
 ## License
 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 - **[MIT license](http://opensource.org/licenses/mit-license.php)**
-- Copyright 2018 © <a href="http://reecerose.com" target="_blank">Reece Rose</a>.
+- Copyright 2019 © <a href="https://reecerose.com" target="_blank">Reece Rose</a>.
 
 ---
