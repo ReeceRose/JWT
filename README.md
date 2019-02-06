@@ -3,12 +3,12 @@
         <img src="https://static.reecerose.com/images/projects/JWTExample/git-header.png" title="JSON Web   Tokens" alt="JSON Web Tokens"  width="200">
     </a>
     <br>
-    JWT FullStack Example
+    JWT Full Stack Example
     <br>
 </h1>
 
 <h4 align="center">
-    JSON Web Tokens with ASP.NET and VueJS
+    JSON Web Tokens with ASP.NET and Vue.js
 </h4>
 
 <p align="center">
