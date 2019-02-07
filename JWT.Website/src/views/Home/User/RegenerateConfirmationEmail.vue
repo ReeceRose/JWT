@@ -1,5 +1,5 @@
 <template>
-    <FormCard title="Resend confirmation email" :submit="submit">
+    <FormNarrowCard title="Resend confirmation email" :submit="submit">
         <div slot="card-information">
             <p v-if="sent" class="text-success text-center mb-3">A confirmation email has been sent.</p>
             <p v-if="error" class="text-danger text-center mb-3">A confirmation email cannot be sent.</p>
@@ -9,11 +9,11 @@
             <FormEmail v-model="email" :validator="$v.email"/>
             <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Resend link</button>
         </div>
-    </FormCard>
+    </FormNarrowCard>
 </template>
 
 <script>
-import FormCard from '@/components/UI/Card/FormCard.vue'
+import FormNarrowCard from '@/components/UI/Card/Form/FormNarrowCard.vue'
 import FormEmail from '@/components/UI/Form/Email.vue'
 
 import { required, email } from 'vuelidate/lib/validators'
@@ -28,7 +28,7 @@ export default {
         }
     },
     components: {
-        FormCard,
+        FormNarrowCard,
         FormEmail
     },
     validations: {
@@ -39,12 +39,14 @@ export default {
     },
     methods: {
         submit() {
-             this.$store.dispatch('authentication/regenerateConfirmationEmail', { email: this.email })
+             this.$store.dispatch('users/regenerateConfirmationEmail', { email: this.email })
                 .then(() => {
                     this.sent = true
+                    this.error = false
                 })
                 .catch(() => {
                     this.error = true
+                    this.sent = false
                 })
         }
     }

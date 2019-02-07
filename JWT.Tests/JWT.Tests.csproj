@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Core\Application\User\Query\SearchUserByEmail\**" />
+    <EmbeddedResource Remove="Core\Application\User\Query\SearchUserByEmail\**" />
+    <None Remove="Core\Application\User\Query\SearchUserByEmail\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
@@ -19,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Domain\Entities\" />
     <Folder Include="Infrastructure\Infrastructure\" />
     <Folder Include="Infrastructure\Persistence\" />
   </ItemGroup>

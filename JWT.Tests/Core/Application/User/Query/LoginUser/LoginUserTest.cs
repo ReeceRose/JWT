@@ -44,7 +44,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
             // Arrange
             var requestedUser = new ApplicationUser()
             {
-                Email = email
+                Email = email,
+                AccountEnabled = true
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken))).Returns(Task.FromResult(requestedUser));
             SignInManager
@@ -65,7 +66,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
             // Arrange
             var requestedUser = new ApplicationUser()
             {
-                Email = email
+                Email = email,
+                AccountEnabled = true
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken)))
                 .ReturnsAsync(requestedUser);
@@ -116,7 +118,8 @@ namespace JWT.Tests.Core.Application.User.Query.LoginUser
             // Arrange
             var requestedUser = new ApplicationUser()
             {
-                Email = email
+                Email = email,
+                AccountEnabled = true
             };
             Mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), default(CancellationToken)))
                 .ReturnsAsync(requestedUser);

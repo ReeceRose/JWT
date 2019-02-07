@@ -22,15 +22,21 @@ namespace JWT.Persistence.Migrations.Identity
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<bool>("AccountEnabled");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<DateTime>("DateJoined")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed");
+                    b.Property<int>("EmailConfirmed");
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.Property<int>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
@@ -44,11 +50,11 @@ namespace JWT.Persistence.Migrations.Identity
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<bool>("PhoneNumberConfirmed");
+                    b.Property<int>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<bool>("TwoFactorEnabled");
+                    b.Property<int>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);

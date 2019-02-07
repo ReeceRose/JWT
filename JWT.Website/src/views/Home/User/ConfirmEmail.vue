@@ -1,5 +1,5 @@
 <template>
-    <DisplayCard title="Email Confirmation">
+    <WideCard title="Email Confirmation">
         <div slot="card-content" class="text-center">
             <div v-if="userId && token">
                 <p v-if="confirmed">Congragulations! Your email has been confirmed. <br>Login <router-link :to="{ name: 'login' }">here</router-link></p>
@@ -11,11 +11,11 @@
                 Resend confirmation email <router-link :to="{ name: 'regenerateConfirmationEmail' }">here</router-link></p>
             </div>
         </div>
-    </DisplayCard>
+    </WideCard>
 </template>
 
 <script>
-import DisplayCard from '@/components/UI/Card/DisplayCard.vue'
+import WideCard from '@/components/UI/Card/WideCard.vue'
 
 export default {
     name: 'confirmEmail',
@@ -28,12 +28,12 @@ export default {
         }
     },
     components: {
-        DisplayCard
+        WideCard
     },
     methods: {
         confirmEmail() {
             if (this.userId && this.token) {
-                this.$store.dispatch('authentication/confirmEmail', { userId: this.userId, token: this.token })
+                this.$store.dispatch('users/confirmEmail', { userId: this.userId, token: this.token })
                 .then(() => {
                     this.confirmed = true
                     setTimeout(() => {
