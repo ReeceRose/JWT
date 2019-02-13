@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JWT.API.Controllers.v1
+namespace JWT.API.Controllers.v1.Admin
 {
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -10,10 +10,8 @@ namespace JWT.API.Controllers.v1
     [ApiController]
     public class AdminController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return Ok();
-        }
+        // If the user is authenticated this will simply just return Ok, if not return an error
+        [HttpGet("Verify")]
+        public IActionResult GetVerifyIsAdmin() { return Ok(new { result = true }); }
     }
 }

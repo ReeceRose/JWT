@@ -45,7 +45,7 @@ namespace JWT.Application.User.Query.LoginUser
             
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
 
-            if (result.IsLockedOut)
+            if (result.IsLockedOut || !user.AccountEnabled)
             {
                 _logger.LogInformation($"LoginUser: {request.Email}: Failed login: Account is locked out");
                 throw new AccountLockedException();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace JWT.Domain.Entities
 {
@@ -22,5 +23,8 @@ namespace JWT.Domain.Entities
             Two Factor Enabled
             Username
          */
+        public DateTime DateJoined { get; set; }
+        // Different from Lockout Enabled as that's for password attempts
+        public bool AccountEnabled { get; set; }
     }
 }

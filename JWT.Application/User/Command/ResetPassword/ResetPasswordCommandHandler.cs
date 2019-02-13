@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Application.User.Query.GetUserByEmail;
 using JWT.Domain.Entities;
 using JWT.Domain.Exceptions;

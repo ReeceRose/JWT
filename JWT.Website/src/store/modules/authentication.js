@@ -1,17 +1,15 @@
 import axios from '@/axios.js'
 import utilities from '@/utilities.js'
-import global from '@/store/modules/global.js'
-import '@/facebook/init.js'
-import '@/google/init.js'
+import '@/authentication/facebook.js'
+import '@/authentication/google.js'
 // For reference
 // headers: { Authorization: `Bearer ${getters['uthentication/getToken'] || ''}`}
 const authentication = {
     namespaced: true,
     getters: {
-        isAdmin: () => utilities.parseJwt(global.state.token).hasOwnProperty("Administrator")
-    },
-    mutations: {
-
+        isAdmin: (state, getters, rootState) => {
+            return utilities.parseJwt(rootState.global.token).hasOwnProperty("Administrator")
+        }    
     },
     actions: {
         login: ({ commit, dispatch }, payload) => {
@@ -108,10 +106,13 @@ const authentication = {
         },
         logout: ({ commit, dispatch }) => {
             commit("global/removeToken", null, { root: true })
-            let googleAuth = window.gapi.auth2.getAuthInstance()
-            googleAuth.signOut()
-            // eslint-disable-next-line
-            FB.logout(() => {})
+            try {
+                let googleAuth = window.gapi.auth2.getAuthInstance()
+                googleAuth.signOut()
+                // eslint-disable-next-line
+                FB.logout(() => {})
+            // eslint-disable-next-line                
+            } catch(error) { }
             dispatch("global/updateCookie", null, { root: true })
         },
         register: ({ commit }, payload) => {
@@ -133,82 +134,21 @@ const authentication = {
                     })
             })
         },
-        confirmEmail: ({ commit }, payload) => {
+        verifyIsAdmin: ({ rootGetters }) => {
             return new Promise((resolve, reject) => {
-                commit('global/setLoading', true, { root: true })
                 axios({
-                    method: 'post',
-                    url: 'authentication/confirmEmail',
-                    data: { userId: payload.userId, token: payload.token },
+                    method: 'get',
+                    url: 'admin/verify',
+                    headers: { Authorization: `Bearer ${rootGetters['global/getToken']}`}
                 })
                     .then(() => {
                         resolve()
                     })
                     .catch(() => {
                         reject()
-                    })
-                    .finally(() => {
-                        commit('global/setLoading', false, { root: true })
                     })
             })
         },
-        regenerateConfirmationEmail: ({ commit }, payload) => {
-            return new Promise((resolve, reject) => {
-                commit('global/setLoading', true, { root: true })
-                axios({
-                    method: 'post',
-                    url: 'authentication/generateConfirmationEmail',
-                    data: { email: payload.email },
-                })
-                    .then(() => {
-                        resolve()
-                    })
-                    .catch(() => {
-                        reject()
-                    })
-                    .finally(() => {
-                        commit('global/setLoading', false, { root: true })
-                    })
-            })
-        },
-        resetPassword: ({ commit }, payload) => {
-            return new Promise((resolve, reject) => {
-                commit('global/setLoading', true, { root: true })
-                axios({
-                    method: 'post',
-                    url: 'authentication/resetPassword',
-                    data: { token: payload.token, email: payload.email, password: payload.password },
-                })
-                    .then(() => {
-                        resolve()
-                    })
-                    .catch(() => {
-                        reject()
-                    })
-                    .finally(() => {
-                        commit('global/setLoading', false, { root: true })
-                    })
-            })
-        },
-        generateResetPasswordEmail: ({ commit }, payload) => {
-            return new Promise((resolve, reject) => {
-                commit('global/setLoading', true, { root: true })
-                axios({
-                    method: 'post',
-                    url: 'authentication/generateResetPasswordEmail',
-                    data: { email: payload.email },
-                })
-                    .then(() => {
-                        resolve()
-                    })
-                    .catch(() => {
-                        reject()
-                    })
-                    .finally(() => {
-                        commit('global/setLoading', false, { root: true })
-                    })
-            })
-        }
     }
 }
 

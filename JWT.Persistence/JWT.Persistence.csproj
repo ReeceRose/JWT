@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20181230175546_MoveToApplicationDb.cs" />
     <Compile Remove="Migrations\20190107193035_test.cs" />
+    <Compile Remove="Migrations\Identity\20190118033749_test.cs" />
+    <Compile Remove="Migrations\Identity\20190122211017_test.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,8 +19,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.15" />
   </ItemGroup>
 
   <ItemGroup>

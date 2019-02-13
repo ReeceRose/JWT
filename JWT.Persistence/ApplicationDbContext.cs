@@ -39,7 +39,11 @@ namespace JWT.Persistence
                 i.Property(o => o.LockoutEnabled).HasConversion<int>();
                 i.Property(o => o.PhoneNumberConfirmed).HasConversion<int>();
                 i.Property(o => o.TwoFactorEnabled).HasConversion<int>();
+                i.Property(o => o.AccountEnabled).HasConversion<short>();
             });
+            builder.Entity<ApplicationUser>()
+                .Property(b => b.DateJoined)
+                .HasDefaultValueSql("now()");
         }
     }
 }

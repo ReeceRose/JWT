@@ -1,2 +1,3 @@
 Add-Migration AddedIdentity -Context ApplicationDbContext -OutputDir Migrations/Identity
+Add-Migration AddedDateJoined -Context ApplicationDbContext -OutputDir Migrations/Identity
 Update-Database
