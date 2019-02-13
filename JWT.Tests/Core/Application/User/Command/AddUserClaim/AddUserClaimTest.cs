@@ -2,10 +2,7 @@
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using JWT.Application.User.Command.AddUserClaim;
-using JWT.Application.User.Model;
-using JWT.Application.Utilities;
 using JWT.Domain.Entities;
 using JWT.Tests.Helpers;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +15,6 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
     public class AddUserClaimTest
     {
         public Mock<MockUserManager> UserManager { get; }
-        public IMapper Mapper { get; }
         public Mock<ILogger<AddUserClaimCommandHandler>> Logger { get; }
         public AddUserClaimCommandHandler Handler { get; }
 
@@ -26,9 +22,8 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         {
             // Arrange
             UserManager = new Mock<MockUserManager>();
-            Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));
             Logger = new Mock<ILogger<AddUserClaimCommandHandler>>();
-            Handler = new AddUserClaimCommandHandler(UserManager.Object, Mapper, Logger.Object);
+            Handler = new AddUserClaimCommandHandler(UserManager.Object, Logger.Object);
         }
 
         [Theory]
@@ -37,7 +32,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         public async Task AddUserClaim_ClaimAdded(string email, string key, string value)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 Email = email
             };
@@ -54,7 +49,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         public async Task AddUserClaim_ClaimNotAdded(string email, string key, string value)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 Email = email
             };
