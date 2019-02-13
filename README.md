@@ -20,8 +20,13 @@
 ## About
 [![Build Status](https://dev.azure.com/ReeceRose/JWT/_apis/build/status/JWT?branchName=master)](https://dev.azure.com/ReeceRose/JWT/_build/latest?definitionId=6?branchName=master)
 ## Features
-
----
+* Login/register
+* Email confirmation
+* Password reset
+* Admin dashboard
+    * View all users (pagination support)
+    * User management (force email confirmation, disable account, view/edit user claims)
+* Docker support
 
 ## License
 
@@ -29,5 +34,3 @@
 
 - **[MIT license](http://opensource.org/licenses/mit-license.php)**
 - Copyright 2019 © <a href="https://reecerose.com" target="_blank">Reece Rose</a>.
-
----
