@@ -5,6 +5,12 @@
                 <h2 class="text-center pb-4">User</h2>
                 <p v-if="error" class="text-danger text-center">Failed to load user</p>
 
+                <p v-if="promotedToAdministrator" class="text-success text-center">Promoted to administrator</p>
+                <p v-if="promotedToAdministratorError" class="text-danger text-center">Cannot promote to administrator</p>
+
+                <p v-if="revokedAdministrator" class="text-success text-center">Revoked administrative rights</p>
+                <p v-if="revokedAdministratorError" class="text-danger text-center">Cannot revoke administrative rights</p>
+
                 <p v-if="accountDisabled" class="text-success text-center">Account has been disabled</p>
                 <p v-if="accountEnabledError" class="text-danger text-center">Failed to enable user</p>
 
@@ -32,6 +38,22 @@
                                 <button class="btn btn-primary" @click="forceEmailConfirmaiton(user.id)">Force Email Confirmation</button>
                             </span>
                         </li>
+                        <li class="pt-3">
+                            <h3>User Claims:</h3>
+                            <span v-if="claims.length > 0">
+                                <span v-for="(claim, index) in claims" :key="index">
+                                    {{ checkIsAdministrator(claim) }}
+                                    {{ claim.type }}
+                                </span>
+                            </span>
+                            <span v-else>
+                                No special claims
+                            </span>
+                        </li>
+                        <li class="pt-3">
+                            <span class="item" v-if="isAdministrator"><button class="btn btn-primary" @click="revokeAdministrator(user.id)">Revoke administrator</button></span>
+                            <span v-else><button class="btn btn-primary" @click="makeAdministrator(user.id)">Make administrator</button></span>
+                        </li>
                         <li>
                             <span class="item" v-if="user.accountEnabled"><button class="btn btn-primary" @click="disableAccount(user.id)">Disable Account</button></span>
                             <span class="item" v-else><button class="btn btn-primary" @click="enableAccount(user.id)">Enable Account</button></span>
@@ -39,8 +61,8 @@
                         <li>
                             <span class="item"><button class="btn btn-primary" @click="deleteUser(user.id)">Delete User</button></span>
                         </li>
-                        <li>
-                            <button class="btn btn-primary mt-4" @click="previous">Return <i class="fas fa-undo"></i></button>
+                        <li class="pt-3">
+                            <button class="btn btn-primary" @click="previous">Return <i class="fas fa-undo"></i></button>
                         </li>
                     </ul>
                 </div>
@@ -60,7 +82,13 @@ export default {
     data() {
         return {
             user: false,
+            claims: false,
+            isAdministrator: false,
             error: false,
+            promotedToAdministrator: false,
+            promotedToAdministratorError: false,
+            revokedAdministrator: false,
+            revokedAdministratorError: false,
             accountDisabled: false,
             accountDisabledError: false,
             accountEnabled: false,
@@ -69,21 +97,45 @@ export default {
             emailNotSent: false,
             emailedConfirmed: false,
             emailedConfirmedError: false,
-            deleteUserError: false
+            deleteUserError: false,
         }
     },
     methods: {
         getUser(userId) {
             this.$store.dispatch("users/userById", userId)
-                .then((user) => {
-                    this.user = user
+                .then((data) => {
+                    this.user = data.user
+                    this.claims = data.claims
                 })
                 .catch(() => {
                     this.error = true
                 })
         },
+        checkIsAdministrator(claim) {
+            claim.type == 'Administrator' ? this.isAdministrator = true : null;
+        },
+        revokeAdministrator(userId) {
+            this.$store.dispatch("users/removeClaim", { userId, claim: "Administrator" })
+                .then(() => {
+                    this.isAdministrator = false
+                    this.revokedAdministrator = true
+                })
+                .catch(() => {
+                    this.revokedAdministratorError = true
+                })
+        },
+        makeAdministrator(userId) {
+            this.$store.dispatch("users/addClaim", { userId, claim: "Administrator"})
+                .then(() => {
+                    this.isAdministrator = true
+                    this.promotedToAdministrator = true
+                })
+                .catch(() => {
+                    this.promotedToAdministratorError = true
+                })
+        },
         sendConfirmationEmail(email) {
-            this.$store.dispatch("users/regenerateConfirmationEmail", { email: email })
+            this.$store.dispatch("users/regenerateConfirmationEmail", email)
                 .then(() => {
                     this.user.accountEnabled = true
                     this.emailSent = true

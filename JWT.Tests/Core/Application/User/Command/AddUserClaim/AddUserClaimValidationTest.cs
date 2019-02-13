@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using JWT.Application.User.Command.AddUserClaim;
-using JWT.Application.User.Model;
+using JWT.Domain.Entities;
 using Xunit;
 
 namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
@@ -18,10 +18,10 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         [Theory]
         [InlineData("test-user")]
         [InlineData("user@domain.com")]
-        public void GetUserClaim_UserIsValid(string userName)
+        public void AddUserClaim_UserIsValid(string userName)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 UserName = userName,
                 Id = "123"
@@ -33,7 +33,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         }
 
         [Fact]
-        public void GetUserClaim_UserIsInvalid()
+        public void AddUserClaim_UserIsInvalid()
         {
             // Act
             var result = Validator.Validate(new AddUserClaimCommand(null, "key", "value"));
@@ -48,7 +48,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         public void AddUserClaim_KeyIsValid(string key, string value)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 Email = "user@test.com",
                 Id = "123"
@@ -65,7 +65,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         public void AddUserClaim_KeyIsInvalid(string key, string value)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 UserName = "test-user",
                 Id = "123"
@@ -83,7 +83,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         public void AddUserClaim_ValueIsValid(string key, string value)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 UserName = "test-user",
                 Id = "123"
@@ -100,7 +100,7 @@ namespace JWT.Tests.Core.Application.User.Command.AddUserClaim
         public void AddUserClaim_ValueIsInvalid(string key, string value)
         {
             // Arrange
-            var user = new ApplicationUserDto()
+            var user = new ApplicationUser()
             {
                 UserName = "test-user",
                 Id = "123"

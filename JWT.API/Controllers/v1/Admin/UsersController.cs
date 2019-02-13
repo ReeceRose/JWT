@@ -1,14 +1,18 @@
 ﻿using System.Threading.Tasks;
+using JWT.Application.User.Command.AddUserClaim;
 using JWT.Application.User.Command.ConfirmUserEmail;
 using JWT.Application.User.Command.DisableUser;
 using JWT.Application.User.Command.EnableUser;
 using JWT.Application.User.Command.ForceEmailConfirmation;
 using JWT.Application.User.Command.RemoveUser;
+using JWT.Application.User.Command.RemoveUserClaim;
 using JWT.Application.User.Command.ResetPassword;
 using JWT.Application.User.Query.GenerateEmailConfirmation.Email;
 using JWT.Application.User.Query.GenerateResetPassword.Email;
 using JWT.Application.User.Query.GetAllUsersPaginated;
 using JWT.Application.User.Query.GetAUserById;
+using JWT.Application.User.Query.GetUserById;
+using JWT.Application.User.Query.GetUserClaim;
 using JWT.Application.User.Query.GetUserCount;
 using JWT.Application.User.Query.SearchUsersByEmail;
 using JWT.Domain.Entities;
@@ -42,30 +46,42 @@ namespace JWT.API.Controllers.v1.Admin
 
         // User specific actions
 
-        [HttpGet("Details/Id/{UserId}")]
+        [HttpGet("{UserId}/Details")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetUserDetailsByIdAsync(string userId) => Ok(new { result = await _mediator.Send(new GetAUserByIdQuery(userId)) });
+        public async Task<IActionResult> GetUserDetailsByIdAsync(string userId)
+        {
+            var user = await _mediator.Send(new GetAUserByIdQuery(userId));
+            return Ok(new { result = new { user, claims = await _mediator.Send(new GetUserClaimQuery(user)) }});
+        }
 
-        [HttpGet("Details/Email/{Email}")]
+        [HttpGet("Search/{Email}")]
         [Authorize(Policy = "AdministratorOnly")]
-        public async Task<IActionResult> GetUserDetailsByEmailAsync(string email) => Ok(new { result = await _mediator.Send(new SearchUsersByEmailQuery(email)) });
+        public async Task<IActionResult> GetUsersDetailsByEmailAsync(string email) => Ok(new { result = await _mediator.Send(new SearchUsersByEmailQuery(email)) });
 
-        [HttpGet("ForceEmailConfirmation/{UserId}")]
+        [HttpGet("{UserId}/ForceEmailConfirmation")]
         [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetForceEmailConfirmationAsync(string userId) => Ok(new { result = await _mediator.Send(new ForceEmailConfirmationCommand(userId)) });
 
-        [HttpGet("Enable/{UserId}")]
+        [HttpGet("{UserId}/Enable")]
         [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetEnableAUserByIdAsync(string userId) => Ok(new { result = await _mediator.Send(new EnableUserCommand(userId)) });
 
-        [HttpGet("Disable/{UserId}")]
+        [HttpGet("{UserId}/Disable")]
         [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetDisableAUserByIdAsync(string userId) => Ok(new { result = await _mediator.Send(new DisableUserCommand(userId)) });
 
-        [HttpGet("Delete/{UserId}")]
+        [HttpGet("{UserId}/Delete")]
         [Authorize(Policy = "AdministratorOnly")]
         public async Task<IActionResult> GetRemoveUserAsync(string userId) => Ok(new { result = await _mediator.Send(new RemoveUserCommand(userId)) });
 
+        [HttpPost("{UserId}/AddClaim/{Claim}")]
+        [Authorize(Policy = "AdministratorOnly")]
+        public async Task<IActionResult> PostAddClaimAsync(string userId, string claim) => Ok( new { result = await _mediator.Send(new AddUserClaimCommand(await _mediator.Send(new GetUserByIdQuery(userId)), claim, "")) });
+
+        [HttpPost("{UserId}/RemoveClaim/{Claim}")]
+        [Authorize(Policy = "AdministratorOnly")]
+        public async Task<IActionResult> PostRemoveClaimAsync(string userId, string claim) => Ok( new { result = await _mediator.Send(new RemoveUserClaimCommand(await _mediator.Send(new GetUserByIdQuery(userId)), claim))} );
+        
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> PostConfirmEmailAsync([FromBody] ConfirmUserEmailCommand confirmUserEmailCommand) => Ok(new { result = await _mediator.Send(confirmUserEmailCommand) });
 
