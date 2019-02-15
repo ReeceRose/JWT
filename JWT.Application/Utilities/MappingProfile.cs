@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JWT.Application.User.Command.RegisterUser;
 using JWT.Application.User.Model;
 using JWT.Domain.Entities;
 
@@ -11,6 +12,8 @@ namespace JWT.Application.Utilities
             CreateMap<ApplicationUser, ApplicationUserDto>();
 
             CreateMap<ApplicationUserDto, ApplicationUser>();
+
+            CreateMap<RegisterUserCommand, ApplicationUserDto>();
         }
     }
 }
