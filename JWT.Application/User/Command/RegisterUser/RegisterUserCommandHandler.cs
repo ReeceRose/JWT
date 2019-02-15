@@ -38,6 +38,7 @@ namespace JWT.Application.User.Command.RegisterUser
             
             var mappedUser = _mapper.Map<ApplicationUserDto>(request);
             mappedUser.AccountEnabled = true;
+            mappedUser.UserName = email;
 
             var result = await _mediator.Send(new CreateUserCommand(mappedUser, request.Password), cancellationToken);
             if (!result.Succeeded)
