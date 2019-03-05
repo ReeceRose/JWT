@@ -32,7 +32,7 @@ namespace JWT.Application.User.Command.RegisterUser
 
             if (user != null)
             {
-                _logger.LogInformation($"Register User: {email}: Registration failed: User does not exist");
+                _logger.LogInformation($"Register User: {email}: Registration failed: User already exists");
                 throw new AccountAlreadyExistsException();
             }
             
